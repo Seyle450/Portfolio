@@ -35,6 +35,14 @@
   }, { threshold: 0, rootMargin: '0px 0px 120px 0px' });
 
   document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => io.observe(el));
+
+  // Safety: nach 1.2s alles sichtbar, falls Observer nicht greift
+  setTimeout(() => {
+    document.querySelectorAll('.reveal:not(.in-view), .reveal-stagger:not(.in-view)').forEach(el => {
+      const r = el.getBoundingClientRect();
+      if (r.top < window.innerHeight) el.classList.add('in-view');
+    });
+  }, 1200);
 })();
 
 /* ───────── RAIL ───────── */
