@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hevi's Café — Matcha, Kaffee & Hausgemachtes · Bremen</title>
+<link rel="icon" href="assets/logo.jpg">
+<meta name="description" content="Hevi's Café Bremen-Walle — Specialty Matcha, Kaffee & hausgemachte Kuchen. Mobiler Kaffee- & Matcha-Stand zum Mieten für Events.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ============ Header ============ -->
+<header class="hdr" id="hdr">
+  <div class="wrap hdr-inner">
+    <a href="#top" data-scroll aria-label="Hevi's Café — Startseite">
+      <span class="brand"><img src="assets/logo.jpg" alt="Hevi's Café Logo"><span class="word">Hevi's Café</span></span>
+    </a>
+    <nav class="nav">
+      <a href="#about" data-scroll>Über uns</a>
+      <a href="#menu" data-scroll>Karte</a>
+      <a href="#stand" data-scroll>Stand mieten</a>
+      <a href="#gallery" data-scroll>Galerie</a>
+      <a href="#contact" data-scroll>Kontakt</a>
+    </nav>
+    <div class="hdr-cta">
+      <a class="btn btn--solid" href="#stand" data-scroll>Stand anfragen
+        <svg class="arrow" width="16" height="12" viewBox="0 0 16 12" fill="none" aria-hidden="true"><path d="M1 6h13M9 1l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <button class="burger" aria-label="Menü" aria-expanded="false" id="burger">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about" data-scroll>Über uns</a>
+  <a href="#menu" data-scroll>Karte</a>
+  <a href="#stand" data-scroll>Stand mieten</a>
+  <a href="#gallery" data-scroll>Galerie</a>
+  <a href="#contact" data-scroll>Kontakt</a>
+  <a class="btn btn--solid btn--block" href="#stand" data-scroll>Stand anfragen</a>
+</div>
+
+<main>
+
+  <!-- ============ Hero (Typo-Poster) ============ -->
+  <section class="hero hero-typo" id="top">
+    <div class="wrap">
+      <p class="kicker">Matcha · Specialty Coffee · Hausgemacht · Bremen-Walle</p>
+      <h1 class="display giant" style="margin-top:18px">Hevi's<br><span class="ln2">Café</span></h1>
+      <div class="subrow">
+        <p class="lead" style="margin:0">Eine kleine Oase im Alltag. Cremige Matcha-Kreationen, ehrlicher Kaffee und liebevoll Hausgemachtes — und auf Wunsch kommt unser mobiler Stand direkt zu dir.</p>
+        <div class="cta-row" style="margin-top:0">
+          <a class="btn btn--solid" href="#stand" data-scroll>Stand mieten
+            <svg class="arrow" width="16" height="12" viewBox="0 0 16 12" fill="none" aria-hidden="true"><path d="M1 6h13M9 1l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a class="btn btn--ghost" href="#menu" data-scroll>Karte ansehen</a>
+        </div>
+      </div>
+      <img class="hero-img" src="assets/matcha.png" alt="Hevi's San Sebastian Cheesecake & Matcha" style="width:100%;max-height:240px;object-fit:cover;border-radius:var(--r);margin-top:32px;object-position:50% 40%;">
+    </div>
+  </section>
+
+  <!-- ============ Marquee ============ -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>Specialty Matcha<span class="dot"></span></span><span>Hausgemacht<span class="dot"></span></span><span>Specialty Coffee<span class="dot"></span></span><span>San Sebastian Cheesecake<span class="dot"></span></span><span>Frühstück<span class="dot"></span></span><span>Mobiler Stand<span class="dot"></span></span><span>Bremen-Walle<span class="dot"></span></span>
+      <span>Specialty Matcha<span class="dot"></span></span><span>Hausgemacht<span class="dot"></span></span><span>Specialty Coffee<span class="dot"></span></span><span>San Sebastian Cheesecake<span class="dot"></span></span><span>Frühstück<span class="dot"></span></span><span>Mobiler Stand<span class="dot"></span></span><span>Bremen-Walle<span class="dot"></span></span>
+    </div>
+  </div>
+
+  <!-- ============ About ============ -->
+  <section class="section" id="about">
+    <div class="wrap about-grid">
+      <div class="reveal about-media">
+        <img src="assets/image.png" alt="Hevi's Café in Bremen-Walle">
+      </div>
+      <div class="reveal">
+        <div class="eyebrow-row"><span class="rule"></span><span class="kicker">Über uns</span></div>
+        <h2 class="section-h">Eine kleine Oase<br>im Alltag.</h2>
+        <p class="lead" style="margin-top:24px">
+          Hevi's Café ist ein gemütlicher Treffpunkt mitten in Bremen-Walle — ein Ort zum Durchatmen, mit gutem Kaffee, außergewöhnlichen Matcha-Kreationen und ganz viel Liebe zum Detail.
+        </p>
+        <p style="color:var(--muted);margin-top:16px">
+          Alles frisch und hausgemacht: vom cremigen San Sebastian Cheesecake über Carrotcake bis zum Schoko-Cookie mit Salz. Ob Frühstück, Mittagspause oder einfach eine ruhige Auszeit — bei uns bist du willkommen.
+        </p>
+        <div class="stats">
+          <div class="stat"><b>9,3</b><span>Bewertung</span></div>
+          <div class="stat"><b>131</b><span>Reviews</span></div>
+          <div class="stat"><b>100%</b><span>Hausgemacht</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Karte / Speisekarte ============ -->
+  <section class="section" id="menu" style="background:var(--paper-2)">
+    <div class="wrap">
+      <div class="reveal" style="max-width:760px">
+        <div class="eyebrow-row"><span class="rule"></span><span class="kicker">Unsere Karte</span></div>
+        <h2 class="section-h">Matcha, Kaffee<br>& Hausgemachtes.</h2>
+        <p class="lead" style="margin-top:20px">Frisch zubereitet, mit besten Zutaten. Unsere Matcha-Drinks sind ein Traum — ob klassisch oder kreativ verfeinert.</p>
+      </div>
+      <div class="menu-grid reveal">
+        <div class="menu-cat">
+          <div class="menu-cat-head"><h3>Matcha</h3><span class="menu-note">Unsere Spezialität</span></div>
+          <ul class="menu-list">
+            <li class="menu-item"><div class="mi-row"><span class="mi-name">Matcha Latte</span><span class="mi-dots"></span><span class="mi-price">4,90 €</span></div><span class="mi-sub">heiß oder über Eis</span></li>
+            <li class="menu-item"><div class="mi-row"><span class="mi-name">Cherry Matcha</span><span class="mi-dots"></span><span class="mi-price">5,50 €</span></div></li>
+            <li class="menu-item"><div class="mi-row"><span class="mi-name">Strawberry Matcha</span><span class="mi-dots"></span><span class="mi-price">5,50 €</span></div></li>
+            <li class="menu-item"><div class="mi-row"><span class="mi-name">Matcha Pur</span><span class="mi-dots"></span><span class="mi-price">3,90 €</span></div></li>
+          </ul>
+        </div>
+        <div class="menu-cat">
+          <div class="menu-cat-head"><h3>Kaffee</h3></div>
+          <ul class="menu-list">
+            <li class="menu-item"><div class="mi-row"><span class="mi-name">Espresso</span><span class="mi-dots"></span><span class="mi-price">2,40 €</span></div></li>
+            <li class="menu-item"><div class="mi-row"><span class="mi-name">Cappuccino</span><span class="mi-dots"></span><span class="mi-price">3,40 €</span></div></li>
+            <li class="menu-item"><div class="mi-row"><span class="mi-name">Flat White</span><span class="mi-dots"></span><span class="mi-price">3,90 €</span></div></li>
+            <li class="menu-item"><div class="mi-row"><span class="mi-name">Filterkaffee</span><span class="mi-dots"></span><span class="mi-price">2,90 €</span></div></li>
+          </ul>
+        </div>
+        <div class="menu-cat span-row">
+          <div class="menu-cat-head"><h3>Kuchen & Gebäck</h3><span class="menu-note">Täglich frisch gebacken</span></div>
+          <ul class="menu-list">
+            <li class="menu-item"><div class="mi-row"><span class="mi-name">San Sebastian Cheesecake</span><span class="mi-dots"></span><span class="mi-price">4,90 €</span></div></li>
+            <li class="menu-item"><div class="mi-row"><span class="mi-name">Carrotcake</span><span class="mi-dots"></span><span class="mi-price">4,50 €</span></div></li>
+            <li class="menu-item"><div class="mi-row"><span class="mi-name">Schoko-Cookie mit Salz</span><span class="mi-dots"></span><span class="mi-price">3,20 €</span></div></li>
+            <li class="menu-item"><div class="mi-row"><span class="mi-name">Vanille-Cookie</span><span class="mi-dots"></span><span class="mi-price">3,20 €</span></div></li>
+            <li class="menu-item"><div class="mi-row"><span class="mi-name">Banana Bread</span><span class="mi-dots"></span><span class="mi-price">3,90 €</span></div><span class="mi-sub">vegan möglich</span></li>
+            <li class="menu-item"><div class="mi-row"><span class="mi-name">Blueberry Muffin</span><span class="mi-dots"></span><span class="mi-price">3,50 €</span></div></li>
+            <li class="menu-item"><div class="mi-row"><span class="mi-name">Croissant</span><span class="mi-dots"></span><span class="mi-price">2,80 €</span></div></li>
+            <li class="menu-item"><div class="mi-row"><span class="mi-name">Schoko-Croissant</span><span class="mi-dots"></span><span class="mi-price">3,20 €</span></div></li>
+            <li class="menu-item"><div class="mi-row"><span class="mi-name">Zimtschnecke</span><span class="mi-dots"></span><span class="mi-price">3,80 €</span></div></li>
+            <li class="menu-item"><div class="mi-row"><span class="mi-name">Brownie</span><span class="mi-dots"></span><span class="mi-price">3,50 €</span></div><span class="mi-sub">glutenfrei auf Anfrage</span></li>
+          </ul>
+        </div>
+        <div class="menu-cat span-row">
+          <div class="menu-cat-head"><h3>Frühstück</h3></div>
+          <ul class="menu-list">
+            <li class="menu-item"><div class="mi-row"><span class="mi-name">Frühstücksteller</span><span class="mi-dots"></span><span class="mi-price">9,90 €</span></div><span class="mi-sub">vegetarisch · auch vegan möglich</span></li>
+            <li class="menu-item"><div class="mi-row"><span class="mi-name">Joghurt-Bowl</span><span class="mi-dots"></span><span class="mi-price">6,90 €</span></div></li>
+          </ul>
+        </div>
+        <div class="menu-cat span-row sauces">
+          <div class="menu-cat-head"><h3>Gut zu wissen</h3></div>
+          <div class="sauce-row"><span class="sauce-chip">Vegetarisch</span><span class="sauce-chip">Vegane Optionen</span><span class="sauce-chip">Hausgemacht</span><span class="sauce-chip">Hafer- & Sojamilch</span></div>
+        </div>
+      </div>
+      <p class="reveal" style="margin-top:22px;font-size:13px;color:var(--muted);font-family:'Spline Sans Mono',monospace">Preise beispielhaft laut Aushang · Allergene &amp; Zusatzstoffe auf Anfrage.</p>
+    </div>
+  </section>
+
+  <!-- ============ Stand mieten (neue Funktion) ============ -->
+  <section class="section" id="stand">
+    <div class="wrap">
+      <div class="reveal" style="max-width:760px">
+        <div class="eyebrow-row"><span class="rule"></span><span class="kicker">Mobiler Stand · Kommt zu dir</span></div>
+        <h2 class="section-h">Unser Stand<br>kommt zu euch.</h2>
+        <p class="lead" style="margin-top:20px">Hevi's to go: Mietet unseren mobilen Kaffee- &amp; Matcha-Stand für euer Event. Wir bauen auf, zaubern frische Drinks und Hausgemachtes — ihr genießt einfach.</p>
+      </div>
+      <div class="serv-grid reveal">
+        <div class="serv">
+          <div class="num">01</div>
+          <h3>Privat &amp; Feiern</h3>
+          <p>Geburtstag, Hochzeit oder Gartenfest — wir bringen Café-Atmosphäre direkt zu euch nach Hause.</p>
+          <ul><li>Matcha- &amp; Kaffee-Bar</li><li>Hausgemachte Kuchen</li><li>Komplett-Aufbau inkl. Service</li></ul>
+        </div>
+        <div class="serv">
+          <div class="num">02</div>
+          <h3>Firmen &amp; Büro</h3>
+          <p>Team-Event, Messe oder Mitarbeiter-Special. Frischer Matcha &amp; Specialty Coffee für eure Gäste.</p>
+          <ul><li>Coffee-Catering vor Ort</li><li>Branding auf Wunsch</li><li>Flexible Paketgrößen</li></ul>
+        </div>
+        <div class="serv">
+          <div class="num">03</div>
+          <h3>Märkte &amp; Festivals</h3>
+          <p>Straßenfeste, Pop-ups und Märkte rund um Bremen — bucht unseren Stand für euren Termin.</p>
+          <ul><li>Mobiler Auf- &amp; Abbau</li><li>Bar &amp; Karte</li><li>Ganzjährig buchbar</li></ul>
+        </div>
+      </div>
+      <div class="reveal" style="margin-top:40px;display:flex;justify-content:center">
+        <a class="btn btn--solid" href="#contact" data-scroll>Stand unverbindlich anfragen
+          <svg class="arrow" width="16" height="12" viewBox="0 0 16 12" fill="none" aria-hidden="true"><path d="M1 6h13M9 1l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Gallery (Instagram) ============ -->
+  <section class="section" id="gallery" style="background:var(--paper-2)">
+    <div class="wrap">
+      <div class="reveal" style="max-width:720px">
+        <div class="eyebrow-row"><span class="rule"></span><span class="kicker">Galerie · @heviscafe</span></div>
+        <h2 class="section-h">Sieht so schön aus,<br>wie es schmeckt.</h2>
+        <p class="lead" style="margin-top:20px">Frisch von unserem Instagram — Matcha-Momente, Hausgemachtes und Eindrücke aus dem Café.</p>
+      </div>
+      <div class="ig-grid reveal">
+        <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DQBrIjiAgfK/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14"></blockquote>
+        <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DOwMM2mCPrr/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14"></blockquote>
+        <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/C_76_x-O4-L/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14"></blockquote>
+      </div>
+      <div class="reveal" style="margin-top:40px;display:flex;justify-content:center">
+        <a class="btn btn--ghost" href="https://www.instagram.com/heviscafe/" target="_blank" rel="noopener">Mehr auf Instagram
+          <svg class="arrow" width="16" height="12" viewBox="0 0 16 12" fill="none" aria-hidden="true"><path d="M1 6h13M9 1l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Reviews ============ -->
+  <section class="section" id="reviews">
+    <div class="wrap">
+      <div class="rev-top reveal">
+        <div style="max-width:620px">
+          <div class="eyebrow-row"><span class="rule"></span><span class="kicker">Was Gäste sagen</span></div>
+          <h2 class="section-h">Geliebt in Walle<br>— und weit darüber.</h2>
+        </div>
+        <div style="text-align:right">
+          <div class="display" style="font-size:clamp(48px,7vw,86px);color:var(--accent)">9,3</div>
+          <div class="kicker" style="margin-top:6px">aus 131 Bewertungen</div>
+        </div>
+      </div>
+      <div class="rev-grid">
+        <figure class="rev reveal">
+          <div class="stars">★★★★★</div>
+          <blockquote>„Die Matcha-Drinks sind ein Traum — egal ob klassisch oder kreativ verfeinert."</blockquote>
+          <figcaption class="who"><span class="ava">A</span><span><b>Aylin K.</b><span>Stammgast</span></span></figcaption>
+        </figure>
+        <figure class="rev reveal" style="transition-delay:80ms">
+          <div class="stars">★★★★★</div>
+          <blockquote>„Wunderbares, herzliches Team und die hausgemachten Kuchen sind der Hammer."</blockquote>
+          <figcaption class="who"><span class="ava">J</span><span><b>Jonas R.</b><span>via Google</span></span></figcaption>
+        </figure>
+        <figure class="rev reveal" style="transition-delay:160ms">
+          <div class="stars">★★★★★</div>
+          <blockquote>„Der Stand auf unserem Fest war das Highlight. Bester Matcha weit und breit!"</blockquote>
+          <figcaption class="who"><span class="ava">L</span><span><b>Lea &amp; Team</b><span>Event-Kundin</span></span></figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Hours + Map ============ -->
+  <section class="section" id="hours">
+    <div class="wrap">
+      <div class="reveal" style="max-width:720px;margin-bottom:44px">
+        <div class="eyebrow-row"><span class="rule"></span><span class="kicker">Öffnungszeiten &amp; Standort</span></div>
+        <h2 class="section-h">Kommt vorbei.</h2>
+      </div>
+      <div class="info-grid reveal">
+        <div class="hours-col">
+          <span class="kicker">Geöffnet</span>
+          <table class="hours-tbl" id="hours-tbl">
+            <tbody>
+              <tr data-day="0"><td>Montag</td><td>10:00 – 17:00</td></tr>
+              <tr data-day="1"><td>Dienstag</td><td>Geschlossen</td></tr>
+              <tr data-day="2"><td>Mittwoch</td><td>Geschlossen</td></tr>
+              <tr data-day="3"><td>Donnerstag</td><td>Geschlossen</td></tr>
+              <tr data-day="4"><td>Freitag</td><td>10:00 – 17:00</td></tr>
+              <tr data-day="5"><td>Samstag</td><td>07:30 – 17:00</td></tr>
+              <tr data-day="6"><td>Sonntag</td><td>10:00 – 17:00</td></tr>
+            </tbody>
+          </table>
+          <div class="addr-block">
+            <span class="l">Adresse</span>
+            <span style="font-size:18px;font-weight:600">Lange Reihe 83, 28219 Bremen</span>
+            <a class="route" href="https://www.google.com/maps/dir/?api=1&destination=Lange+Reihe+83,+28219+Bremen" target="_blank" rel="noopener">Route planen →</a>
+          </div>
+        </div>
+        <div class="map-col">
+          <iframe
+            title="Standort Hevi's Café"
+            loading="lazy"
+            src="https://www.openstreetmap.org/export/embed.html?bbox=8.7760%2C53.0920%2C8.7960%2C53.1020&layer=mapnik&marker=53.0970%2C8.7860"></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Contact (dark) ============ -->
+  <section class="section dark-sec" id="contact">
+    <div class="wrap contact-grid">
+      <div class="contact-side reveal">
+        <div class="eyebrow-row"><span class="rule"></span><span class="kicker">Kontakt &amp; Anfrage</span></div>
+        <h2 class="section-h">Lasst uns euren<br>Termin planen.</h2>
+        <p class="lead" style="margin-top:20px">Stand mieten oder einfach Hallo sagen? Schreibt uns — wir melden uns mit einem unverbindlichen Angebot.</p>
+        <div style="margin-top:30px">
+          <div class="ci"><span class="ic">◎</span><span><span class="l">Instagram</span><a href="https://www.instagram.com/heviscafe/" target="_blank" rel="noopener">@heviscafe</a></span></div>
+          <div class="ci"><span class="ic">@</span><span><span class="l">E-Mail</span><a href="mailto:hallo@heviscafe.de">hallo@heviscafe.de</a></span></div>
+          <div class="ci"><span class="ic">⌂</span><span><span class="l">Adresse</span><span class="v">Lange Reihe 83 · 28219 Bremen</span></span></div>
+        </div>
+      </div>
+      <div class="reveal">
+        <form id="contact-form" novalidate>
+          <div class="row2">
+            <div class="field" data-field="name">
+              <label>Name *</label>
+              <input name="name" placeholder="Euer Name">
+              <span class="msg"></span>
+            </div>
+            <div class="field" data-field="email">
+              <label>E-Mail *</label>
+              <input name="email" placeholder="name@mail.de">
+              <span class="msg"></span>
+            </div>
+          </div>
+          <div class="row2">
+            <div class="field">
+              <label>Telefon</label>
+              <input name="phone" placeholder="Optional">
+            </div>
+            <div class="field">
+              <label>Anliegen</label>
+              <select name="subject">
+                <option>Stand mieten</option>
+                <option>Event / Firmenfeier</option>
+                <option>Hochzeit</option>
+                <option>Frage zur Karte</option>
+                <option>Sonstiges</option>
+              </select>
+            </div>
+          </div>
+          <div class="field" data-field="message">
+            <label>Nachricht *</label>
+            <textarea name="message" rows="4" placeholder="Anlass, Datum, Gästezahl, Standort …" style="resize:vertical"></textarea>
+            <span class="msg"></span>
+          </div>
+          <button type="submit" class="btn btn--solid btn--block" style="margin-top:6px">Anfrage senden
+            <svg class="arrow" width="16" height="12" viewBox="0 0 16 12" fill="none" aria-hidden="true"><path d="M1 6h13M9 1l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </form>
+        <div class="form-ok" id="form-ok" style="display:none">
+          <p class="big">Danke!</p>
+          <p class="sub">Eure Nachricht ist bei uns angekommen. Wir melden uns so schnell wie möglich bei euch.</p>
+          <button class="btn btn--lightghost" style="margin-top:24px" id="form-reset">Neue Nachricht</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ Footer ============ -->
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr-top">
+      <div>
+        <span class="brand"><img src="assets/logo.jpg" alt="Hevi's Café Logo"><span class="word">Hevi's Café</span></span>
+        <p style="color:#a0a894;max-width:34ch;margin-top:6px">Specialty Matcha, Kaffee &amp; hausgemachte Kuchen aus Bremen-Walle. Unser mobiler Stand kommt auch zu euch.</p>
+      </div>
+      <div>
+        <h4>Entdecken</h4>
+        <ul>
+          <li><a href="#about" data-scroll>Über uns</a></li>
+          <li><a href="#menu" data-scroll>Karte</a></li>
+          <li><a href="#stand" data-scroll>Stand mieten</a></li>
+          <li><a href="#gallery" data-scroll>Galerie</a></li>
+          <li><a href="#contact" data-scroll>Kontakt</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Kontakt</h4>
+        <ul>
+          <li><a href="https://www.instagram.com/heviscafe/" target="_blank" rel="noopener">@heviscafe</a></li>
+          <li><a href="mailto:hallo@heviscafe.de">hallo@heviscafe.de</a></li>
+          <li style="color:#a0a894">Lange Reihe 83<br>28219 Bremen</li>
+        </ul>
+      </div>
+    </div>
+    <div class="ftr-bottom">
+      <span>© <span id="year"></span> Hevi's Café · Bremen-Walle</span>
+      <span>Matcha · Specialty Coffee · Stand mieten · Hausgemacht</span>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+<script async src="https://www.instagram.com/embed.js"></script>
+</body>
+</html>
