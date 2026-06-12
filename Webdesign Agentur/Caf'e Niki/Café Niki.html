@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Café Niki — Berlin</title>
+<link rel="icon" href="assets/logo-dark.png">
+<meta name="description" content="Café Niki — ein ruhiger Ort für langsame Morgen, sorgfältig gerösteten Kaffee und Gebäck, das nach Zuhause schmeckt. Linienstraße 42, Berlin Mitte.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header>
+  <a href="#top" class="logo-link" aria-label="Café Niki — Startseite">
+    <img class="logo-img" src="assets/logo-dark.png" alt="Café Niki">
+  </a>
+  <button class="nav-toggle" aria-label="Menü öffnen" aria-expanded="false">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M4 8h16M4 16h16"/></svg>
+  </button>
+  <nav>
+    <a href="#about">Über uns</a>
+    <a href="#menu">Speisekarte</a>
+    <a href="#gallery">Galerie</a>
+    <a href="#contact">Kontakt</a>
+    <a href="#booking" class="nav-cta">Reservieren</a>
+  </nav>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="top">
+  <h1 class="sr-only">Café Niki — Boutique Café in Berlin</h1>
+  <img class="hero-logo reveal" data-delay=".05" src="assets/logo-dark.png" alt="Café Niki — Boutique Café">
+  <p class="hero-sub reveal" data-delay=".18">Ein ruhiger Ort für langsame Morgen, sorgfältig gerösteten Kaffee und Gebäck, das nach Zuhause schmeckt.</p>
+  <div class="hero-loc reveal" data-delay=".24">
+    <span>Mitte, Berlin</span><div class="dot"></div>
+    <span>Täglich geöffnet</span><div class="dot"></div>
+    <span>Specialty Coffee</span>
+  </div>
+  <div class="hero-cta reveal" data-delay=".3">
+    <a href="#booking" class="btn btn-primary">Tisch reservieren
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+    <a href="#menu" class="btn btn-ghost">Speisekarte</a>
+  </div>
+  <div class="scroll-hint reveal" data-delay=".4">
+    <span>Scroll</span><div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ===== ABOUT ===== -->
+<section class="about" id="about">
+  <div class="wrap">
+    <div class="about-grid">
+      <div class="about-copy">
+        <div class="eyebrow reveal" style="margin-bottom:18px">Unsere Geschichte</div>
+        <h2 class="sec-title reveal" data-delay=".05" style="margin-bottom:30px">Ein Stück <em>Ruhe</em> im Trubel der Stadt</h2>
+        <p class="lead reveal" data-delay=".1">Niki entstand aus einer einfachen Idee — einem Ort, an dem man verweilen möchte.</p>
+        <p class="reveal" data-delay=".15">Zwischen warmen Beigetönen, sanftem Licht und dem Duft frisch gemahlener Bohnen schaffen wir einen Raum für Pausen. Ob Morgenkaffee, ein langes Gespräch oder ein Moment für dich allein.</p>
+        <p class="reveal" data-delay=".2">Jede Tasse, jedes Stück Gebäck und jedes Möbelstück wurde mit Bedacht gewählt — schlicht, ehrlich und schön.</p>
+      </div>
+      <div class="about-img-frame reveal" data-delay=".15">
+        <div class="img-ph">Café-Interieur</div>
+      </div>
+    </div>
+
+    <div class="values">
+      <div class="value reveal" data-delay="0">
+        <div class="ic">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9h11v5a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4V9z"/><path d="M16 10h2.2a2.3 2.3 0 0 1 0 4.6H16"/><path d="M8 5.5c0-1 1-1.2 1-2.2M11.5 5.5c0-1 1-1.2 1-2.2"/></svg>
+        </div>
+        <h3>Specialty Coffee</h3>
+        <p>Bohnen von kleinen Röstereien, frisch und mit Sorgfalt extrahiert.</p>
+      </div>
+      <div class="value reveal" data-delay=".06">
+        <div class="ic">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16c4 1 12 1 16 0"/><path d="M4 16c1-3 3-5 8-5s7 2 8 5"/><path d="M8.5 11.5 7 8M12 11l0-3.5M15.5 11.5 17 8"/></svg>
+        </div>
+        <h3>Hausgemacht</h3>
+        <p>Gebäck und Kuchen, jeden Morgen von Hand gefertigt.</p>
+      </div>
+      <div class="value reveal" data-delay=".12">
+        <div class="ic">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-8 6-13 14-13 0 8-6 13-14 13z"/><path d="M5 19c3-5 6-7 10-9"/></svg>
+        </div>
+        <h3>Saisonal</h3>
+        <p>Zutaten von lokalen Höfen, im Rhythmus der Jahreszeiten.</p>
+      </div>
+      <div class="value reveal" data-delay=".18">
+        <div class="ic">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c.5 4 2 5.5 6 6-4 .5-5.5 2-6 6-.5-4-2-5.5-6-6 4-.5 5.5-2 6-6z"/></svg>
+        </div>
+        <h3>Mit Liebe</h3>
+        <p>Ein durchdachter Raum, in dem jedes Detail zählt.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== MENU ===== -->
+<section id="menu">
+  <div class="wrap">
+    <div class="sec-head center">
+      <span class="eyebrow reveal">Was wir servieren</span>
+      <h2 class="sec-title reveal" data-delay=".05">Die <em>Karte</em></h2>
+    </div>
+    <div class="menu-grid">
+
+      <!-- Kaffee -->
+      <div class="menu-card reveal" data-delay="0">
+        <div class="menu-card-hd">
+          <span class="menu-cat-label">Espresso Bar</span>
+          <h3 class="menu-cat-title"><em>Kaffee</em></h3>
+          <div class="menu-cat-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9h11v5a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4V9z"/><path d="M16 10h2.2a2.3 2.3 0 0 1 0 4.6H16"/><path d="M8 5.5c0-1 1-1.2 1-2.2M11.5 5.5c0-1 1-1.2 1-2.2"/></svg>
+          </div>
+        </div>
+        <ul class="menu-items">
+          <li class="m-item">
+            <div class="m-body"><span class="m-name">Espresso</span><span class="m-note">doppio / single</span></div>
+            <span class="m-price">3,20</span>
+          </li>
+          <li class="m-item">
+            <div class="m-body"><span class="m-name">Flat White</span></div>
+            <span class="m-price">4,80</span>
+          </li>
+          <li class="m-item">
+            <div class="m-body"><span class="m-name">Cappuccino</span></div>
+            <span class="m-price">4,40</span>
+          </li>
+          <li class="m-item">
+            <div class="m-body"><span class="m-name">Filterkaffee</span><span class="m-note">V60 / Batch</span></div>
+            <span class="m-price">4,20</span>
+          </li>
+          <li class="m-item">
+            <div class="m-body"><span class="m-name">Matcha Latte</span></div>
+            <span class="m-price">5,40</span>
+          </li>
+          <li class="m-item">
+            <div class="m-body"><span class="m-name">Chai</span><span class="m-note">hausgemacht</span></div>
+            <span class="m-price">4,90</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Gebäck -->
+      <div class="menu-card reveal" data-delay=".08">
+        <div class="menu-card-hd">
+          <span class="menu-cat-label">Aus der Backstube</span>
+          <h3 class="menu-cat-title"><em>Gebäck</em></h3>
+          <div class="menu-cat-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16c4 1 12 1 16 0"/><path d="M4 16c1-3 3-5 8-5s7 2 8 5"/><path d="M8.5 11.5 7 8M12 11l0-3.5M15.5 11.5 17 8"/></svg>
+          </div>
+        </div>
+        <ul class="menu-items">
+          <li class="m-item">
+            <div class="m-body"><span class="m-name">Butter-Croissant</span></div>
+            <span class="m-price">3,60</span>
+          </li>
+          <li class="m-item">
+            <div class="m-body"><span class="m-name">Pain au Chocolat</span></div>
+            <span class="m-price">4,20</span>
+          </li>
+          <li class="m-item">
+            <div class="m-body"><span class="m-name">Zimtschnecke</span></div>
+            <span class="m-price">4,50</span>
+          </li>
+          <li class="m-item">
+            <div class="m-body"><span class="m-name">Karottenkuchen</span></div>
+            <span class="m-price">5,80</span>
+          </li>
+          <li class="m-item">
+            <div class="m-body"><span class="m-name">Basque Cheesecake</span></div>
+            <span class="m-price">6,20</span>
+          </li>
+          <li class="m-item">
+            <div class="m-body"><span class="m-name">Bananenbrot</span></div>
+            <span class="m-price">4,40</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Küche -->
+      <div class="menu-card reveal" data-delay=".16">
+        <div class="menu-card-hd">
+          <span class="menu-cat-label">Bis 15 Uhr</span>
+          <h3 class="menu-cat-title"><em>Küche</em></h3>
+          <div class="menu-cat-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 11h17a8.5 8.5 0 0 1-17 0z"/><path d="M9 7.5c0-1.2 1-1.5 1-2.6M13 7.5c0-1.2 1-1.5 1-2.6"/></svg>
+          </div>
+        </div>
+        <ul class="menu-items">
+          <li class="m-item">
+            <div class="m-body"><span class="m-name">Avocado-Brot</span><span class="m-note">Sauerteig, Ei</span></div>
+            <span class="m-price">11,50</span>
+          </li>
+          <li class="m-item">
+            <div class="m-body"><span class="m-name">Granola Bowl</span><span class="m-note">Joghurt, Obst</span></div>
+            <span class="m-price">9,80</span>
+          </li>
+          <li class="m-item">
+            <div class="m-body"><span class="m-name">Shakshuka</span></div>
+            <span class="m-price">12,90</span>
+          </li>
+          <li class="m-item">
+            <div class="m-body"><span class="m-name">Saison-Salat</span></div>
+            <span class="m-price">12,50</span>
+          </li>
+          <li class="m-item">
+            <div class="m-body"><span class="m-name">Bagel Niki</span><span class="m-note">Lachs, Frischkäse</span></div>
+            <span class="m-price">13,40</span>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== GALLERY ===== -->
+<section class="gallery" id="gallery">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow reveal">Augenblicke</span>
+      <h2 class="sec-title reveal" data-delay=".05">Im <em>Niki</em></h2>
+    </div>
+    <div class="gal-grid">
+      <div class="gal-cell g-tall reveal"></div>
+      <div class="gal-cell reveal" data-delay=".05"></div>
+      <div class="gal-cell g-wide reveal" data-delay=".1"></div>
+      <div class="gal-cell reveal" data-delay=".12"></div>
+      <div class="gal-cell g-wide reveal" data-delay=".08"></div>
+      <div class="gal-cell reveal" data-delay=".14"></div>
+    </div>
+    <div class="gal-cap reveal">
+      <p>Folge uns für tägliche Momente, neue Specials und kleine Geschichten aus dem Café.</p>
+      <a href="https://instagram.com/cafeniki.de" target="_blank" rel="noopener">@cafeniki.de
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== BOOKING ===== -->
+<section class="booking" id="booking">
+  <div class="wrap">
+    <div class="book-grid">
+      <div class="book-aside">
+        <span class="eyebrow reveal">Reservierung</span>
+        <h2 class="sec-title reveal" data-delay=".05" style="margin-top:18px">Sichere dir einen <em>Platz</em></h2>
+        <p class="reveal" data-delay=".1">Wir halten gern einen Tisch für dich bereit. Für Gruppen ab 6 Personen schreib uns bitte direkt.</p>
+        <div class="book-meta">
+          <div class="bm reveal" data-delay=".14">
+            <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg></span>
+            <div><h4>Öffnungszeiten</h4><p>Mo–Fr &nbsp;7:30 – 19:00<br>Sa–So &nbsp;9:00 – 18:00</p></div>
+          </div>
+          <div class="bm reveal" data-delay=".18">
+            <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c4-4.5 7-7.8 7-11A7 7 0 1 0 5 10c0 3.2 3 6.5 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
+            <div><h4>Adresse</h4><p>Linienstraße 42<br>10119 Berlin</p></div>
+          </div>
+        </div>
+      </div>
+
+      <form class="form reveal" data-delay=".1" id="booking-form" novalidate>
+        <div class="fg">
+          <label>Name</label>
+          <input name="name" placeholder="Dein Name">
+        </div>
+        <div class="fg">
+          <label>E-Mail</label>
+          <input type="email" name="email" placeholder="du@beispiel.de">
+        </div>
+        <div class="frow">
+          <div class="fg">
+            <label>Datum</label>
+            <input type="date" name="date">
+          </div>
+          <div class="fg">
+            <label>Uhrzeit</label>
+            <input type="time" name="time">
+          </div>
+        </div>
+        <div class="fg">
+          <label>Anzahl Gäste</label>
+          <div class="guest-pick">
+            <button type="button">1</button>
+            <button type="button" class="active">2</button>
+            <button type="button">3</button>
+            <button type="button">4</button>
+            <button type="button">5</button>
+            <button type="button">6+</button>
+          </div>
+        </div>
+        <button type="submit" class="form-submit">
+          Reservierung anfragen
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+        <div class="f-msg" id="booking-msg" style="display:none"></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CONTACT ===== -->
+<section id="contact">
+  <div class="wrap">
+    <div class="sec-head center">
+      <span class="eyebrow reveal">Besuch uns</span>
+      <h2 class="sec-title reveal" data-delay=".05">Wo du uns <em>findest</em></h2>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <div class="ci reveal">
+          <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c4-4.5 7-7.8 7-11A7 7 0 1 0 5 10c0 3.2 3 6.5 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
+          <div><h4>Adresse</h4><p>Linienstraße 42<br>10119 Berlin, Mitte</p></div>
+        </div>
+        <div class="ci reveal" data-delay=".06">
+          <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg></span>
+          <div><h4>Öffnungszeiten</h4><p>Mo–Fr &nbsp;7:30 – 19:00<br>Sa–So &nbsp;9:00 – 18:00</p></div>
+        </div>
+        <div class="ci reveal" data-delay=".12">
+          <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3.5h3l1.5 4-2 1.3a11 11 0 0 0 5 5l1.3-2 4 1.5v3a2 2 0 0 1-2 2A15.5 15.5 0 0 1 4 5.5a2 2 0 0 1 2-2z"/></svg></span>
+          <div><h4>Telefon</h4><a href="tel:+493012345678">+49 30 123 456 78</a></div>
+        </div>
+        <div class="ci reveal" data-delay=".18">
+          <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="m4 7 8 6 8-6"/></svg></span>
+          <div><h4>E-Mail</h4><a href="mailto:hallo@cafeniki.de">hallo@cafeniki.de</a></div>
+        </div>
+        <div class="ci reveal" data-delay=".24">
+          <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.5 2.5 2.5 14 0 17M12 3.5c-2.5 2.5-2.5 14 0 17"/></svg></span>
+          <div><h4>Folge uns</h4>
+            <div class="socials">
+              <a href="https://instagram.com/cafeniki.de" target="_blank" rel="noopener" aria-label="Instagram">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="3.6"/><circle cx="17" cy="7" r="1" fill="currentColor" stroke="none"/></svg>
+              </a>
+              <a href="https://www.google.com/maps/search/Linienstraße+42+Berlin" target="_blank" rel="noopener" aria-label="Standort">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c4-4.5 7-7.8 7-11A7 7 0 1 0 5 10c0 3.2 3 6.5 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+              </a>
+              <a href="mailto:hallo@cafeniki.de" aria-label="E-Mail">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="m4 7 8 6 8-6"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="map reveal" data-delay=".1">
+        <iframe
+          title="Standort Café Niki"
+          loading="lazy"
+          src="https://www.openstreetmap.org/export/embed.html?bbox=13.395%2C52.524%2C13.410%2C52.531&layer=mapnik&marker=52.5275%2C13.4025">
+        </iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="foot-wrap">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <a href="#top" class="logo-link">
+          <img class="foot-logo" src="assets/logo-light.png" alt="Café Niki">
+        </a>
+        <p>Ein ruhiger Ort für langsame Morgen und guten Kaffee, mitten in Berlin.</p>
+      </div>
+      <div class="foot-nav">
+        <div class="foot-col">
+          <h5>Entdecken</h5>
+          <a href="#about">Über uns</a>
+          <a href="#menu">Speisekarte</a>
+          <a href="#gallery">Galerie</a>
+          <a href="#booking">Reservieren</a>
+        </div>
+        <div class="foot-col">
+          <h5>Kontakt</h5>
+          <a href="tel:+493012345678">+49 30 123 456 78</a>
+          <a href="mailto:hallo@cafeniki.de">hallo@cafeniki.de</a>
+          <a href="https://instagram.com/cafeniki.de" target="_blank" rel="noopener">@cafeniki.de</a>
+        </div>
+        <div class="foot-col">
+          <h5>Besuch</h5>
+          <a href="#contact">Linienstraße 42</a>
+          <a href="#contact">10119 Berlin</a>
+          <a href="#contact">Mo–So geöffnet</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bot">
+      <span>© <span id="year"></span> Café Niki — Mit Sorgfalt gemacht in Berlin.</span>
+      <span><a href="#">Impressum</a> &nbsp;·&nbsp; <a href="#">Datenschutz</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
