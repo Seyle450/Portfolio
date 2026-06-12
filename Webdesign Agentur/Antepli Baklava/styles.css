@@ -355,7 +355,7 @@
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; overflow-x: hidden; }
 body {
   background: var(--green-950);
   color: var(--cream);
@@ -532,7 +532,6 @@ section.alt { background: var(--green-900); }
 .menu-orn {
   position: absolute; left: 50%; transform: translate(-50%, -50%);
   color: var(--gold); font-size: 13px; line-height: 1;
-  background: var(--green-950); padding: 0 16px; letter-spacing: 0.6em; text-indent: 0.6em;
 }
 .menu-orn.top { top: 0; }
 .menu-orn.bottom { top: 100%; }
@@ -565,7 +564,7 @@ section.alt { background: var(--green-900); }
 .anatomy .eyebrow::before { background: #9c7c2c; }
 .anatomy .section-head h2, .anatomy h2 { color: var(--green-900); }
 .anatomy .section-head p { color: #5b5343; }
-.anatomy-scene-wrap { perspective: 1400px; overflow: visible; margin: 64px auto 0; max-width: 1000px; }
+.anatomy-scene-wrap { perspective: 1400px; overflow: clip; margin: 64px auto 0; max-width: 1000px; }
 .anatomy-scene {
   position: relative; transform-style: preserve-3d;
   transition: transform 0.18s ease-out; margin: 0 auto;
@@ -653,21 +652,53 @@ select option { background: var(--green-900); }
 }
 .form-ok.show { display: block; }
 
-/* ---------- Galerie 3D ---------- */
-.gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; perspective: 1400px; }
-.g-card {
-  transform-style: preserve-3d; border-radius: 18px; overflow: hidden; position: relative;
-  box-shadow: 0 30px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(201,162,75,0.2);
-  transition: transform 0.18s ease-out, box-shadow 0.3s;
+/* ---------- Instagram ---------- */
+.ig-intro { margin-bottom: 36px; }
+.ig-account-badge {
+  display: inline-flex; align-items: center; gap: 12px;
+  background: var(--green-900); border: 1px solid rgba(201,162,75,0.35);
+  border-radius: 50px; padding: 10px 22px 10px 16px;
+  color: var(--cream); text-decoration: none;
+  font-size: 15px; font-weight: 600; letter-spacing: 0.02em;
+  transition: border-color 0.2s, background 0.2s;
 }
-.g-card image-slot { width: 100%; height: 340px; }
-.g-card .g-label {
-  position: absolute; left: 0; right: 0; bottom: 0; padding: 40px 20px 16px;
-  background: linear-gradient(transparent, rgba(10,24,16,0.88));
-  font-family: var(--serif); font-size: 21px; color: var(--cream); pointer-events: none;
+.ig-account-badge:hover { border-color: rgba(201,162,75,0.7); background: rgba(201,162,75,0.08); }
+.ig-icon { width: 22px; height: 22px; color: var(--gold-bright); flex-shrink: 0; }
+.ig-handle { color: var(--gold-bright); }
+.ig-follow-arrow { color: var(--cream-dim); font-size: 18px; margin-left: 2px; }
+.ig-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
 }
-.g-card:nth-child(2) { transform: translateY(32px); }
-.g-tall image-slot { height: 420px; }
+.ig-post {
+  border-radius: 18px; overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.45), 0 0 0 1px rgba(201,162,75,0.15);
+}
+.ig-post .instagram-media { border-radius: 18px !important; min-width: 0 !important; }
+.ig-cta { margin-top: 44px; text-align: center; }
+
+/* Instagram Skeleton Placeholder */
+@keyframes ig-shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position:  400px 0; }
+}
+.ig-skeleton {
+  border-radius: 18px; overflow: hidden;
+  background: var(--green-900);
+  border: 1px solid rgba(201,162,75,0.12);
+}
+.ig-sk-img {
+  width: 100%; aspect-ratio: 1;
+  background: linear-gradient(90deg, rgba(201,162,75,0.06) 25%, rgba(201,162,75,0.14) 50%, rgba(201,162,75,0.06) 75%);
+  background-size: 800px 100%;
+  animation: ig-shimmer 1.6s ease-in-out infinite;
+}
+.ig-sk-footer {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 16px;
+  color: rgba(201,162,75,0.5);
+  font-size: 13px; font-weight: 600; letter-spacing: 0.02em;
+}
+.ig-sk-footer svg { width: 18px; height: 18px; flex-shrink: 0; }
 
 /* ---------- Reservierung ---------- */
 .res-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; }
@@ -706,8 +737,7 @@ footer { background: var(--ink); padding: 64px 0 40px; border-top: 1px solid rgb
 
 /* ---------- Responsive ---------- */
 @media (max-width: 1100px) {
-  .gallery { grid-template-columns: repeat(2, 1fr); }
-  .g-tall image-slot { height: 340px; }
+  .ig-grid { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 980px) {
   .hero-grid, .order-grid, .res-grid, .contact-grid, .menu-cols { grid-template-columns: 1fr; }
@@ -737,9 +767,7 @@ footer { background: var(--ink); padding: 64px 0 40px; border-top: 1px solid rgb
   .card-chip { display: none; }
   .card-main { width: 88%; left: 2%; }
   .card-small { width: 52%; }
-  .gallery { grid-template-columns: 1fr; }
-  .g-card:nth-child(2) { transform: none; }
-  .g-card image-slot, .g-tall image-slot { height: min(320px, 72vw); }
+  .ig-grid { grid-template-columns: 1fr; }
   .hero-ctas .btn { flex: 1 1 100%; }
   .order-summary .total { font-size: 28px; }
   .order-summary .btn { flex: 1 1 100%; }
