@@ -384,10 +384,31 @@ footer a:hover { color: var(--ds-accent); }
 
     /* Update back link */
     var backEl = document.getElementById('backLink');
-    if (backEl && theme.back) {
-      backEl.href = theme.back;
-      backEl.textContent = theme.backLabel;
+    if (backEl) {
+      backEl.href = theme.back || '/Portfolio/';
+      backEl.textContent = theme.backLabel || '← Zurück';
     }
+  }
+
+  /* Smart back-navigation: history.back() wenn möglich */
+  var backEl2 = document.getElementById('backLink');
+  if (backEl2) {
+    var ref = document.referrer;
+    var ownHost = location.hostname;
+    var canGoBack = ref && ref.length > 0 && (
+      ref.includes(ownHost) ||
+      ref.includes('seyle450.github.io') ||
+      ref.includes('localhost') ||
+      ref.includes('127.0.0.1')
+    ) && ref !== location.href;
+
+    backEl2.addEventListener('click', function (e) {
+      if (canGoBack) {
+        e.preventDefault();
+        window.history.back();
+      }
+      /* else: normal href-Link zu theme.back greift */
+    });
   }
 
   /* ── Consent status ─────────────────────────────────────────────────── */
