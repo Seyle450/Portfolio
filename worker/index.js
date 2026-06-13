@@ -170,21 +170,15 @@ async function handleTrack(request, env, ctx) {
   if (!daily.visitors.includes(visitorId)) daily.visitors.push(visitorId);
   await env.ANALYTICS.put(dailyKey, JSON.stringify(daily), { expirationTtl: 60 * 60 * 24 * 92 });
 
-  // ── Push-Benachrichtigung ─────────────────────────────────────────────────
-  const ntfyTopic = (env.NTFY_TOPIC || '').trim();
-  if (ntfyTopic) {
-    const ntfyName  = pageName(page);
-    const ntfyFlag  = country && country.length === 2
+  // ── Push-Benachrichtigung via Telegram ───────────────────────────────────
+  {
+    const flag = country && country.length === 2
       ? String.fromCodePoint(0x1F1E6 + country.charCodeAt(0) - 65) + String.fromCodePoint(0x1F1E6 + country.charCodeAt(1) - 65)
-      : '';
-    const ntfyIsNew   = !previousPage;
-    const ntfyTitle   = (ntfyIsNew ? '👁 Neuer Besuch ' : '📄 Seite ') + ntfyFlag;
-    const ntfyMessage = ntfyName + ' · ' + dev + (ntfyIsNew ? (profile.returning ? ' · ↩ Zurück' : ' · ✦ Neu') : '');
-    await fetch('https://ntfy.sh/' + ntfyTopic, {
-      method: 'POST',
-      headers: { 'Title': ntfyTitle, 'Tags': ntfyIsNew ? 'eyes' : 'page_facing_up', 'Priority': '3', 'Content-Type': 'text/plain' },
-      body: ntfyMessage,
-    }).catch(() => {});
+      : '🌍';
+    const isNew = !previousPage;
+    const icon  = isNew ? '👁' : '📄';
+    const msg   = `${icon} <b>${pageName(page)}</b>\n${flag} ${dev}${isNew ? (profile.returning ? ' · ↩ Wiederkehrend' : ' · ✦ Neu') : ''}`;
+    await sendTelegram(env, msg);
   }
 
   return json({ ok: true }, 200, origin);
@@ -307,32 +301,31 @@ async function handleData(request, env) {
   return json({ events, count: events.length }, 200, origin);
 }
 
-// ─── Push-Benachrichtigung via ntfy.sh ───────────────────────────────────────
+// ─── Push-Benachrichtigung via Telegram ──────────────────────────────────────
 function pageName(page) {
   if (!page) return '?';
   const p = page.toLowerCase();
-  if (p.includes('starscape')) return 'Starscape';
-  if (p.includes('ben'))       return "Ben's Catering";
-  if (p.includes('hevi'))      return "Hevi's Café";
-  if (p.includes('niki'))      return 'Café Niki';
-  if (p.includes('lokma'))     return 'Lokma Lovers';
-  if (p.includes('antepli'))   return 'Antepli Baklava';
-  if (p.includes('freelance')) return 'Freelance';
+  if (p.includes('starscape'))   return 'Starscape';
+  if (p.includes('ben'))         return "Ben's Catering";
+  if (p.includes('hevi'))        return "Hevi's Café";
+  if (p.includes('niki'))        return 'Café Niki';
+  if (p.includes('lokma'))       return 'Lokma Lovers';
+  if (p.includes('antepli'))     return 'Antepli Baklava';
+  if (p.includes('freelance'))   return 'Freelance';
   if (p.includes('datenschutz')) return 'Datenschutz';
   if (p === '/portfolio/' || p === '/portfolio' || p === '/') return 'Portfolio · Home';
   return page.split('/').filter(Boolean).pop() || page;
 }
 
-async function sendNtfy(env, title, body, tags) {
-  const topic = (env.NTFY_TOPIC || '').trim();
-  if (!topic) return;
-  try {
-    await fetch('https://ntfy.sh/' + encodeURIComponent(topic), {
-      method: 'POST',
-      headers: { 'Title': title, 'Tags': tags || 'bell', 'Priority': '3', 'Content-Type': 'text/plain' },
-      body: body,
-    });
-  } catch { /* ignore */ }
+async function sendTelegram(env, text) {
+  const token  = (env.TELEGRAM_TOKEN   || '').trim();
+  const chatId = (env.TELEGRAM_CHAT_ID || '').trim();
+  if (!token || !chatId) return;
+  await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ chat_id: chatId, text, parse_mode: 'HTML' }),
+  }).catch(() => {});
 }
 
 // ─── Session-Merge: Cross-Tab-Pfade retroaktiv verknüpfen ────────────────────
@@ -593,14 +586,8 @@ export default {
     }
     if (url.pathname === '/test-notify' && request.method === 'GET') {
       if (!isAuthorized(request, env)) return unauthorized(origin);
-      const topic = (env.NTFY_TOPIC || '').trim();
-      if (!topic) return json({ error: 'NTFY_TOPIC not set' }, 500, origin);
-      const res = await fetch('https://ntfy.sh/' + topic, {
-        method: 'POST',
-        headers: { 'Title': '✅ Debug Test', 'Tags': 'bell', 'Priority': '3', 'Content-Type': 'text/plain' },
-        body: 'Direkt aus Worker via fetch',
-      });
-      return json({ ok: true, ntfyStatus: res.status, topic: topic.slice(0,8)+'…' }, 200, origin);
+      await sendTelegram(env, '✅ <b>Test erfolgreich!</b>\nPortfolio Worker → Telegram funktioniert.');
+      return json({ ok: true }, 200, origin);
     }
     if (url.pathname === '/duration' && request.method === 'POST') {
       return handleDuration(request, env);
