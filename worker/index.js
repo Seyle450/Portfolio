@@ -18,7 +18,7 @@ function corsHeaders(origin) {
   const use = allowed.some(o => origin && origin.startsWith(o)) ? origin : CORS_ORIGIN;
   return {
     'Access-Control-Allow-Origin': use,
-    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     'Access-Control-Max-Age': '86400',
   };
@@ -81,87 +81,166 @@ function lastNDays(n) {
   return days;
 }
 
+// ── Besucher-Profil aktualisieren ─────────────────────────────────────────────
+async function updateVisitorProfile(env, visitorId, { page, sessionId, timestamp, referrer, device, screenWidth, language }) {
+  const profileKey = `profile:${visitorId}`;
+  let profile = {
+    visitorId,
+    alias: '',
+    firstSeen: timestamp,
+    lastSeen: timestamp,
+    totalPageviews: 0,
+    totalSessions: 0,
+    totalDurationMs: 0,
+    returning: false,
+    sessions: {},   // sessionId → { start, pages: [{page, ts, durationMs}], referrer, device }
+    topPages: {},
+  };
+
+  const existing = await env.ANALYTICS.get(profileKey);
+  if (existing) {
+    try { profile = { ...profile, ...JSON.parse(existing) }; profile.returning = true; } catch { /* */ }
+  }
+
+  profile.lastSeen = timestamp;
+  profile.totalPageviews += 1;
+
+  if (!profile.sessions[sessionId]) {
+    profile.sessions[sessionId] = { start: timestamp, referrer, device, pages: [] };
+    profile.totalSessions += 1;
+  }
+  profile.sessions[sessionId].pages.push({ page, ts: timestamp, durationMs: 0 });
+  profile.topPages[page] = (profile.topPages[page] || 0) + 1;
+
+  // Sessions auf die letzten 50 begrenzen
+  const sessionKeys = Object.keys(profile.sessions).sort((a, b) => profile.sessions[b].start - profile.sessions[a].start);
+  if (sessionKeys.length > 50) {
+    sessionKeys.slice(50).forEach(k => delete profile.sessions[k]);
+  }
+
+  await env.ANALYTICS.put(profileKey, JSON.stringify(profile), { expirationTtl: 60 * 60 * 24 * 365 });
+  return profile;
+}
+
 // ─── POST /track ─────────────────────────────────────────────────────────────
 
 async function handleTrack(request, env) {
   const origin = request.headers.get('Origin') || '';
-
   let body;
-  try {
-    body = await request.json();
-  } catch {
-    return json({ error: 'Invalid JSON' }, 400, origin);
-  }
+  try { body = await request.json(); } catch { return json({ error: 'Invalid JSON' }, 400, origin); }
 
   const {
-    page = '/',
-    previousPage = '',
-    pageIndex = 1,
-    referrer = '',
-    userAgent = request.headers.get('User-Agent') || '',
-    screenWidth = 0,
-    language = '',
-    timestamp = Date.now(),
-    sessionId = '',
+    page = '/', previousPage = '', pageIndex = 1,
+    referrer = '', userAgent = request.headers.get('User-Agent') || '',
+    screenWidth = 0, language = '', timestamp = Date.now(), sessionId = '',
   } = body;
 
   const visitorId = body.visitorId || deriveVisitorId(request);
+  const dev = deviceType(screenWidth);
 
-  // ── Wiederkehrende Besucher erkennen ──────────────────────────────────────
-  const visitorKey = `visitor:${visitorId}`;
-  let visitorData = { visits: 0, firstSeen: timestamp, lastSeen: timestamp, returning: false };
-  const existingVisitor = await env.ANALYTICS.get(visitorKey);
-  if (existingVisitor) {
-    try {
-      visitorData = JSON.parse(existingVisitor);
-      visitorData.returning = true;
-    } catch { /* ignore */ }
-  }
-  visitorData.visits += 1;
-  visitorData.lastSeen = timestamp;
-  await env.ANALYTICS.put(visitorKey, JSON.stringify(visitorData), {
-    expirationTtl: 60 * 60 * 24 * 365,
-  });
+  // ── Besucher-Profil ───────────────────────────────────────────────────────
+  const profile = await updateVisitorProfile(env, visitorId, { page, sessionId, timestamp, referrer, device: dev, screenWidth, language });
 
-  // ── Einzelnes Event speichern ──────────────────────────────────────────────
+  // ── Event speichern ───────────────────────────────────────────────────────
   const randId = Math.random().toString(36).slice(2, 8);
-  const eventKey = `event:${timestamp}:${randId}`;
-  const event = {
-    page,
-    previousPage,
-    pageIndex,
-    referrer,
-    userAgent,
-    screenWidth,
-    language,
-    timestamp,
-    sessionId,
-    visitorId,
-    device: deviceType(screenWidth),
-    returning: visitorData.returning,
-    totalVisits: visitorData.visits,
-  };
-  await env.ANALYTICS.put(eventKey, JSON.stringify(event), {
-    expirationTtl: 60 * 60 * 24 * 90,
-  });
+  await env.ANALYTICS.put(`event:${timestamp}:${randId}`, JSON.stringify({
+    page, previousPage, pageIndex, referrer, userAgent, screenWidth, language,
+    timestamp, sessionId, visitorId, device: dev,
+    returning: profile.returning, totalVisits: profile.totalPageviews,
+  }), { expirationTtl: 60 * 60 * 24 * 90 });
 
-  // ── Tägliche Aggregation aktualisieren ────────────────────────────────────
+  // ── Tages-Aggregat ────────────────────────────────────────────────────────
   const dateStr = toDateString(timestamp);
   const dailyKey = `daily:${dateStr}:${page}`;
   let daily = { pageviews: 0, visitors: [] };
-  const existing = await env.ANALYTICS.get(dailyKey);
-  if (existing) {
-    try { daily = JSON.parse(existing); } catch { /* ignore */ }
-  }
+  const ex = await env.ANALYTICS.get(dailyKey);
+  if (ex) { try { daily = JSON.parse(ex); } catch { /* */ } }
   daily.pageviews += 1;
-  if (!daily.visitors.includes(visitorId)) {
-    daily.visitors.push(visitorId);
-  }
-  await env.ANALYTICS.put(dailyKey, JSON.stringify(daily), {
-    expirationTtl: 60 * 60 * 24 * 92,
-  });
+  if (!daily.visitors.includes(visitorId)) daily.visitors.push(visitorId);
+  await env.ANALYTICS.put(dailyKey, JSON.stringify(daily), { expirationTtl: 60 * 60 * 24 * 92 });
 
   return json({ ok: true }, 200, origin);
+}
+
+// ─── POST /duration ───────────────────────────────────────────────────────────
+
+async function handleDuration(request, env) {
+  const origin = request.headers.get('Origin') || '';
+  let body;
+  try { body = await request.json(); } catch { return json({ ok: true }, 200, origin); }
+
+  const { page, durationMs = 0, sessionId = '', visitorId = '', timestamp = Date.now() } = body;
+  if (!page || durationMs < 500 || durationMs > 3600000) return json({ ok: true }, 200, origin);
+
+  // Verweildauer im Profil nachführen
+  const profileKey = `profile:${visitorId}`;
+  const raw = await env.ANALYTICS.get(profileKey);
+  if (raw) {
+    try {
+      const profile = JSON.parse(raw);
+      profile.totalDurationMs = (profile.totalDurationMs || 0) + durationMs;
+      // letzte Seite im Session-Eintrag aktualisieren
+      if (profile.sessions && profile.sessions[sessionId]) {
+        const pages = profile.sessions[sessionId].pages;
+        // finde die passende Seite (letzter Eintrag mit diesem page-Namen)
+        for (let i = pages.length - 1; i >= 0; i--) {
+          if (pages[i].page === page && pages[i].durationMs === 0) {
+            pages[i].durationMs = durationMs;
+            break;
+          }
+        }
+      }
+      await env.ANALYTICS.put(profileKey, JSON.stringify(profile), { expirationTtl: 60 * 60 * 24 * 365 });
+    } catch { /* */ }
+  }
+
+  return json({ ok: true }, 200, origin);
+}
+
+// ─── GET /profiles ────────────────────────────────────────────────────────────
+
+async function handleProfiles(request, env) {
+  const origin = request.headers.get('Origin') || '';
+  if (!isAuthorized(request, env)) return unauthorized(origin);
+
+  const profiles = [];
+  let cursor;
+  do {
+    const opts = { prefix: 'profile:', limit: 100 };
+    if (cursor) opts.cursor = cursor;
+    const listed = await env.ANALYTICS.list(opts);
+    cursor = listed.list_complete ? null : listed.cursor;
+    for (const key of listed.keys) {
+      const raw = await env.ANALYTICS.get(key.name);
+      if (raw) { try { profiles.push(JSON.parse(raw)); } catch { /* */ } }
+    }
+  } while (cursor);
+
+  profiles.sort((a, b) => b.lastSeen - a.lastSeen);
+  return json({ profiles, count: profiles.length }, 200, origin);
+}
+
+// ─── PUT /visitor/:id ─────────────────────────────────────────────────────────
+// Besucher umbenennen (alias setzen)
+
+async function handleVisitorUpdate(request, env, visitorId) {
+  const origin = request.headers.get('Origin') || '';
+  if (!isAuthorized(request, env)) return unauthorized(origin);
+
+  let body;
+  try { body = await request.json(); } catch { return json({ error: 'Invalid JSON' }, 400, origin); }
+
+  const profileKey = `profile:${visitorId}`;
+  const raw = await env.ANALYTICS.get(profileKey);
+  if (!raw) return json({ error: 'Visitor not found' }, 404, origin);
+
+  try {
+    const profile = JSON.parse(raw);
+    if (typeof body.alias === 'string') profile.alias = body.alias.slice(0, 80);
+    if (typeof body.note  === 'string') profile.note  = body.note.slice(0, 500);
+    await env.ANALYTICS.put(profileKey, JSON.stringify(profile), { expirationTtl: 60 * 60 * 24 * 365 });
+    return json({ ok: true, profile }, 200, origin);
+  } catch { return json({ error: 'Failed' }, 500, origin); }
 }
 
 // ─── GET /data ────────────────────────────────────────────────────────────────
@@ -366,11 +445,23 @@ export default {
     if (url.pathname === '/track' && request.method === 'POST') {
       return handleTrack(request, env);
     }
+    if (url.pathname === '/duration' && request.method === 'POST') {
+      return handleDuration(request, env);
+    }
     if (url.pathname === '/data' && request.method === 'GET') {
       return handleData(request, env);
     }
     if (url.pathname === '/summary' && request.method === 'GET') {
       return handleSummary(request, env);
+    }
+    if (url.pathname === '/profiles' && request.method === 'GET') {
+      return handleProfiles(request, env);
+    }
+    // PUT /visitor/<visitorId>  – Alias / Notiz setzen
+    if (url.pathname.startsWith('/visitor/') && (request.method === 'PUT' || request.method === 'PATCH')) {
+      const vid = url.pathname.replace('/visitor/', '').trim();
+      if (!vid) return json({ error: 'Missing visitorId' }, 400, origin);
+      return handleVisitorUpdate(request, env, vid);
     }
     if (url.pathname === '/debug-kv' && request.method === 'GET') {
       if (!isAuthorized(request, env)) return unauthorized(origin);

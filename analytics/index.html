@@ -170,6 +170,51 @@ tr:hover td { background: rgba(255,255,255,.02); }
 }
 .error-box.visible { display: block; }
 
+/* ── Visitor Profiles ────────────────────────────────────────────────────── */
+.profiles-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 1rem; flex-wrap: wrap; gap: .6rem;
+}
+.profiles-header h2 { font-size: 1rem; font-weight: 700; }
+#profileSearch {
+  background: var(--bg); border: 1px solid var(--border); border-radius: 6px;
+  color: var(--text); padding: .45rem .8rem; font-family: inherit; font-size: .82rem;
+  min-width: 220px;
+}
+#profileSearch:focus { outline: none; border-color: var(--accent); }
+.alias-cell { display: flex; align-items: center; gap: .4rem; }
+.alias-cell .alias-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.alias-cell input {
+  flex: 1; background: var(--bg); border: 1px solid var(--accent); border-radius: 5px;
+  color: var(--text); font-family: inherit; font-size: .82rem; padding: .25rem .5rem;
+  display: none;
+}
+.alias-cell.editing input    { display: block; }
+.alias-cell.editing .alias-name { display: none; }
+.alias-cell.editing .edit-btn { display: none; }
+.alias-cell.editing .save-btn,
+.alias-cell.editing .cancel-btn { display: inline-flex; }
+.icon-btn {
+  background: none; border: none; cursor: pointer; color: var(--muted);
+  padding: .15rem .3rem; border-radius: 4px; font-size: .8rem; flex-shrink: 0;
+  display: inline-flex; align-items: center;
+}
+.icon-btn:hover { color: var(--text); background: rgba(255,255,255,.05); }
+.save-btn   { color: var(--green) !important; display: none; }
+.cancel-btn { color: var(--red)   !important; display: none; }
+.visitor-row td { cursor: default; vertical-align: middle; }
+.expand-row { display: none; }
+.expand-row td { background: rgba(99,102,241,.04); padding: 0; }
+.expand-inner {
+  padding: .75rem 1.25rem; border-top: 1px solid var(--border);
+  font-size: .78rem; color: var(--muted); max-height: 260px; overflow-y: auto;
+}
+.expand-inner table { width: 100%; }
+.expand-inner th { background: transparent; border-bottom: 1px solid var(--border); }
+.expand-inner td { border-bottom: 1px solid rgba(42,45,62,.4); }
+.expand-trigger { cursor: pointer; user-select: none; }
+.expand-trigger:hover td { background: rgba(255,255,255,.03); }
+
 /* ── Responsive ──────────────────────────────────────────────────────────── */
 @media (max-width: 800px) {
   .chart-grid, .table-grid { grid-template-columns: 1fr; }
@@ -323,6 +368,34 @@ tr:hover td { background: rgba(255,255,255,.02); }
             <tbody id="tbEvents"></tbody>
           </table>
         </div>
+      </div>
+    </div>
+    <!-- ── Besucher-Profile ───────────────────────────────────────────── -->
+    <div class="panel full" id="profilesPanel" style="margin-top:1rem;">
+      <div class="panel-header">
+        <h3>Besucher-Profile</h3>
+        <input type="text" id="profileSearch" placeholder="Suchen…">
+      </div>
+      <div class="panel-body">
+        <div id="profilesLoading" class="spinner-wrap" style="display:none">
+          <div class="spinner"></div><span>Profile laden…</span>
+        </div>
+        <table id="profilesTable">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Name / Alias</th>
+              <th>Besucher-ID</th>
+              <th>Erster Besuch</th>
+              <th>Letzter Besuch</th>
+              <th>Sessions</th>
+              <th>Aufrufe</th>
+              <th>Verweildauer</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="tbProfiles"></tbody>
+        </table>
       </div>
     </div>
   </main>
@@ -629,6 +702,185 @@ document.getElementById('pageFilter').addEventListener('change', function () { r
 
 // Init: wenn bereits eingeloggt
 if (getToken()) loadData();
+
+// ── Besucher-Profile ──────────────────────────────────────────────────────────
+var rawProfiles = [];
+
+async function loadProfiles() {
+  var apiTok = getApiToken();
+  var loading = document.getElementById('profilesLoading');
+  loading.style.display = 'flex';
+  try {
+    var res = await fetch(WORKER_URL + '/profiles', {
+      headers: { 'Authorization': 'Bearer ' + apiTok }
+    });
+    if (!res.ok) throw new Error(res.status);
+    var d = await res.json();
+    rawProfiles = d.profiles || [];
+  } catch (e) {
+    rawProfiles = [];
+  } finally {
+    loading.style.display = 'none';
+  }
+  renderProfiles();
+}
+
+function fmtDuration(ms) {
+  if (!ms || ms < 1000) return '–';
+  var s = Math.round(ms / 1000);
+  if (s < 60) return s + 's';
+  var m = Math.floor(s / 60), rs = s % 60;
+  if (m < 60) return m + 'm ' + rs + 's';
+  var h = Math.floor(m / 60), rm = m % 60;
+  return h + 'h ' + rm + 'm';
+}
+
+function fmtDate(ts) {
+  if (!ts) return '–';
+  return new Date(ts).toLocaleDateString('de', { day:'2-digit', month:'2-digit', year:'numeric' });
+}
+
+function renderProfiles() {
+  var query = (document.getElementById('profileSearch').value || '').toLowerCase();
+  var tbody = document.getElementById('tbProfiles');
+  var filtered = rawProfiles.filter(function (p) {
+    if (!query) return true;
+    return (p.alias || '').toLowerCase().includes(query) ||
+           (p.visitorId || '').includes(query);
+  });
+
+  if (!filtered.length) {
+    tbody.innerHTML = '<tr><td colspan="9" style="color:var(--muted);text-align:center;padding:2rem">'
+      + (rawProfiles.length ? 'Keine Treffer.' : 'Noch keine Profile vorhanden.') + '</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(function (p, idx) {
+    var vid = esc(p.visitorId || '');
+    var alias = esc(p.alias || '');
+    var sessions = Object.values(p.sessions || {});
+    var sessionCount = p.totalSessions || sessions.length;
+    var topPage = Object.entries(p.topPages || {}).sort((a,b)=>b[1]-a[1])[0];
+    var statusBadge = p.returning
+      ? '<span class="badge" style="background:rgba(245,158,11,.15);color:var(--amber)">Wiederkehrend</span>'
+      : '<span class="badge" style="background:rgba(34,197,94,.12);color:#22c55e">Neu</span>';
+
+    // Session-Details für Expand-Row
+    var sessionRows = sessions
+      .sort(function (a, b) { return b.start - a.start; })
+      .slice(0, 20)
+      .map(function (s) {
+        var pages = (s.pages || []);
+        var dur = pages.reduce(function (sum, pg) { return sum + (pg.durationMs || 0); }, 0);
+        return '<tr><td style="white-space:nowrap">' + fmtDate(s.start) + '</td>'
+          + '<td>' + (s.device || '–') + '</td>'
+          + '<td>' + pages.length + ' Seiten</td>'
+          + '<td>' + fmtDuration(dur) + '</td>'
+          + '<td style="max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'
+          + pages.map(function(pg){ return esc(pg.page); }).join(' → ') + '</td></tr>';
+      }).join('');
+
+    var expandId = 'exp-' + idx;
+    var triggerClass = sessions.length ? 'expand-trigger' : '';
+
+    return '<tr class="visitor-row ' + triggerClass + '" data-expand="' + expandId + '">'
+      + '<td style="color:var(--muted);font-size:1rem;padding-left:.75rem">'
+      + (sessions.length ? '▶' : '') + '</td>'
+      + '<td><div class="alias-cell" data-vid="' + vid + '">'
+      + '<span class="alias-name">' + (alias || '<span style="color:var(--muted);font-style:italic">Kein Name</span>') + '</span>'
+      + '<input type="text" value="' + alias + '" maxlength="80" placeholder="Name vergeben…">'
+      + '<button class="icon-btn edit-btn" title="Bearbeiten">✎</button>'
+      + '<button class="icon-btn save-btn"   title="Speichern">✓</button>'
+      + '<button class="icon-btn cancel-btn" title="Abbrechen">✕</button>'
+      + '</div></td>'
+      + '<td style="font-family:monospace;font-size:.78rem;color:var(--muted)">' + vid.slice(0, 12) + '…</td>'
+      + '<td style="white-space:nowrap">' + fmtDate(p.firstSeen) + '</td>'
+      + '<td style="white-space:nowrap">' + fmtDate(p.lastSeen) + '</td>'
+      + '<td>' + sessionCount + '</td>'
+      + '<td>' + (p.totalPageviews || 0) + '</td>'
+      + '<td>' + fmtDuration(p.totalDurationMs) + '</td>'
+      + '<td>' + statusBadge + '</td>'
+      + '</tr>'
+      + '<tr class="expand-row" id="' + expandId + '">'
+      + '<td colspan="9"><div class="expand-inner">'
+      + (sessionRows ? '<table><thead><tr><th>Datum</th><th>Gerät</th><th>Seiten</th><th>Verweildauer</th><th>Pfad</th></tr></thead><tbody>'
+          + sessionRows + '</tbody></table>'
+        : '<em>Keine Session-Details.</em>')
+      + '</div></td></tr>';
+  }).join('');
+
+  // Event-Delegation für Expand
+  tbody.querySelectorAll('.expand-trigger').forEach(function (row) {
+    row.addEventListener('click', function (e) {
+      if (e.target.closest('.alias-cell')) return; // nicht beim Alias-Edit öffnen
+      var expRow = document.getElementById(row.dataset.expand);
+      if (!expRow) return;
+      var isOpen = expRow.style.display === 'table-row';
+      expRow.style.display = isOpen ? 'none' : 'table-row';
+      var arrow = row.querySelector('td:first-child');
+      if (arrow) arrow.textContent = isOpen ? '▶' : '▼';
+    });
+  });
+
+  // Alias Inline-Edit
+  tbody.querySelectorAll('.alias-cell').forEach(function (cell) {
+    var editBtn   = cell.querySelector('.edit-btn');
+    var saveBtn   = cell.querySelector('.save-btn');
+    var cancelBtn = cell.querySelector('.cancel-btn');
+    var input     = cell.querySelector('input');
+    var nameSpan  = cell.querySelector('.alias-name');
+    var vid       = cell.dataset.vid;
+
+    editBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      cell.classList.add('editing');
+      input.focus(); input.select();
+    });
+
+    cancelBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      cell.classList.remove('editing');
+    });
+
+    saveBtn.addEventListener('click', async function (e) {
+      e.stopPropagation();
+      var newAlias = input.value.trim();
+      saveBtn.textContent = '…'; saveBtn.disabled = true;
+      try {
+        var res = await fetch(WORKER_URL + '/visitor/' + encodeURIComponent(vid), {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getApiToken() },
+          body: JSON.stringify({ alias: newAlias }),
+        });
+        if (!res.ok) throw new Error(res.status);
+        // lokal aktualisieren
+        var prof = rawProfiles.find(function(p){ return p.visitorId === vid; });
+        if (prof) prof.alias = newAlias;
+        nameSpan.innerHTML = newAlias || '<span style="color:var(--muted);font-style:italic">Kein Name</span>';
+        cell.classList.remove('editing');
+      } catch (err) {
+        alert('Fehler beim Speichern: ' + err.message);
+      } finally {
+        saveBtn.textContent = '✓'; saveBtn.disabled = false;
+      }
+    });
+
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter')  saveBtn.click();
+      if (e.key === 'Escape') cancelBtn.click();
+    });
+  });
+}
+
+document.getElementById('profileSearch').addEventListener('input', renderProfiles);
+
+// Profile nach dem Haupt-Load nachladen
+var _origLoadData = loadData;
+loadData = async function () {
+  await _origLoadData.apply(this, arguments);
+  if (getToken()) loadProfiles();
+};
+if (getToken()) loadProfiles();
 </script>
 </body>
 </html>
