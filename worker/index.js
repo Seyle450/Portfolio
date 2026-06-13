@@ -171,15 +171,20 @@ async function handleTrack(request, env, ctx) {
   await env.ANALYTICS.put(dailyKey, JSON.stringify(daily), { expirationTtl: 60 * 60 * 24 * 92 });
 
   // ── Push-Benachrichtigung ─────────────────────────────────────────────────
-  if (env.NTFY_TOPIC) {
-    const name = pageName(page);
-    const flag = country && country.length === 2
+  const ntfyTopic = (env.NTFY_TOPIC || '').trim();
+  if (ntfyTopic) {
+    const ntfyName  = pageName(page);
+    const ntfyFlag  = country && country.length === 2
       ? String.fromCodePoint(0x1F1E6 + country.charCodeAt(0) - 65) + String.fromCodePoint(0x1F1E6 + country.charCodeAt(1) - 65)
       : '';
-    const isNew = !previousPage;
-    const title = (isNew ? '👁 Neuer Besuch ' : '📄 Seite ') + flag;
-    const body  = name + ' · ' + dev + (isNew ? (profile.returning ? ' · ↩ Zurück' : ' · ✦ Neu') : '');
-    ctx.waitUntil(sendNtfy(env, title, body, isNew ? 'eyes' : 'page_facing_up'));
+    const ntfyIsNew   = !previousPage;
+    const ntfyTitle   = (ntfyIsNew ? '👁 Neuer Besuch ' : '📄 Seite ') + ntfyFlag;
+    const ntfyMessage = ntfyName + ' · ' + dev + (ntfyIsNew ? (profile.returning ? ' · ↩ Zurück' : ' · ✦ Neu') : '');
+    await fetch('https://ntfy.sh/' + ntfyTopic, {
+      method: 'POST',
+      headers: { 'Title': ntfyTitle, 'Tags': ntfyIsNew ? 'eyes' : 'page_facing_up', 'Priority': '3', 'Content-Type': 'text/plain' },
+      body: ntfyMessage,
+    }).catch(() => {});
   }
 
   return json({ ok: true }, 200, origin);
@@ -590,8 +595,12 @@ export default {
       if (!isAuthorized(request, env)) return unauthorized(origin);
       const topic = (env.NTFY_TOPIC || '').trim();
       if (!topic) return json({ error: 'NTFY_TOPIC not set' }, 500, origin);
-      await sendNtfy(env, '✅ Test erfolgreich', 'Portfolio Worker → ntfy.sh funktioniert!', 'white_check_mark');
-      return json({ ok: true, topic: topic.slice(0, 8) + '…' }, 200, origin);
+      const res = await fetch('https://ntfy.sh/' + topic, {
+        method: 'POST',
+        headers: { 'Title': '✅ Debug Test', 'Tags': 'bell', 'Priority': '3', 'Content-Type': 'text/plain' },
+        body: 'Direkt aus Worker via fetch',
+      });
+      return json({ ok: true, ntfyStatus: res.status, topic: topic.slice(0,8)+'…' }, 200, origin);
     }
     if (url.pathname === '/duration' && request.method === 'POST') {
       return handleDuration(request, env);
