@@ -9,19 +9,41 @@
 <meta name="description" content="Portfolio von Elyes Ferchichi — Web Developer mit Fokus auf Shopify und Frontend. Aus Bremen, offen für Praktikum oder Minijob.">
 <meta name="author" content="Elyes Ferchichi">
 
+<link rel="canonical" href="https://seyle450.github.io/Portfolio/">
 <meta property="og:type" content="website">
+<meta property="og:locale" content="de_DE">
+<meta property="og:url" content="https://seyle450.github.io/Portfolio/">
 <meta property="og:title" content="Elyes Ferchichi — Web Developer">
 <meta property="og:description" content="Web Developer mit Fokus auf Shopify & Frontend.">
-<meta property="og:image" content="Daten/Profil.JPEG">
+<meta property="og:image" content="https://seyle450.github.io/Portfolio/Daten/Profil.JPEG">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Elyes Ferchichi — Web Developer">
+<meta name="twitter:description" content="Web Developer mit Fokus auf Shopify & Frontend.">
+<meta name="twitter:image" content="https://seyle450.github.io/Portfolio/Daten/Profil.JPEG">
 
 <title>Elyes Ferchichi — Web Developer</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="image" href="Daten/Profil.JPEG">
-<link rel="stylesheet" href="fonts.css">
+<link rel="preload" as="image" href="Daten/Profil-720.jpg" fetchpriority="high">
+<link rel="stylesheet" href="Extra/fonts.css">
 <link rel="stylesheet" href="style.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Elyes Ferchichi",
+  "jobTitle": "Web Developer",
+  "email": "mailto:elyes.ferchichi@icloud.com",
+  "url": "https://seyle450.github.io/Portfolio/",
+  "image": "https://seyle450.github.io/Portfolio/Daten/Profil.JPEG",
+  "address": { "@type": "PostalAddress", "addressLocality": "Bremen", "addressCountry": "DE" },
+  "sameAs": [
+    "https://www.linkedin.com/in/seyle/",
+    "https://github.com/Seyle450"
+  ],
+  "knowsAbout": ["HTML", "CSS", "JavaScript", "Liquid", "Shopify", "Python"]
+}
+</script>
 </head>
 <body>
 <div class="page">
@@ -36,20 +58,20 @@
         <h2 class="contact-title">Kontakt</h2>
         <ul>
           <li><span class="lbl">E-Mail:</span> <a href="mailto:elyes.ferchichi@icloud.com">elyes.ferchichi@icloud.com</a></li>
-          <li class="link"><a href="https://www.linkedin.com/in/seyle/">LinkedIn</a></li>
-          <li class="link"><a href="https://github.com/Seyle450">Github</a></li>
-          <li class="link"><a href="Daten/Lebenslauf 19.05.2026.pdf">Lebenslauf (PDF)</a></li>
+          <li class="link"><a href="https://www.linkedin.com/in/seyle/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+          <li class="link"><a href="https://github.com/Seyle450" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+          <li class="link"><a href="Daten/Lebenslauf 19.05.2026.pdf" target="_blank" rel="noopener noreferrer">Lebenslauf (PDF)</a></li>
         </ul>
-      </div>
-
-      <div class="badge-row">
-        <div class="badge"><span class="dot blink_me" aria-hidden="true"></span>Auf der Suche nach einem Minijob / Praktikum</div>
-        <div class="badge">Remote &amp; Bremen</div>
       </div>
     </div>
 
     <div class="portrait-wrap">
-      <img class="portrait" src="Daten/Profil.JPEG" alt="Porträt von Elyes Ferchichi" width="280" height="392" fetchpriority="high" decoding="async">
+      <img class="portrait" src="Daten/Profil-720.jpg" alt="Porträt von Elyes Ferchichi" width="720" height="960" fetchpriority="high" decoding="async">
+    </div>
+
+    <div class="badge-row">
+      <div class="badge"><span class="dot blink_me" aria-hidden="true"></span>Auf der Suche nach einem Minijob / Praktikum</div>
+      <div class="badge">Remote &amp; Bremen</div>
     </div>
   </section>
 
@@ -57,7 +79,7 @@
 
   <!-- ABOUT -->
   <section class="about" data-screen-label="02 Über mich" aria-label="Über mich">
-    <p><em>Hey,</em> Ich bin ein <em><span id="age" data-dob="2007-10-15">18</span>-jähriger</em> Schüler und <em>angehender Webentwickler</em> mit Fokus auf <em>Frontend</em> und <em>Shopify</em>. In den letzten Monaten habe ich durch ein Praktikum <em>praktische Erfahrung</em> in der Arbeit an echten E-Commerce-Projekten gesammelt und dabei vor allem an Frontend-Anpassungen, Features und Bugfixes gearbeitet.</p>
+    <p><em>Hey,</em> ich bin ein <em><span id="age" data-dob="2007-10-15">18</span>-jähriger</em> Schüler und <em>angehender Webentwickler</em> mit Fokus auf <em>Frontend</em> und <em>Shopify</em>. In den letzten Monaten habe ich durch ein Praktikum <em>praktische Erfahrung</em> in der Arbeit an echten E-Commerce-Projekten gesammelt und dabei vor allem an Frontend-Anpassungen, Features und Bugfixes gearbeitet.</p>
     <p>Ich arbeite mich schnell in neue Themen ein und lege Wert auf sauberen, verständlichen Code. Aktuell baue ich mein Portfolio weiter aus und suche nach einer Möglichkeit, als Minijobber im Bereich <em>Webentwicklung</em> weiter <em>praktische Erfahrung</em> zu sammeln.</p>
   </section>
 
@@ -95,7 +117,7 @@
      <div class="projects-rail" id="projectsRail" tabindex="0" role="region" aria-label="Projekte – horizontal scrollbar">
       <article class="project-card">
         <div class="project-shot">
-          <img class="project-img" src="Daten/Bloom Naturals.png" alt="Screenshot der Bloom Naturals Website" loading="lazy" decoding="async">
+          <img class="project-img" src="Daten/Bloom Naturals-800.jpg" alt="Screenshot der Bloom Naturals Website" width="800" height="547" loading="lazy" decoding="async">
         </div>
         <div class="project-meta">
           <div>
@@ -113,7 +135,7 @@
 
       <article class="project-card">
         <div class="project-shot">
-          <img class="project-img" src="Daten/Sportnahrung Wehle.png" alt="Screenshot der Sportnahrung Wehle Website" loading="lazy" decoding="async">
+          <img class="project-img" src="Daten/Sportnahrung Wehle-800.jpg" alt="Screenshot der Sportnahrung Wehle Website" width="800" height="539" loading="lazy" decoding="async">
         </div>
         <div class="project-meta">
           <div>
@@ -131,7 +153,7 @@
 
       <article class="project-card">
         <div class="project-shot">
-          <img class="project-img" src="Daten/Ostfriesenpfoten.png" alt="Screenshot der Ostfriesenpfoten Website" loading="lazy" decoding="async">
+          <img class="project-img" src="Daten/Ostfriesenpfoten-800.jpg" alt="Screenshot der Ostfriesenpfoten Website" width="800" height="555" loading="lazy" decoding="async">
         </div>
         <div class="project-meta">
           <div>
@@ -140,7 +162,7 @@
           </div>
           <span class="date">Februar 2025</span>
         </div>
-        <p class="project-desc">Landing-Page-Redesign und Conversion-Optimierung für eine Collagen-Marke. Custom Hero, neue Produkt-Komponenten und Mobile-First-Layout.</p>
+        <p class="project-desc">Shopify-Theme-Anpassungen für eine Tierbedarfs-Marke. Eigene Blöcke und Sections, Frontend-Features und Bugfixes auf Produkt- und Kategorieseiten.</p>
         <ul class="project-tags">
           <li>Shopify</li><li>JavaScript</li><li>Liquid</li>
         </ul>

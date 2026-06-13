@@ -106,7 +106,10 @@ body::before { animation: bgDrift 18s ease-in-out infinite; }
   .page { position: relative; z-index: 1; max-width: var(--max); margin: 0 auto; padding: 56px 64px 80px; }
 
   /* ───────── HERO ───────── */
-  .hero { display: grid; grid-template-columns: 1fr 280px; gap: 48px; align-items: start; }
+  /* Porträt (Spalte 2) endet bündig mit der Kontakt-Box: die Badges liegen
+     in einer eigenen Grid-Zeile, das Bild streckt sich auf die Zeilenhöhe. */
+  .hero { display: grid; grid-template-columns: 1fr 280px; column-gap: 48px; row-gap: 0; }
+  .hero .badge-row { grid-column: 1; }
   .hero-left { padding-top: 8px; }
   .hero h1 {
     font-family: 'Space Grotesk', sans-serif;
@@ -177,7 +180,8 @@ body::before { animation: bgDrift 18s ease-in-out infinite; }
 
   .portrait-wrap {
     width: 100%;
-    aspect-ratio: 3 / 4.2;
+    align-self: stretch;
+    min-height: 360px;
     border-radius: 24px;
     overflow: hidden;
     border: 1px solid var(--border);
@@ -478,11 +482,6 @@ body::before { animation: bgDrift 18s ease-in-out infinite; }
     color: var(--fg);
     white-space: nowrap;
   }
-  .tl-head .line {
-    flex: 1;
-    height: 1px;
-    background: var(--border-strong);
-  }
   .tl-head .date {
     font-family: 'JetBrains Mono', monospace;
     font-size: 12.5px;
@@ -545,9 +544,8 @@ body::before { animation: bgDrift 18s ease-in-out infinite; }
     cursor: pointer;
     text-decoration: none;
     display: flex; align-items: center; justify-content: center; gap: 12px;
-    transition: background .2s, border-color .2s;
+    transition: background .15s ease-out, border-color .15s ease-out, transform .18s cubic-bezier(.2,.9,.3,1), box-shadow .18s ease-out;
   }
-  .doc-btn { transition: background .15s ease-out, border-color .15s ease-out, transform .18s cubic-bezier(.2,.9,.3,1), box-shadow .18s ease-out; }
   .doc-btn:hover { background: rgba(255,255,255,0.08); border-color: var(--border-strong); transform: translateY(-3px); box-shadow: 0 14px 36px rgba(0,0,0,0.45); }
   .doc-btn::before {
     content: "";
@@ -572,27 +570,13 @@ body::before { animation: bgDrift 18s ease-in-out infinite; }
   .footer .tag { font-size: 13px; color: var(--fg-dim); margin-top: 8px; font-family: 'JetBrains Mono', monospace; }
 
 
-  .Praktikum {
-    margin-top: 18px;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 12px;
-    text-align: center;
-    color: var(--fg);
-    font-size: 14px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    cursor: pointer;
-    text-decoration: none;
-    transition: background .2s;
-  }
-  .Praktikum:hover { background: rgba(255,255,255,0.12); }
   /* ───────── MOBILE ───────── */
   @media (max-width: 945px) {
     .page { padding: 28px 20px 60px; }
     .hero { grid-template-columns: 1fr; gap: 24px; }
     .hero-left { order: 2; }
-    .portrait-wrap { order: 1; max-width: 240px; margin: 0 auto; aspect-ratio: 3 / 4; }
+    .portrait-wrap { order: 1; max-width: 240px; margin: 0 auto; align-self: center; min-height: 0; aspect-ratio: 3 / 4; }
+    .hero .badge-row { order: 3; margin-top: 0; }
     .hero h1 { font-size: 44px; }
     .hero .tagline { font-size: 16px; }
     .contact-card { margin-top: 24px; padding: 20px; max-width: none;}
@@ -625,8 +609,3 @@ body::before { animation: bgDrift 18s ease-in-out infinite; }
     .contact-card { padding: 18px; }
     .docs-block { padding: 20px; }
   }
-  img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}

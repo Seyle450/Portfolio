@@ -21,7 +21,8 @@
   const staggerTargets = [
     document.querySelector('.tech-pills'),
     document.querySelector('.timeline'),
-    document.querySelector('.docs-grid')
+    document.querySelector('.docs-grid'),
+    document.querySelector('.freelance-grid')
   ].filter(Boolean);
   staggerTargets.forEach(el => el.classList.add('reveal-stagger'));
 
@@ -53,7 +54,7 @@
     const fill = document.getElementById('railFill');
     const count = document.getElementById('railCount');
     if (!rail) return;
-    const cards = () => Array.from(rail.querySelectorAll('.project-card'));
+    const cards = () => Array.from(rail.querySelectorAll('.project-card:not(.empty)'));
     function step() {
       const c = cards()[0];
       if (!c) return rail.clientWidth;
