@@ -1,14 +1,13 @@
 /**
  * Portfolio Analytics Tracker
- * Leichtgewichtiges Tracking-Script – kein Cookie, kein localStorage.
- * Einbinden: <script src="/analytics/tracker.js" defer></script>
+ * Kein Cookie, kein localStorage – DSGVO-freundlich.
+ * Trackt: Seitenaufrufe, Session-Flow, Wiederkehrende Besucher.
  */
 
 (function () {
-  // TODO: Deine Worker-URL eintragen (nach `wrangler deploy`)
   var WORKER_URL = 'https://portfolio-analytics.seyle450.workers.dev';
 
-  // ── Canvas-Fingerprint (DSGVO-freundlich: kein Speichern, nur Zählen) ──────
+  // ── Canvas-Fingerprint ────────────────────────────────────────────────────
   function canvasFingerprint() {
     try {
       var c = document.createElement('canvas');
@@ -17,12 +16,10 @@
       ctx.font = '14px Arial';
       ctx.fillText('Analytics\u{1F4CA}', 2, 2);
       return c.toDataURL().slice(-20);
-    } catch (e) {
-      return 'no-canvas';
-    }
+    } catch (e) { return 'no-canvas'; }
   }
 
-  // ── Stabiler Visitor-Hash ohne Cookie / localStorage ─────────────────────
+  // ── Stabiler Visitor-Hash (kein Cookie/localStorage) ─────────────────────
   function getVisitorId() {
     var parts = [
       canvasFingerprint(),
@@ -30,9 +27,7 @@
       navigator.language || '',
       Intl.DateTimeFormat().resolvedOptions().timeZone || '',
       navigator.hardwareConcurrency || '',
-      navigator.deviceMemory || '',
     ].join('|');
-    // FNV-1a Hash
     var h = 2166136261;
     for (var i = 0; i < parts.length; i++) {
       h ^= parts.charCodeAt(i);
@@ -41,7 +36,7 @@
     return (h >>> 0).toString(16).padStart(8, '0');
   }
 
-  // ── Session-ID (pro Browser-Tab, flüchtig) ───────────────────────────────
+  // ── Session-ID (pro Browser-Tab) ─────────────────────────────────────────
   function getSessionId() {
     var key = '_as';
     var sid = sessionStorage.getItem(key);
@@ -52,21 +47,46 @@
     return sid;
   }
 
-  // ── Event senden (fire-and-forget) ──────────────────────────────────────
+  // ── Seitenanzahl dieser Session (für Session-Flow) ────────────────────────
+  function getSessionPageIndex() {
+    var key = '_api';
+    var n = parseInt(sessionStorage.getItem(key) || '0', 10) + 1;
+    sessionStorage.setItem(key, String(n));
+    return n;
+  }
+
+  // ── Vorherige Seite in dieser Session ─────────────────────────────────────
+  function getPreviousPage() {
+    return sessionStorage.getItem('_pp') || '';
+  }
+  function setCurrentPage(page) {
+    sessionStorage.setItem('_pp', page);
+  }
+
+  // ── Event senden ──────────────────────────────────────────────────────────
   function send() {
     try {
+      var visitorId    = getVisitorId();
+      var sessionId    = getSessionId();
+      var pageIndex    = getSessionPageIndex();
+      var previousPage = getPreviousPage();
+      var currentPage  = location.pathname + location.search;
+
       var payload = {
-        page: location.pathname + location.search,
-        referrer: document.referrer || '',
-        userAgent: navigator.userAgent,
-        screenWidth: screen.width,
-        language: navigator.language || '',
-        timestamp: Date.now(),
-        sessionId: getSessionId(),
-        visitorId: getVisitorId(),
+        page:         currentPage,
+        previousPage: previousPage,       // woher innerhalb der Site
+        pageIndex:    pageIndex,          // wie viele Seiten diese Session
+        referrer:     document.referrer || '',
+        userAgent:    navigator.userAgent,
+        screenWidth:  screen.width,
+        language:     navigator.language || '',
+        timestamp:    Date.now(),
+        sessionId:    sessionId,
+        visitorId:    visitorId,
       };
 
-      // Bevorzuge navigator.sendBeacon für Unload-Sicherheit
+      setCurrentPage(currentPage);
+
       if (navigator.sendBeacon) {
         var blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
         navigator.sendBeacon(WORKER_URL + '/track', blob);
@@ -78,12 +98,10 @@
           keepalive: true,
         }).catch(function () {});
       }
-    } catch (e) {
-      // Leises Scheitern – Seite darf nie brechen
-    }
+    } catch (e) { /* leises Scheitern */ }
   }
 
-  // ── SPA-Support: History-Navigation tracken ───────────────────────────────
+  // SPA-Support
   function patchHistory(method) {
     var orig = history[method];
     history[method] = function () {
@@ -92,14 +110,12 @@
     };
   }
 
-  // Initialer Seitenaufruf
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', send);
   } else {
     send();
   }
 
-  // SPA-Navigation
   window.addEventListener('popstate', send);
   patchHistory('pushState');
   patchHistory('replaceState');

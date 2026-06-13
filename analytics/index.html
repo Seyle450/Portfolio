@@ -240,6 +240,16 @@ tr:hover td { background: rgba(255,255,255,.02); }
         <div class="kpi-value" id="kpiTopPage" style="font-size:1rem;word-break:break-all;">–</div>
         <div class="kpi-sub" id="kpiTopPageViews"></div>
       </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Wiederkehrend</div>
+        <div class="kpi-value" id="kpiReturning">–</div>
+        <div class="kpi-sub" id="kpiReturningPct"></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Neu</div>
+        <div class="kpi-value" id="kpiNew">–</div>
+        <div class="kpi-sub">neue Besucher</div>
+      </div>
     </div>
 
     <!-- Charts -->
@@ -259,6 +269,28 @@ tr:hover td { background: rgba(255,255,255,.02); }
       <div class="chart-card full">
         <h3>Top Referrer</h3>
         <div class="chart-wrap"><canvas id="chartReferrers"></canvas></div>
+      </div>
+    </div>
+
+    <!-- Session Flow + Landing Pages -->
+    <div class="table-grid" style="margin-bottom:1rem;">
+      <div class="panel">
+        <div class="panel-header"><h3>Top Einstiegsseiten</h3></div>
+        <div class="panel-body">
+          <table>
+            <thead><tr><th>Seite</th><th>Einstiege</th></tr></thead>
+            <tbody id="tbLanding"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><h3>Session-Pfade (häufigste Wege)</h3></div>
+        <div class="panel-body">
+          <table>
+            <thead><tr><th>Pfad</th><th>Sessions</th></tr></thead>
+            <tbody id="tbFlows"></tbody>
+          </table>
+        </div>
       </div>
     </div>
 
@@ -286,7 +318,7 @@ tr:hover td { background: rgba(255,255,255,.02); }
         <div class="panel-body">
           <table>
             <thead><tr>
-              <th>Zeitpunkt</th><th>Seite</th><th>Gerät</th><th>Sprache</th>
+              <th>Zeitpunkt</th><th>Seite</th><th>Gerät</th><th>Besucher</th><th>Views</th>
             </tr></thead>
             <tbody id="tbEvents"></tbody>
           </table>
@@ -412,6 +444,14 @@ function renderAll() {
   document.getElementById('kpiTopPage').textContent     = top ? top.page : '–';
   document.getElementById('kpiTopPageViews').textContent = top ? top.views + ' Aufrufe' : '';
 
+  var total = (s.returningVisitors || 0) + (s.newVisitors || 0);
+  document.getElementById('kpiReturning').textContent = (s.returningVisitors || 0).toLocaleString('de');
+  document.getElementById('kpiReturningPct').textContent = total > 0
+    ? Math.round((s.returningVisitors / total) * 100) + '% aller Besucher' : 'Besucher';
+  document.getElementById('kpiNew').textContent = (s.newVisitors || 0).toLocaleString('de');
+
+  renderLandingTable(s.topLandingPages || []);
+  renderFlowTable(s.topSessionPaths || []);
   renderDailyChart(s.dailyStats);
   renderPagesChart(s.topPages);
   renderDevicesChart(s.deviceTypes);
@@ -523,6 +563,22 @@ function renderReferrersChart(topReferrers) {
   });
 }
 
+function renderLandingTable(topLanding) {
+  var tbody = document.getElementById('tbLanding');
+  if (!tbody) return;
+  tbody.innerHTML = topLanding.length ? topLanding.map(function (l) {
+    return '<tr><td>' + esc(l.page) + '</td><td>' + l.count + '</td></tr>';
+  }).join('') : '<tr><td colspan="2" style="color:var(--muted);text-align:center">Noch keine Daten</td></tr>';
+}
+
+function renderFlowTable(flows) {
+  var tbody = document.getElementById('tbFlows');
+  if (!tbody) return;
+  tbody.innerHTML = flows.length ? flows.map(function (f) {
+    return '<tr><td style="font-size:.78rem">' + esc(f.path) + '</td><td>' + f.count + '</td></tr>';
+  }).join('') : '<tr><td colspan="2" style="color:var(--muted);text-align:center">Noch keine Multi-Page-Sessions</td></tr>';
+}
+
 function renderPagesTable(topPages, total) {
   var tbody = document.getElementById('tbPages');
   tbody.innerHTML = topPages.map(function (p) {
@@ -546,9 +602,13 @@ function renderEventsTable(events) {
     var t  = new Date(e.timestamp).toLocaleString('de');
     var dev = e.device || 'unknown';
     var badge = '<span class="badge badge-' + dev + '">' + dev + '</span>';
+    var visitorBadge = e.returning
+      ? '<span class="badge" style="background:rgba(245,158,11,.15);color:var(--amber)">wiederkehrend</span>'
+      : '<span class="badge" style="background:rgba(34,197,94,.12);color:#22c55e">neu</span>';
     return '<tr><td style="white-space:nowrap">' + t + '</td>'
          + '<td>' + esc(e.page) + '</td><td>' + badge + '</td>'
-         + '<td>' + esc(e.language || '–') + '</td></tr>';
+         + '<td>' + visitorBadge + '</td>'
+         + '<td>' + (e.totalVisits || 1) + '</td></tr>';
   }).join('');
 }
 

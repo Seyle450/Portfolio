@@ -95,6 +95,8 @@ async function handleTrack(request, env) {
 
   const {
     page = '/',
+    previousPage = '',
+    pageIndex = 1,
     referrer = '',
     userAgent = request.headers.get('User-Agent') || '',
     screenWidth = 0,
@@ -103,14 +105,31 @@ async function handleTrack(request, env) {
     sessionId = '',
   } = body;
 
-  // visitorId: bevorzuge clientseitigen Hash, fallback auf Server-Hash
   const visitorId = body.visitorId || deriveVisitorId(request);
+
+  // ── Wiederkehrende Besucher erkennen ──────────────────────────────────────
+  const visitorKey = `visitor:${visitorId}`;
+  let visitorData = { visits: 0, firstSeen: timestamp, lastSeen: timestamp, returning: false };
+  const existingVisitor = await env.ANALYTICS.get(visitorKey);
+  if (existingVisitor) {
+    try {
+      visitorData = JSON.parse(existingVisitor);
+      visitorData.returning = true;
+    } catch { /* ignore */ }
+  }
+  visitorData.visits += 1;
+  visitorData.lastSeen = timestamp;
+  await env.ANALYTICS.put(visitorKey, JSON.stringify(visitorData), {
+    expirationTtl: 60 * 60 * 24 * 365,
+  });
 
   // ── Einzelnes Event speichern ──────────────────────────────────────────────
   const randId = Math.random().toString(36).slice(2, 8);
   const eventKey = `event:${timestamp}:${randId}`;
   const event = {
     page,
+    previousPage,
+    pageIndex,
     referrer,
     userAgent,
     screenWidth,
@@ -119,9 +138,10 @@ async function handleTrack(request, env) {
     sessionId,
     visitorId,
     device: deviceType(screenWidth),
+    returning: visitorData.returning,
+    totalVisits: visitorData.visits,
   };
   await env.ANALYTICS.put(eventKey, JSON.stringify(event), {
-    // Events nach 90 Tagen automatisch löschen
     expirationTtl: 60 * 60 * 24 * 90,
   });
 
@@ -197,8 +217,12 @@ async function handleSummary(request, env) {
   const pageCount = {};
   const referrerCount = {};
   const deviceCount = { desktop: 0, mobile: 0, tablet: 0, unknown: 0 };
-  const dailyMap = {}; // date → { pageviews, visitors: Set }
+  const dailyMap = {};
   const recentEvents = [];
+  let returningVisitors = 0;
+  let newVisitors = 0;
+  const sessionFlows = {}; // sessionId → [pages in order]
+  const landingPages = {}; // page → count as landing page
 
   // Tages-Aggregate aus KV lesen (effizient, kein Event-Scan nötig für Summen)
   for (const date of dateRange) {
@@ -255,7 +279,22 @@ async function handleSummary(request, env) {
         } catch { /* ignore */ }
       }
 
-      if (recentEvents.length < 20) recentEvents.push(ev);
+      // Wiederkehrende Besucher
+      if (ev.returning) returningVisitors++;
+      else newVisitors++;
+
+      // Session-Flow aufbauen
+      if (ev.sessionId) {
+        if (!sessionFlows[ev.sessionId]) sessionFlows[ev.sessionId] = [];
+        sessionFlows[ev.sessionId].push({ page: ev.page, ts: ev.timestamp, idx: ev.pageIndex || 1 });
+      }
+
+      // Landing Pages
+      if (!ev.previousPage || ev.pageIndex === 1) {
+        landingPages[ev.page] = (landingPages[ev.page] || 0) + 1;
+      }
+
+      if (recentEvents.length < 50) recentEvents.push(ev);
     }
   } while (evCursor);
 
@@ -275,6 +314,25 @@ async function handleSummary(request, env) {
     uniqueVisitors: dailyMap[date]?.visitors?.size || 0,
   }));
 
+  // Session-Flows sortieren und Top-Pfade extrahieren
+  const topFlows = Object.values(sessionFlows)
+    .filter(flow => flow.length > 1)
+    .map(flow => flow.sort((a, b) => a.ts - b.ts).map(f => f.page))
+    .reduce((acc, path) => {
+      const key = path.join(' → ');
+      acc[key] = (acc[key] || 0) + 1;
+      return acc;
+    }, {});
+  const topSessionPaths = Object.entries(topFlows)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 10)
+    .map(([path, count]) => ({ path, count }));
+
+  const topLandingPages = Object.entries(landingPages)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 10)
+    .map(([page, count]) => ({ page, count }));
+
   const summary = {
     totalPageviews,
     uniqueVisitors: uniqueVisitors.size,
@@ -283,6 +341,10 @@ async function handleSummary(request, env) {
     deviceTypes: deviceCount,
     topReferrers,
     dailyStats,
+    returningVisitors,
+    newVisitors,
+    topSessionPaths,
+    topLandingPages,
     recentEvents: recentEvents.sort((a, b) => b.timestamp - a.timestamp).slice(0, 20),
   };
 
@@ -309,6 +371,17 @@ export default {
     }
     if (url.pathname === '/summary' && request.method === 'GET') {
       return handleSummary(request, env);
+    }
+    if (url.pathname === '/debug-kv' && request.method === 'GET') {
+      if (!isAuthorized(request, env)) return unauthorized(origin);
+      try {
+        await env.ANALYTICS.put('debug:test', 'hello');
+        const val = await env.ANALYTICS.get('debug:test');
+        const list = await env.ANALYTICS.list({ limit: 10 });
+        return json({ kvWrite: val, keys: list.keys.map(k => k.name) }, 200, origin);
+      } catch (e) {
+        return json({ error: e.message }, 500, origin);
+      }
     }
 
     return json({ error: 'Not found' }, 404, origin);
