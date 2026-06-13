@@ -127,7 +127,7 @@ async function updateVisitorProfile(env, visitorId, { page, sessionId, timestamp
 
 // ─── POST /track ─────────────────────────────────────────────────────────────
 
-async function handleTrack(request, env) {
+async function handleTrack(request, env, ctx) {
   const origin = request.headers.get('Origin') || '';
   let body;
   try { body = await request.json(); } catch { return json({ error: 'Invalid JSON' }, 400, origin); }
@@ -170,7 +170,7 @@ async function handleTrack(request, env) {
   if (!daily.visitors.includes(visitorId)) daily.visitors.push(visitorId);
   await env.ANALYTICS.put(dailyKey, JSON.stringify(daily), { expirationTtl: 60 * 60 * 24 * 92 });
 
-  // ── Push-Benachrichtigung ─────────────────────────────────────────────────
+  // ── Push-Benachrichtigung (via ctx.waitUntil damit CF nicht abbricht) ────────
   if (env.NTFY_TOPIC) {
     const name = pageName(page);
     const flag = country && country.length === 2
@@ -180,17 +180,17 @@ async function handleTrack(request, env) {
     const watched  = watchRaw ? watchRaw.split(',').map(s => s.trim()).filter(Boolean) : [];
     const pageMatches = watched.length === 0 || watched.some(w => page.toLowerCase().includes(w));
 
+    let notifyPromise = null;
     if (pageIndex === 1 && pageMatches) {
-      // Neue Session
-      await sendNtfy(env,
+      notifyPromise = sendNtfy(env,
         'Neue Session ' + flag,
         name + (dev !== 'unknown' ? ' · ' + dev : '') + (profile.returning ? ' · Wiederkehrend' : ' · Neu'),
         'eyes'
       );
     } else if (pageIndex > 1 && watched.some(w => page.toLowerCase().includes(w))) {
-      // Überwachte Seite aufgerufen (nicht erste Seite der Session)
-      await sendNtfy(env, 'Seite aufgerufen ' + flag, name, 'page_facing_up');
+      notifyPromise = sendNtfy(env, 'Seite aufgerufen ' + flag, name, 'page_facing_up');
     }
+    if (notifyPromise && ctx) ctx.waitUntil(notifyPromise);
   }
 
   return json({ ok: true }, 200, origin);
@@ -585,7 +585,7 @@ async function handleSummary(request, env) {
 // ─── Router ───────────────────────────────────────────────────────────────────
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const origin = request.headers.get('Origin') || '';
 
     if (request.method === 'OPTIONS') {
@@ -595,7 +595,14 @@ export default {
     const url = new URL(request.url);
 
     if (url.pathname === '/track' && request.method === 'POST') {
-      return handleTrack(request, env);
+      return handleTrack(request, env, ctx);
+    }
+    if (url.pathname === '/test-notify' && request.method === 'GET') {
+      if (!isAuthorized(request, env)) return unauthorized(origin);
+      const topic = (env.NTFY_TOPIC || '').trim();
+      if (!topic) return json({ error: 'NTFY_TOPIC not set' }, 500, origin);
+      await sendNtfy(env, '✅ Test erfolgreich', 'Portfolio Worker → ntfy.sh funktioniert!', 'white_check_mark');
+      return json({ ok: true, topic: topic.slice(0, 8) + '…' }, 200, origin);
     }
     if (url.pathname === '/duration' && request.method === 'POST') {
       return handleDuration(request, env);
