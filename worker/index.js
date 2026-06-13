@@ -170,15 +170,33 @@ async function handleTrack(request, env, ctx) {
   if (!daily.visitors.includes(visitorId)) daily.visitors.push(visitorId);
   await env.ANALYTICS.put(dailyKey, JSON.stringify(daily), { expirationTtl: 60 * 60 * 24 * 92 });
 
-  // ── Push-Benachrichtigung via Telegram ───────────────────────────────────
+  // ── Live-Session + Telegram ───────────────────────────────────────────────
   {
     const flag = country && country.length === 2
       ? String.fromCodePoint(0x1F1E6 + country.charCodeAt(0) - 65) + String.fromCodePoint(0x1F1E6 + country.charCodeAt(1) - 65)
       : '🌍';
-    const isNew = !previousPage;
-    const icon  = isNew ? '👁' : '📄';
-    const msg   = `${icon} <b>${pageName(page)}</b>\n${flag} ${dev}${isNew ? (profile.returning ? ' · ↩ Wiederkehrend' : ' · ✦ Neu') : ''}`;
-    await sendTelegram(env, msg);
+    const now2 = Date.now();
+    let session = await getLiveSession(env, sessionId);
+
+    if (!session) {
+      // Neue Session — sofort benachrichtigen
+      session = {
+        flag, dev, returning: profile.returning,
+        pages: [page], startTs: now2,
+        lastActivity: now2, lastNotifiedAt: now2, lastNotifiedCount: 1,
+      };
+      await putLiveSession(env, sessionId, session);
+      await sendTelegram(env,
+        `👁 <b>Neue Session</b> ${flag}\n` +
+        `${dev} · ${profile.returning ? '↩ Wiederkehrend' : '✦ Neu'}\n\n` +
+        `<b>${pageName(page)}</b>`
+      );
+    } else {
+      // Session läuft — Seite hinzufügen, Cron schickt Zusammenfassung
+      session.pages.push(page);
+      session.lastActivity = now2;
+      await putLiveSession(env, sessionId, session);
+    }
   }
 
   return json({ ok: true }, 200, origin);
@@ -326,6 +344,76 @@ async function sendTelegram(env, text) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ chat_id: chatId, text, parse_mode: 'HTML' }),
   }).catch(() => {});
+}
+
+function fmtDur(ms) {
+  if (!ms || ms < 1000) return '';
+  const s = Math.round(ms / 1000);
+  if (s < 60) return s + 's';
+  const m = Math.floor(s / 60), rs = s % 60;
+  return m + 'min' + (rs > 0 ? ' ' + rs + 's' : '');
+}
+
+// ─── Live-Session KV Hilfsfunktionen ─────────────────────────────────────────
+async function getLiveSession(env, sessionId) {
+  const raw = await env.ANALYTICS.get('live:' + sessionId);
+  if (!raw) return null;
+  try { return JSON.parse(raw); } catch { return null; }
+}
+
+async function putLiveSession(env, sessionId, data) {
+  await env.ANALYTICS.put('live:' + sessionId, JSON.stringify(data), { expirationTtl: 3600 });
+}
+
+async function deleteLiveSession(env, sessionId) {
+  await env.ANALYTICS.delete('live:' + sessionId);
+}
+
+// ─── Cron: jede Minute aktive Sessions prüfen ────────────────────────────────
+async function handleScheduled(env) {
+  const now = Date.now();
+  const SUMMARY_INTERVAL = 60 * 1000;   // 1 Minute
+  const SESSION_TIMEOUT  = 5 * 60 * 1000; // 5 Minuten Inaktivität = Session beendet
+
+  let cursor;
+  do {
+    const opts = { prefix: 'live:', limit: 100 };
+    if (cursor) opts.cursor = cursor;
+    const listed = await env.ANALYTICS.list(opts);
+    cursor = listed.list_complete ? null : listed.cursor;
+
+    for (const key of listed.keys) {
+      const sid = key.name.replace('live:', '');
+      const s   = await getLiveSession(env, sid);
+      if (!s) continue;
+
+      const inactive = now - s.lastActivity;
+      const isEnded  = inactive > SESSION_TIMEOUT;
+      const newPages  = s.pages.slice(s.lastNotifiedCount);
+      const hasNew    = newPages.length > 0;
+      const timeSinceLast = now - s.lastNotifiedAt;
+
+      if (isEnded) {
+        // Session beendet — finale Nachricht
+        const dur = fmtDur(now - s.startTs);
+        const path = s.pages.map(p => pageName(p)).join(' → ');
+        await sendTelegram(env,
+          `👋 <b>Session beendet</b> ${s.flag}\n` +
+          `${s.dev}${s.returning ? ' · ↩ Wiederkehrend' : ' · ✦ Neu'}${dur ? ' · ' + dur : ''}\n\n` +
+          `<b>Pfad:</b> ${path}`
+        );
+        await deleteLiveSession(env, sid);
+
+      } else if (hasNew && timeSinceLast >= SUMMARY_INTERVAL) {
+        // Zusammenfassung der neuen Seiten seit letzter Benachrichtigung
+        const summary = newPages.map(p => pageName(p)).join(' → ');
+        await sendTelegram(env, `📊 ${s.flag} <b>${summary}</b>`);
+        s.lastNotifiedCount = s.pages.length;
+        s.lastNotifiedAt = now;
+        await putLiveSession(env, sid, s);
+      }
+    }
+  } while (cursor);
 }
 
 // ─── Session-Merge: Cross-Tab-Pfade retroaktiv verknüpfen ────────────────────
@@ -572,6 +660,10 @@ async function handleSummary(request, env) {
 // ─── Router ───────────────────────────────────────────────────────────────────
 
 export default {
+  async scheduled(event, env, ctx) {
+    ctx.waitUntil(handleScheduled(env));
+  },
+
   async fetch(request, env, ctx) {
     const origin = request.headers.get('Origin') || '';
 
