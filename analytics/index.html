@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Analytics · Portfolio</title>
+<link rel="icon" href="favicon.svg">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 /* ── Reset & Tokens ──────────────────────────────────────────────────────────── */
@@ -140,6 +141,15 @@ main { flex: 1; padding: 1.5rem; max-width: 1440px; width: 100%; margin: 0 auto;
 .chart-card h3 { font-size: .8rem; color: var(--muted); margin-bottom: .9rem; text-transform: uppercase; letter-spacing: .06em; }
 .chart-wrap { position: relative; height: 220px; }
 .chart-wrap-sm { position: relative; height: 180px; }
+
+/* ── Granularity Toggle ──────────────────────────────────────────────────────── */
+.granularity-btn {
+  background: transparent; border: 1px solid var(--border); border-radius: 6px;
+  color: var(--muted); font-size: .75rem; font-family: inherit; font-weight: 600;
+  padding: .25rem .65rem; cursor: pointer; transition: all .15s;
+}
+.granularity-btn:hover { color: var(--text); border-color: var(--muted); }
+.granularity-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
 
 /* ── Journey / Flow Map ──────────────────────────────────────────────────────── */
 .flow-list { display: flex; flex-direction: column; gap: .5rem; }
@@ -425,13 +435,31 @@ tr:hover td { background: rgba(255,255,255,.015); }
         <div class="kpi-value" id="kpiTopPage" style="font-size:1rem;line-height:1.3">–</div>
         <div class="kpi-sub" id="kpiTopPageViews"></div>
       </div>
+      <div class="kpi-card" style="--kpi-accent:var(--accent2)">
+        <div class="kpi-icon">🚀</div>
+        <div class="kpi-label">Besuche (Sessions)</div>
+        <div class="kpi-value" id="kpiSessions">–</div>
+        <div class="kpi-sub">eindeutige Sitzungen</div>
+      </div>
+      <div class="kpi-card" style="--kpi-accent:var(--red)">
+        <div class="kpi-icon">↩</div>
+        <div class="kpi-label">Bounce Rate</div>
+        <div class="kpi-value" id="kpiBounce">–</div>
+        <div class="kpi-sub">1-Seiten-Sessions</div>
+      </div>
     </div>
 
     <!-- Daily Chart -->
     <div class="section-label">Traffic</div>
     <div class="chart-grid" style="grid-template-columns:1fr;margin-bottom:1.25rem">
       <div class="chart-card full">
-        <h3>Seitenaufrufe pro Tag</h3>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.9rem">
+          <h3 style="margin:0" id="dailyChartTitle">Seitenaufrufe pro Tag</h3>
+          <div style="display:flex;gap:.3rem">
+            <button class="granularity-btn active" data-g="day">Tag</button>
+            <button class="granularity-btn" data-g="hour">Stunde</button>
+          </div>
+        </div>
         <div class="chart-wrap"><canvas id="chartDaily"></canvas></div>
       </div>
     </div>
@@ -685,9 +713,10 @@ if (getToken()) { $overlay.style.display = 'none'; $app.classList.add('visible')
 
 // ── Data ──────────────────────────────────────────────────────────────────────
 var charts = {};
-var rawSummary = null;
-var rawEvents  = [];
+var rawSummary  = null;
+var rawEvents   = [];
 var rawProfiles = [];
+var chartGranularity = 'day';
 
 async function loadAll() {
   var days   = document.getElementById('rangeSelect').value;
@@ -733,6 +762,8 @@ function renderAll() {
   var top = s.topPages && s.topPages[0];
   document.getElementById('kpiTopPage').textContent      = top ? labelPage(top.page) : '–';
   document.getElementById('kpiTopPageViews').textContent = top ? top.views + ' Aufrufe' : '';
+  document.getElementById('kpiSessions').textContent = (s.totalSessions != null ? s.totalSessions : '–').toLocaleString('de');
+  document.getElementById('kpiBounce').textContent   = s.bounceRate != null ? s.bounceRate + '%' : '–';
 
   renderDailyChart(s.dailyStats || []);
   renderPagesChart(s.topPages   || []);
@@ -771,26 +802,58 @@ var TICK = { color: '#64748b', font: { size: 10 } };
 
 function destroyChart(id) { if (charts[id]) { charts[id].destroy(); delete charts[id]; } }
 
+function aggregateByHour(events, days) {
+  var cutoff = Date.now() - days * 24 * 60 * 60 * 1000;
+  var hourMap = {};
+  events.filter(function(e) { return e.timestamp >= cutoff; }).forEach(function(e) {
+    var d = new Date(e.timestamp);
+    var key = d.toISOString().slice(0, 13); // "2024-06-13T14"
+    if (!hourMap[key]) hourMap[key] = { pageviews: 0, visitors: new Set() };
+    hourMap[key].pageviews++;
+    if (e.visitorId) hourMap[key].visitors.add(e.visitorId);
+  });
+  return Object.entries(hourMap)
+    .sort(function(a, b) { return a[0] < b[0] ? -1 : 1; })
+    .map(function(entry) {
+      var key = entry[0], val = entry[1];
+      // Format label: "Sa 14:00"
+      var d = new Date(key + ':00:00Z');
+      var dayNames = ['So','Mo','Di','Mi','Do','Fr','Sa'];
+      var label = dayNames[d.getUTCDay()] + ' ' + String(d.getUTCHours()).padStart(2,'0') + ':00';
+      return { label: label, pageviews: val.pageviews, uniqueVisitors: val.visitors.size };
+    });
+}
+
 function renderDailyChart(dailyStats) {
+  var isHour = chartGranularity === 'hour';
+  var days   = parseInt(document.getElementById('rangeSelect').value || '30', 10);
+  var data   = isHour ? aggregateByHour(rawEvents, days) : dailyStats;
+  var labels = isHour ? data.map(function(d){ return d.label; }) : data.map(function(d){ return d.date.slice(5); });
+
+  document.getElementById('dailyChartTitle').textContent = isHour ? 'Seitenaufrufe pro Stunde' : 'Seitenaufrufe pro Tag';
+
   destroyChart('daily');
   var ctx = document.getElementById('chartDaily').getContext('2d');
   charts.daily = new Chart(ctx, {
     type: 'line',
     data: {
-      labels: dailyStats.map(d => d.date.slice(5)),
+      labels: labels,
       datasets: [
-        { label: 'Aufrufe', data: dailyStats.map(d => d.pageviews),
+        { label: 'Aufrufe', data: data.map(function(d){ return d.pageviews; }),
           borderColor: 'rgba(99,102,241,.9)', backgroundColor: 'rgba(99,102,241,.08)',
-          tension: .35, fill: true, pointRadius: 3, pointHoverRadius: 5 },
-        { label: 'Visitors', data: dailyStats.map(d => d.uniqueVisitors),
+          tension: .35, fill: true, pointRadius: isHour ? 2 : 3, pointHoverRadius: 5 },
+        { label: 'Visitors', data: data.map(function(d){ return d.uniqueVisitors; }),
           borderColor: 'rgba(34,211,238,.8)', backgroundColor: 'rgba(34,211,238,.04)',
-          tension: .35, fill: true, pointRadius: 3, pointHoverRadius: 5 },
+          tension: .35, fill: true, pointRadius: isHour ? 2 : 3, pointHoverRadius: 5 },
       ]
     },
     options: {
       responsive: true, maintainAspectRatio: false,
       plugins: { legend: { labels: { color: '#94a3b8', font: { size: 11 }, boxWidth: 12 } } },
-      scales: { x: { ticks: TICK, grid: GRID }, y: { ticks: TICK, grid: GRID, beginAtZero: true } }
+      scales: {
+        x: { ticks: { ...TICK, maxRotation: isHour ? 45 : 0, maxTicksLimit: isHour ? 24 : 31 }, grid: GRID },
+        y: { ticks: TICK, grid: GRID, beginAtZero: true }
+      }
     }
   });
 }
@@ -1171,6 +1234,17 @@ function renderProfiles() {
 }
 
 document.getElementById('profileSearch').addEventListener('input', renderProfiles);
+
+// ── Granularity toggle ────────────────────────────────────────────────────────
+document.querySelectorAll('.granularity-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    chartGranularity = btn.dataset.g;
+    document.querySelectorAll('.granularity-btn').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    if (rawSummary) renderDailyChart(rawSummary.dailyStats || []);
+  });
+});
+
 if (getToken()) loadAll();
 </script>
 </body>

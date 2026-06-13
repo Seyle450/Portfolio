@@ -305,6 +305,7 @@ async function handleSummary(request, env) {
   let returningVisitors = 0;
   let newVisitors = 0;
   const sessionFlows = {}; // sessionId → [pages in order]
+  const allSessionIds = new Set(); // all unique session IDs
   const landingPages = {}; // page → count as landing page
   const countryCounts = {}; // country code → count
 
@@ -369,6 +370,7 @@ async function handleSummary(request, env) {
 
       // Session-Flow aufbauen
       if (ev.sessionId) {
+        allSessionIds.add(ev.sessionId);
         if (!sessionFlows[ev.sessionId]) sessionFlows[ev.sessionId] = [];
         sessionFlows[ev.sessionId].push({ page: ev.page, ts: ev.timestamp, idx: ev.pageIndex || 1 });
       }
@@ -425,9 +427,15 @@ async function handleSummary(request, env) {
     .slice(0, 15)
     .map(([country, count]) => ({ country, count }));
 
+  const totalSessions = allSessionIds.size;
+  const bounceSessions = Object.values(sessionFlows).filter(f => f.length === 1).length;
+  const bounceRate = totalSessions > 0 ? Math.round(bounceSessions / totalSessions * 100) : 0;
+
   const summary = {
     totalPageviews,
     uniqueVisitors: uniqueVisitors.size,
+    totalSessions,
+    bounceRate,
     avgPerDay: days > 0 ? Math.round(totalPageviews / days) : 0,
     topPages,
     deviceTypes: deviceCount,
