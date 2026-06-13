@@ -7,44 +7,98 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --ds-bg:      #f8fafc;
+  --ds-surface: #ffffff;
+  --ds-text:    #1e293b;
+  --ds-muted:   #64748b;
+  --ds-subtle:  #475569;
+  --ds-border:  #e2e8f0;
+  --ds-accent:  #6366f1;
+  --ds-accent2: #eef2ff;
+  --ds-green:   #22c55e;
+  --ds-green2:  #f0fdf4;
+  --ds-th-bg:   #f1f5f9;
+  --ds-h1:      #0f172a;
+  --ds-h3:      #334155;
+  --ds-font:    -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --ds-radius:  10px;
+}
+
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-  background: #f8fafc; color: #1e293b; line-height: 1.7; font-size: 1rem;
+  font-family: var(--ds-font);
+  background: var(--ds-bg);
+  color: var(--ds-text);
+  line-height: 1.7;
+  font-size: 1rem;
 }
 .wrap { max-width: 720px; margin: 0 auto; padding: 3rem 1.5rem 5rem; }
-header { margin-bottom: 2.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid #e2e8f0; }
-header a { color: #6366f1; text-decoration: none; font-size: .9rem; }
-header a:hover { text-decoration: underline; }
-h1 { font-size: 1.8rem; font-weight: 700; margin: .75rem 0 .4rem; color: #0f172a; }
-header p { color: #64748b; font-size: .9rem; }
-h2 { font-size: 1.1rem; font-weight: 700; margin: 2rem 0 .6rem; color: #0f172a; padding-left: .75rem; border-left: 3px solid #6366f1; }
-h3 { font-size: .95rem; font-weight: 600; margin: 1.2rem 0 .4rem; color: #334155; }
-p, li { color: #475569; margin-bottom: .6rem; font-size: .92rem; }
+
+header { margin-bottom: 2.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--ds-border); }
+.back-link {
+  display: inline-flex; align-items: center; gap: .35rem;
+  color: var(--ds-accent); text-decoration: none; font-size: .9rem; font-weight: 500;
+  opacity: .85;
+}
+.back-link:hover { opacity: 1; text-decoration: underline; }
+h1 { font-size: 1.8rem; font-weight: 700; margin: .75rem 0 .4rem; color: var(--ds-h1); }
+header p { color: var(--ds-muted); font-size: .9rem; }
+
+h2 {
+  font-size: 1.1rem; font-weight: 700; margin: 2rem 0 .6rem;
+  color: var(--ds-h1); padding-left: .75rem;
+  border-left: 3px solid var(--ds-accent);
+}
+h3 { font-size: .95rem; font-weight: 600; margin: 1.2rem 0 .4rem; color: var(--ds-h3); }
+p, li { color: var(--ds-subtle); margin-bottom: .6rem; font-size: .92rem; }
 ul { padding-left: 1.4rem; margin-bottom: .8rem; }
 li { margin-bottom: .3rem; }
-.box { background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1.25rem 1.5rem; margin: 1rem 0; }
-.box-green { border-left: 4px solid #22c55e; background: #f0fdf4; }
-.box-blue  { border-left: 4px solid #6366f1; background: #eef2ff; }
-a { color: #6366f1; }
-table { width: 100%; border-collapse: collapse; font-size: .88rem; margin: 1rem 0; }
-th { text-align: left; padding: .6rem .8rem; background: #f1f5f9; font-weight: 600; color: #334155; border: 1px solid #e2e8f0; }
-td { padding: .6rem .8rem; border: 1px solid #e2e8f0; color: #475569; vertical-align: top; }
-.consent-btn {
-  display: inline-block; margin-top: 1rem; padding: .6rem 1.2rem;
-  background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 6px;
-  font-size: .85rem; font-weight: 600; cursor: pointer; color: #475569;
-  font-family: inherit;
+a { color: var(--ds-accent); }
+
+.box {
+  background: var(--ds-surface); border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius); padding: 1.25rem 1.5rem; margin: 1rem 0;
+  font-size: .92rem; color: var(--ds-subtle);
 }
-.consent-btn:hover { background: #e2e8f0; }
+.box-green { border-left: 4px solid var(--ds-green); background: var(--ds-green2); }
+.box-blue  { border-left: 4px solid var(--ds-accent); background: var(--ds-accent2); }
+
+table { width: 100%; border-collapse: collapse; font-size: .88rem; margin: 1rem 0; }
+th { text-align: left; padding: .6rem .8rem; background: var(--ds-th-bg); font-weight: 600; color: var(--ds-h3); border: 1px solid var(--ds-border); }
+td { padding: .6rem .8rem; border: 1px solid var(--ds-border); color: var(--ds-subtle); vertical-align: top; }
+
+.consent-row { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: .75rem; }
+.consent-btn {
+  display: inline-block; padding: .55rem 1.1rem;
+  background: var(--ds-th-bg); border: 1px solid var(--ds-border);
+  border-radius: 6px; font-size: .85rem; font-weight: 600;
+  cursor: pointer; color: var(--ds-subtle); font-family: inherit;
+  transition: background .15s;
+}
+.consent-btn:hover { background: var(--ds-border); }
+.consent-btn.grant {
+  background: var(--ds-accent); color: #fff; border-color: var(--ds-accent);
+}
+.consent-btn.grant:hover { opacity: .88; }
 .consent-btn.revoke { color: #dc2626; background: #fff5f5; border-color: #fecaca; }
-footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid #e2e8f0; font-size: .82rem; color: #94a3b8; }
+
+#consentStatus { margin-top: .6rem; font-size: .82rem; color: var(--ds-muted); }
+
+footer {
+  margin-top: 3rem; padding-top: 1.5rem;
+  border-top: 1px solid var(--ds-border);
+  font-size: .82rem; color: var(--ds-muted);
+}
+footer a { color: var(--ds-muted); }
+footer a:hover { color: var(--ds-accent); }
 </style>
 </head>
 <body>
 <div class="wrap">
 
   <header>
-    <a href="/Portfolio/">← Zurück zum Portfolio</a>
+    <a class="back-link" id="backLink" href="/Portfolio/">← Zurück</a>
     <h1>Datenschutzerklärung</h1>
     <p>Stand: Juni 2026 · Verantwortlicher: Elyes Ferchichi, Bremen</p>
   </header>
@@ -88,51 +142,15 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid #e2e8f0; f
 
   <h3>Was wird erhoben?</h3>
   <table>
-    <tr>
-      <th>Datum</th>
-      <th>Zweck</th>
-      <th>Speicherdauer</th>
-    </tr>
-    <tr>
-      <td>Aufgerufene Seite (URL)</td>
-      <td>Verstehen, welche Inhalte interessant sind</td>
-      <td>90 Tage</td>
-    </tr>
-    <tr>
-      <td>Verweildauer auf der Seite</td>
-      <td>Einschätzung der Relevanz von Inhalten</td>
-      <td>90 Tage</td>
-    </tr>
-    <tr>
-      <td>Einstiegsseite & Navigation</td>
-      <td>Verstehen, wie Besucher die Website nutzen</td>
-      <td>90 Tage</td>
-    </tr>
-    <tr>
-      <td>Bildschirmbreite (Gerätekategorie)</td>
-      <td>Optimierung für mobile/Desktop-Nutzer</td>
-      <td>90 Tage</td>
-    </tr>
-    <tr>
-      <td>Browsersprache</td>
-      <td>Sprachoptimierung</td>
-      <td>90 Tage</td>
-    </tr>
-    <tr>
-      <td>Referrer (woher Sie kamen)</td>
-      <td>Marketing-Auswertung</td>
-      <td>90 Tage</td>
-    </tr>
-    <tr>
-      <td>Pseudonymer Besucher-Hash</td>
-      <td>Wiederkehrende Besucher erkennen (kein Name, kein Konto)</td>
-      <td>365 Tage</td>
-    </tr>
-    <tr>
-      <td>IP-Adresse</td>
-      <td>Wird zur Generierung des Besucher-Hashs verarbeitet, <strong>nicht gespeichert</strong></td>
-      <td>Nicht gespeichert</td>
-    </tr>
+    <tr><th>Datum</th><th>Zweck</th><th>Speicherdauer</th></tr>
+    <tr><td>Aufgerufene Seite (URL)</td><td>Verstehen, welche Inhalte interessant sind</td><td>90 Tage</td></tr>
+    <tr><td>Verweildauer auf der Seite</td><td>Einschätzung der Relevanz von Inhalten</td><td>90 Tage</td></tr>
+    <tr><td>Einstiegsseite &amp; Navigation</td><td>Verstehen, wie Besucher die Website nutzen</td><td>90 Tage</td></tr>
+    <tr><td>Bildschirmbreite (Gerätekategorie)</td><td>Optimierung für mobile/Desktop-Nutzer</td><td>90 Tage</td></tr>
+    <tr><td>Browsersprache</td><td>Sprachoptimierung</td><td>90 Tage</td></tr>
+    <tr><td>Referrer (woher Sie kamen)</td><td>Marketing-Auswertung</td><td>90 Tage</td></tr>
+    <tr><td>Pseudonymer Besucher-Hash</td><td>Wiederkehrende Besucher erkennen (kein Name, kein Konto)</td><td>365 Tage</td></tr>
+    <tr><td>IP-Adresse</td><td>Wird zur Generierung des Besucher-Hashs verarbeitet, <strong>nicht gespeichert</strong></td><td>Nicht gespeichert</td></tr>
   </table>
 
   <h3>Wie wird ein „Besucher-Hash" gebildet?</h3>
@@ -157,9 +175,11 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid #e2e8f0; f
 
   <h3>Einwilligung widerrufen</h3>
   <p>Sie können Ihre Einwilligung jederzeit mit Wirkung für die Zukunft widerrufen:</p>
-  <button class="consent-btn revoke" id="revokeBtn">Einwilligung widerrufen</button>
-  <button class="consent-btn" id="grantBtn" style="margin-left:.5rem">Einwilligung erteilen</button>
-  <p id="consentStatus" style="margin-top:.6rem;font-size:.82rem;"></p>
+  <div class="consent-row">
+    <button class="consent-btn revoke" id="revokeBtn">Einwilligung widerrufen</button>
+    <button class="consent-btn grant"  id="grantBtn">Einwilligung erteilen</button>
+  </div>
+  <p id="consentStatus"></p>
 
   <!-- 5 -->
   <h2>5. Ihre Rechte</h2>
@@ -212,26 +232,186 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid #e2e8f0; f
 </div>
 
 <script>
-var CONSENT_KEY = 'analytics_consent';
-var status = document.getElementById('consentStatus');
+(function () {
+  /* ── Site-Theming ──────────────────────────────────────────────────── */
+  var THEMES = {
+    starscape: {
+      back: '/Portfolio/Webdesign Agentur/Starscape/index.html',
+      backLabel: '← Zurück zu Starscape',
+      vars: {
+        '--ds-bg':      '#0d1420',
+        '--ds-surface': '#151d2e',
+        '--ds-text':    '#e0eaf0',
+        '--ds-muted':   'rgba(224,234,240,.5)',
+        '--ds-subtle':  'rgba(224,234,240,.75)',
+        '--ds-border':  'rgba(0,159,173,.18)',
+        '--ds-accent':  '#009fad',
+        '--ds-accent2': 'rgba(0,159,173,.08)',
+        '--ds-green':   '#00c9b1',
+        '--ds-green2':  'rgba(0,201,177,.08)',
+        '--ds-th-bg':   'rgba(255,255,255,.04)',
+        '--ds-h1':      '#f0f8ff',
+        '--ds-h3':      '#a0c0d0',
+      }
+    },
+    bens: {
+      back: '/Portfolio/Webdesign Agentur/Ben\'s/Ben\'s Catering.html',
+      backLabel: '← Zurück zu Ben\'s Catering',
+      font: 'https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;600;700&display=swap',
+      vars: {
+        '--ds-bg':      '#0b0b0b',
+        '--ds-surface': '#181818',
+        '--ds-text':    '#f0ece4',
+        '--ds-muted':   'rgba(240,236,228,.45)',
+        '--ds-subtle':  'rgba(240,236,228,.7)',
+        '--ds-border':  'rgba(255,255,255,.08)',
+        '--ds-accent':  '#e8e0d0',
+        '--ds-accent2': 'rgba(232,224,208,.07)',
+        '--ds-green':   '#6fcf97',
+        '--ds-green2':  'rgba(111,207,151,.07)',
+        '--ds-th-bg':   'rgba(255,255,255,.05)',
+        '--ds-h1':      '#fff',
+        '--ds-h3':      '#c0b8b0',
+        '--ds-font':    "'Archivo', sans-serif",
+      }
+    },
+    hevis: {
+      back: '/Portfolio/Webdesign Agentur/Hevi\'s/Hevi\'s Cafe.html',
+      backLabel: '← Zurück zu Hevi\'s Café',
+      font: 'https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap',
+      vars: {
+        '--ds-bg':      '#fdf9f4',
+        '--ds-surface': '#fffdf9',
+        '--ds-text':    '#2a3a1e',
+        '--ds-muted':   '#7a8a6e',
+        '--ds-subtle':  '#506040',
+        '--ds-border':  'rgba(92,125,67,.14)',
+        '--ds-accent':  '#5c7d43',
+        '--ds-accent2': 'rgba(92,125,67,.07)',
+        '--ds-green':   '#5c7d43',
+        '--ds-green2':  'rgba(92,125,67,.07)',
+        '--ds-th-bg':   '#f0ebe3',
+        '--ds-h1':      '#1a2a10',
+        '--ds-h3':      '#3a5025',
+        '--ds-font':    "'Archivo', sans-serif",
+      }
+    },
+    cafeniki: {
+      back: '/Portfolio/Webdesign Agentur/Caf\'e Niki/Café Niki.html',
+      backLabel: '← Zurück zu Café Niki',
+      font: 'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Jost:wght@300;400;500&display=swap',
+      vars: {
+        '--ds-bg':      '#FBF7F0',
+        '--ds-surface': '#fff',
+        '--ds-text':    '#463E32',
+        '--ds-muted':   '#9a8a78',
+        '--ds-subtle':  '#6a5a48',
+        '--ds-border':  'rgba(154,123,79,.14)',
+        '--ds-accent':  '#9A7B4F',
+        '--ds-accent2': 'rgba(154,123,79,.07)',
+        '--ds-green':   '#7a9a4f',
+        '--ds-green2':  'rgba(122,154,79,.07)',
+        '--ds-th-bg':   '#f0e8da',
+        '--ds-h1':      '#2e2418',
+        '--ds-h3':      '#6a5540',
+        '--ds-font':    "'Cormorant Garamond', 'Jost', serif",
+        '--ds-radius':  '6px',
+      }
+    },
+    lokma: {
+      back: '/Portfolio/Webdesign Agentur/Lokma Lovers/Lokma Lovers.html',
+      backLabel: '← Zurück zu Lokma Lovers',
+      vars: {
+        '--ds-bg':      '#fffbf5',
+        '--ds-surface': '#fff',
+        '--ds-text':    '#3d2b06',
+        '--ds-muted':   '#a0844a',
+        '--ds-subtle':  '#6b4c1a',
+        '--ds-border':  'rgba(200,134,10,.14)',
+        '--ds-accent':  '#c8860a',
+        '--ds-accent2': 'rgba(200,134,10,.07)',
+        '--ds-green':   '#7a9a20',
+        '--ds-green2':  'rgba(122,154,32,.07)',
+        '--ds-th-bg':   '#f5ecd8',
+        '--ds-h1':      '#1e1000',
+        '--ds-h3':      '#8b5e20',
+      }
+    },
+    antepli: {
+      back: '/Portfolio/Webdesign Agentur/Antepli Baklava/Antepli Baklava.html',
+      backLabel: '← Zurück zu Antepli',
+      font: 'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Manrope:wght@400;500;600&display=swap',
+      vars: {
+        '--ds-bg':      '#18230f',
+        '--ds-surface': '#202d14',
+        '--ds-text':    '#f0e8d0',
+        '--ds-muted':   'rgba(240,232,208,.45)',
+        '--ds-subtle':  'rgba(240,232,208,.72)',
+        '--ds-border':  'rgba(208,169,61,.16)',
+        '--ds-accent':  '#d0a93d',
+        '--ds-accent2': 'rgba(208,169,61,.08)',
+        '--ds-green':   '#78b048',
+        '--ds-green2':  'rgba(120,176,72,.08)',
+        '--ds-th-bg':   'rgba(255,255,255,.04)',
+        '--ds-h1':      '#f8f0d8',
+        '--ds-h3':      '#c8a850',
+        '--ds-font':    "'Cormorant Garamond', 'Manrope', serif",
+      }
+    },
+    freelance: {
+      back: '/Portfolio/Webdesign Agentur/index.html',
+      backLabel: '← Zurück zur Agentur-Seite',
+      vars: {}
+    },
+  };
 
-function updateStatus() {
-  var v = localStorage.getItem(CONSENT_KEY);
-  status.textContent = v === 'granted' ? '✅ Einwilligung aktuell erteilt.'
-                     : v === 'denied'  ? '❌ Einwilligung aktuell verweigert.'
-                     : 'ℹ️ Noch keine Entscheidung getroffen.';
-}
+  var site = new URLSearchParams(location.search).get('site') || '';
+  var theme = THEMES[site];
 
-document.getElementById('revokeBtn').onclick = function () {
-  localStorage.setItem(CONSENT_KEY, 'denied');
+  if (theme) {
+    /* Apply CSS variables */
+    var root = document.documentElement;
+    var vars = theme.vars;
+    for (var k in vars) root.style.setProperty(k, vars[k]);
+
+    /* Load custom font if needed */
+    if (theme.font) {
+      var lnk = document.createElement('link');
+      lnk.rel = 'stylesheet';
+      lnk.href = theme.font;
+      document.head.appendChild(lnk);
+    }
+
+    /* Update back link */
+    var backEl = document.getElementById('backLink');
+    if (backEl && theme.back) {
+      backEl.href = theme.back;
+      backEl.textContent = theme.backLabel;
+    }
+  }
+
+  /* ── Consent status ─────────────────────────────────────────────────── */
+  var CONSENT_KEY = 'analytics_consent';
+  var statusEl = document.getElementById('consentStatus');
+
+  function updateStatus() {
+    var v = localStorage.getItem(CONSENT_KEY);
+    statusEl.textContent = v === 'granted' ? '✅ Einwilligung aktuell erteilt.'
+                         : v === 'denied'  ? '❌ Einwilligung aktuell verweigert.'
+                         : 'ℹ️ Noch keine Entscheidung getroffen.';
+  }
+
+  document.getElementById('revokeBtn').onclick = function () {
+    localStorage.setItem(CONSENT_KEY, 'denied');
+    updateStatus();
+  };
+  document.getElementById('grantBtn').onclick = function () {
+    localStorage.setItem(CONSENT_KEY, 'granted');
+    updateStatus();
+  };
+
   updateStatus();
-};
-document.getElementById('grantBtn').onclick = function () {
-  localStorage.setItem(CONSENT_KEY, 'granted');
-  updateStatus();
-};
-
-updateStatus();
+})();
 </script>
 </body>
 </html>
