@@ -1,4 +1,4 @@
-/* ============ Hevi's Café — Interaktionen ============ */
+﻿/* ============ Hevi's Café — Interaktionen ============ */
 (function () {
   "use strict";
 
@@ -95,8 +95,17 @@
     else setFieldError("message", "");
 
     if (ok) {
-      form.style.display = "none";
-      formOk.style.display = "block";
+      var btn = form.querySelector('[type="submit"]');
+      if (btn) { btn.disabled = true; btn.textContent = 'Wird gesendet…'; }
+      fetch('https://formspree.io/f/mojzpynj', {
+        method: 'POST', headers: { 'Accept': 'application/json' }, body: data,
+      }).then(function (r) {
+        if (r.ok) { form.style.display = 'none'; formOk.style.display = 'block'; }
+        else { if (btn) { btn.disabled = false; btn.textContent = 'Senden'; } setFieldError('message', 'Fehler beim Senden. Bitte versuche es erneut.'); }
+      }).catch(function () {
+        if (btn) { btn.disabled = false; btn.textContent = 'Senden'; }
+        setFieldError('message', 'Keine Verbindung. Bitte versuche es erneut.');
+      });
     }
   });
 

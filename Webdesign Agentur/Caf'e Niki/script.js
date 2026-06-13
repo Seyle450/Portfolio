@@ -86,9 +86,29 @@
         msgEl.style.display = 'block';
         return;
       }
-      msgEl.className = 'f-msg ok';
-      msgEl.textContent = 'Danke, ' + name + '. Deine Anfrage für ' + guests + (guests === '1' ? ' Person' : ' Personen') + ' ist eingegangen — wir bestätigen sie in Kürze per E-Mail.';
-      msgEl.style.display = 'block';
+      var btn = bookForm.querySelector('[type="submit"]');
+      if (btn) { btn.disabled = true; btn.textContent = 'Wird gesendet…'; }
+      var fd = new FormData();
+      fd.append('name', name); fd.append('email', email);
+      fd.append('date', date); fd.append('time', time); fd.append('guests', guests);
+      fetch('https://formspree.io/f/maqzlabz', {
+        method: 'POST', headers: { 'Accept': 'application/json' }, body: fd,
+      }).then(function (r) {
+        if (btn) { btn.disabled = false; btn.textContent = 'Reservieren'; }
+        if (r.ok) {
+          msgEl.className = 'f-msg ok';
+          msgEl.textContent = 'Danke, ' + name + '. Deine Anfrage für ' + guests + (guests === '1' ? ' Person' : ' Personen') + ' ist eingegangen — wir bestätigen sie in Kürze per E-Mail.';
+        } else {
+          msgEl.className = 'f-msg err';
+          msgEl.textContent = 'Fehler beim Senden. Bitte versuche es erneut.';
+        }
+        msgEl.style.display = 'block';
+      }).catch(function () {
+        if (btn) { btn.disabled = false; btn.textContent = 'Reservieren'; }
+        msgEl.className = 'f-msg err';
+        msgEl.textContent = 'Keine Verbindung. Bitte versuche es erneut.';
+        msgEl.style.display = 'block';
+      });
     });
   }
 
