@@ -82,17 +82,19 @@ function lastNDays(n) {
 }
 
 // ── Besucher-Profil aktualisieren ─────────────────────────────────────────────
-async function updateVisitorProfile(env, visitorId, { page, sessionId, timestamp, referrer, device, screenWidth, language }) {
+async function updateVisitorProfile(env, visitorId, { page, sessionId, timestamp, referrer, device, screenWidth, language, country }) {
   const profileKey = `profile:${visitorId}`;
   let profile = {
     visitorId,
     alias: '',
+    note: '',
     firstSeen: timestamp,
     lastSeen: timestamp,
     totalPageviews: 0,
     totalSessions: 0,
     totalDurationMs: 0,
     returning: false,
+    country: country || '',
     sessions: {},   // sessionId → { start, pages: [{page, ts, durationMs}], referrer, device }
     topPages: {},
   };
@@ -103,6 +105,7 @@ async function updateVisitorProfile(env, visitorId, { page, sessionId, timestamp
   }
 
   profile.lastSeen = timestamp;
+  if (country) profile.country = country;
   profile.totalPageviews += 1;
 
   if (!profile.sessions[sessionId]) {
@@ -137,15 +140,16 @@ async function handleTrack(request, env) {
 
   const visitorId = body.visitorId || deriveVisitorId(request);
   const dev = deviceType(screenWidth);
+  const country = request.headers.get('CF-IPCountry') || '';
 
   // ── Besucher-Profil ───────────────────────────────────────────────────────
-  const profile = await updateVisitorProfile(env, visitorId, { page, sessionId, timestamp, referrer, device: dev, screenWidth, language });
+  const profile = await updateVisitorProfile(env, visitorId, { page, sessionId, timestamp, referrer, device: dev, screenWidth, language, country });
 
   // ── Event speichern ───────────────────────────────────────────────────────
   const randId = Math.random().toString(36).slice(2, 8);
   await env.ANALYTICS.put(`event:${timestamp}:${randId}`, JSON.stringify({
     page, previousPage, pageIndex, referrer, userAgent, screenWidth, language,
-    timestamp, sessionId, visitorId, device: dev,
+    timestamp, sessionId, visitorId, device: dev, country,
     returning: profile.returning, totalVisits: profile.totalPageviews,
   }), { expirationTtl: 60 * 60 * 24 * 90 });
 
@@ -302,6 +306,7 @@ async function handleSummary(request, env) {
   let newVisitors = 0;
   const sessionFlows = {}; // sessionId → [pages in order]
   const landingPages = {}; // page → count as landing page
+  const countryCounts = {}; // country code → count
 
   // Tages-Aggregate aus KV lesen (effizient, kein Event-Scan nötig für Summen)
   for (const date of dateRange) {
@@ -373,6 +378,9 @@ async function handleSummary(request, env) {
         landingPages[ev.page] = (landingPages[ev.page] || 0) + 1;
       }
 
+      // Länder
+      if (ev.country) countryCounts[ev.country] = (countryCounts[ev.country] || 0) + 1;
+
       if (recentEvents.length < 50) recentEvents.push(ev);
     }
   } while (evCursor);
@@ -412,6 +420,11 @@ async function handleSummary(request, env) {
     .slice(0, 10)
     .map(([page, count]) => ({ page, count }));
 
+  const topCountries = Object.entries(countryCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 15)
+    .map(([country, count]) => ({ country, count }));
+
   const summary = {
     totalPageviews,
     uniqueVisitors: uniqueVisitors.size,
@@ -424,6 +437,7 @@ async function handleSummary(request, env) {
     newVisitors,
     topSessionPaths,
     topLandingPages,
+    topCountries,
     recentEvents: recentEvents.sort((a, b) => b.timestamp - a.timestamp).slice(0, 20),
   };
 
