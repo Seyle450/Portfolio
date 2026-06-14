@@ -24,7 +24,7 @@ jobs:
           user = os.environ['FTP_USERNAME']
           pwd  = os.environ['FTP_PASSWORD']
 
-          REMOTE_ROOT = '/Portfolio'
+          REMOTE_ROOT = '/www'
 
           SKIP = {'.git', '.github', 'worker', 'README.md',
                   'ANALYTICS_SETUP.md', 'CNAME', '.ftp-deploy-sync-state.json'}
