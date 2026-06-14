@@ -26,8 +26,9 @@ jobs:
 
           REMOTE_ROOT = '/www'
 
-          SKIP = {'.git', '.github', 'worker', 'README.md',
-                  'ANALYTICS_SETUP.md', 'CNAME', '.ftp-deploy-sync-state.json'}
+          SKIP = {'.git', '.github', '.gitignore', '.gitattributes',
+                  'worker', 'README.md', 'ANALYTICS_SETUP.md', 'CNAME',
+                  '.ftp-deploy-sync-state.json'}
 
           t = paramiko.Transport((host, 22))
           t.connect(username=user, password=pwd)
@@ -41,7 +42,7 @@ jobs:
 
           def upload(local, remote):
               for name in os.listdir(local):
-                  if name in SKIP or name.startswith('.'):
+                  if name in SKIP:
                       continue
                   lp = os.path.join(local, name)
                   rp = f"{remote}/{name}"
