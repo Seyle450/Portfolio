@@ -675,15 +675,34 @@ async function handleSummary(request, env) {
     if (recentEvents.length < 50) recentEvents.push(ev);
   }
 
-  const topPages = Object.entries(pageCount)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 10)
-    .map(([page, views]) => ({ page, views }));
-
   const topReferrers = Object.entries(referrerCount)
     .sort((a, b) => b[1] - a[1])
     .slice(0, 10)
     .map(([referrer, count]) => ({ referrer, count }));
+
+  // When exclusion is active, the daily KV aggregates include all visitors and can't
+  // be filtered retroactively. Recompute all aggregate-based stats from the
+  // already-filtered events so every metric is consistent.
+  if (!includeExcluded && excludedIds.size > 0) {
+    totalPageviews = allEvents.length;
+    uniqueVisitors.clear();
+    Object.keys(pageCount).forEach(k => delete pageCount[k]);
+    for (const date of dateRange) dailyMap[date] = { pageviews: 0, visitors: new Set() };
+    for (const ev of allEvents) {
+      if (ev.visitorId) uniqueVisitors.add(ev.visitorId);
+      pageCount[ev.page] = (pageCount[ev.page] || 0) + 1;
+      const ds = toDateString(ev.timestamp);
+      if (dailyMap[ds]) {
+        dailyMap[ds].pageviews++;
+        if (ev.visitorId) dailyMap[ds].visitors.add(ev.visitorId);
+      }
+    }
+  }
+
+  const topPages = Object.entries(pageCount)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 10)
+    .map(([page, views]) => ({ page, views }));
 
   const dailyStats = dateRange.map(date => ({
     date,
