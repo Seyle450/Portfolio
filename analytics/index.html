@@ -675,7 +675,7 @@ body { min-height: 100svh; }
     <div class="chart-card full" style="margin-bottom:1.25rem">
       <div class="utm-input-grid">
         <div><label style="font-size:.7rem;color:var(--muted);display:block;margin-bottom:.25rem;text-transform:uppercase;letter-spacing:.05em">URL</label>
-          <input id="utmUrl" type="text" placeholder="https://seyle450.github.io/Portfolio/" style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:7px;color:var(--text);padding:.45rem .7rem;font-size:.82rem;font-family:inherit"></div>
+          <input id="utmUrl" type="text" placeholder="https://elyesferchichi.com/" style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:7px;color:var(--text);padding:.45rem .7rem;font-size:.82rem;font-family:inherit"></div>
         <div><label style="font-size:.7rem;color:var(--muted);display:block;margin-bottom:.25rem;text-transform:uppercase;letter-spacing:.05em">Quelle (Source)</label>
           <input id="utmSource" type="text" placeholder="instagram" style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:7px;color:var(--text);padding:.45rem .7rem;font-size:.82rem;font-family:inherit"></div>
         <div><label style="font-size:.7rem;color:var(--muted);display:block;margin-bottom:.25rem;text-transform:uppercase;letter-spacing:.05em">Medium</label>
@@ -1807,7 +1807,7 @@ document.getElementById('alertSaveBtn').addEventListener('click', function() {
 
 // ── UTM Generator ─────────────────────────────────────────────────────────────
 document.getElementById('utmGenBtn').addEventListener('click', function() {
-  var base = document.getElementById('utmUrl').value.trim() || 'https://seyle450.github.io/Portfolio/';
+  var base = document.getElementById('utmUrl').value.trim() || 'https://elyesferchichi.com/';
   var params = new URLSearchParams();
   var src = document.getElementById('utmSource').value.trim();
   var med = document.getElementById('utmMedium').value.trim();
