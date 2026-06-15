@@ -258,6 +258,41 @@ async function handleDuration(request, env) {
   return json({ ok: true }, 200, origin);
 }
 
+// ─── POST /event ──────────────────────────────────────────────────────────────
+// Klick-/Interaktions-Tracking (z.B. WhatsApp-Button, E-Mail, Paket-Buttons)
+
+async function handleEvent(request, env, ctx) {
+  const origin = request.headers.get('Origin') || '';
+  let body;
+  try { body = await request.json(); } catch { return json({ ok: true }, 200, origin); }
+
+  const {
+    label = '', category = 'link', href = '', page = '/',
+    sessionId = '', timestamp = Date.now(),
+  } = body;
+  const visitorId = body.visitorId || deriveVisitorId(request);
+  const lbl = String(label).trim().slice(0, 80);
+  if (!lbl) return json({ ok: true }, 200, origin);
+
+  const randId = Math.random().toString(36).slice(2, 8);
+  await env.ANALYTICS.put(`click:${timestamp}:${randId}`, JSON.stringify({
+    label: lbl,
+    category: String(category).slice(0, 20),
+    href: String(href).slice(0, 200),
+    page, sessionId, visitorId, timestamp,
+  }), { expirationTtl: 60 * 60 * 24 * 90 });
+
+  // Summary-Caches invalidieren (Klicks fließen in /summary ein)
+  ctx.waitUntil(Promise.all(
+    ['7', '30', '90'].flatMap(d => [
+      env.ANALYTICS.delete('cache:summary:' + d),
+      env.ANALYTICS.delete('cache:summary:' + d + ':all'),
+    ])
+  ));
+
+  return json({ ok: true }, 200, origin);
+}
+
 // ─── GET /profiles ────────────────────────────────────────────────────────────
 
 async function handleProfiles(request, env) {
@@ -396,9 +431,12 @@ function pageName(page) {
   if (p.includes('niki'))        return 'Café Niki';
   if (p.includes('lokma'))       return 'Lokma Lovers';
   if (p.includes('antepli'))     return 'Antepli Baklava';
-  if (p.includes('freelance'))   return 'Freelance';
+  if (p.includes('portfolio'))   return 'Portfolio (CV)';
+  if (p.includes('impressum'))   return 'Impressum';
   if (p.includes('datenschutz')) return 'Datenschutz';
-  if (p === '/portfolio/' || p === '/portfolio' || p === '/') return 'Portfolio · Home';
+  if (p.includes('analytics'))   return 'Analytics';
+  if (p.includes('freelance'))   return 'Freelance';
+  if (p === '/' || p === '' || p.endsWith('/index.html')) return 'Webdesign Bremen';
   return page.split('/').filter(Boolean).pop() || page;
 }
 
@@ -639,6 +677,40 @@ async function handleSummary(request, env) {
     }
   } while (evCursor);
 
+  // Pass 1b: Klick-Events aggregieren (click:<ts>:<rand>)
+  const clickLabelCount = {};
+  const clickCategoryCount = {};
+  let totalClicks = 0;
+  let clkCursor;
+  do {
+    const opts = { prefix: 'click:', limit: 1000 };
+    if (clkCursor) opts.cursor = clkCursor;
+    const listed = await env.ANALYTICS.list(opts);
+    clkCursor = listed.list_complete ? null : listed.cursor;
+    for (const key of listed.keys) {
+      const ts = parseInt(key.name.split(':')[1], 10);
+      if (ts < since) continue;
+      const raw = await env.ANALYTICS.get(key.name);
+      if (!raw) continue;
+      try {
+        const c = JSON.parse(raw);
+        if (excludedIds.has(c.visitorId)) continue;
+        totalClicks++;
+        const lbl = c.label || '?';
+        clickLabelCount[lbl] = (clickLabelCount[lbl] || 0) + 1;
+        const cat = c.category || 'link';
+        clickCategoryCount[cat] = (clickCategoryCount[cat] || 0) + 1;
+      } catch { /* skip */ }
+    }
+  } while (clkCursor);
+
+  const topClicks = Object.entries(clickLabelCount)
+    .sort((a, b) => b[1] - a[1]).slice(0, 15)
+    .map(([label, count]) => ({ label, count }));
+  const clickCategories = Object.entries(clickCategoryCount)
+    .sort((a, b) => b[1] - a[1])
+    .map(([category, count]) => ({ category, count }));
+
   // Pass 2: Session-Merge-Map aufbauen (verknüpft Cross-Tab-Pfade retroaktiv)
   const resolveSession = buildSessionMergeMap(allEvents);
 
@@ -767,6 +839,9 @@ async function handleSummary(request, env) {
     topUtmSources,
     topUtmCampaigns,
     topUtmMediums,
+    totalClicks,
+    topClicks,
+    clickCategories,
     recentEvents: recentEvents.sort((a, b) => b.timestamp - a.timestamp).slice(0, 20),
   };
 
@@ -801,6 +876,9 @@ export default {
     }
     if (url.pathname === '/duration' && request.method === 'POST') {
       return handleDuration(request, env);
+    }
+    if (url.pathname === '/event' && request.method === 'POST') {
+      return handleEvent(request, env, ctx);
     }
     if (url.pathname === '/data' && request.method === 'GET') {
       return handleData(request, env);

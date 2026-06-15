@@ -193,6 +193,60 @@
     if (page && start > 0) sendDuration(page, Date.now() - start);
   }
 
+  // ── Klick-Tracking (was gedrückt wurde) ──────────────────────────────────
+  function clickLabel(el) {
+    var dt = el.getAttribute('data-track');
+    if (dt) return dt.slice(0, 80);
+    var href = el.getAttribute('href') || '';
+    if (/wa\.me|whatsapp/i.test(href))  return 'WhatsApp';
+    if (/^mailto:/i.test(href))         return 'E-Mail: ' + href.replace(/^mailto:/i, '').split('?')[0];
+    if (/^tel:/i.test(href))            return 'Anruf: ' + href.replace(/^tel:/i, '');
+    var text = (el.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 80);
+    if (text) return text;
+    var aria = el.getAttribute('aria-label');
+    if (aria) return aria.slice(0, 80);
+    return href ? href.slice(0, 80) : 'Klick';
+  }
+
+  function clickCategory(el) {
+    var href = el.getAttribute('href') || '';
+    if (/wa\.me|whatsapp/i.test(href)) return 'whatsapp';
+    if (/^mailto:/i.test(href))        return 'email';
+    if (/^tel:/i.test(href))           return 'phone';
+    if (/^#/.test(href))               return 'anchor';
+    if (el.tagName === 'BUTTON')       return 'button';
+    if (href) {
+      try {
+        var host = new URL(href, location.href).hostname;
+        if (host && host !== location.hostname) return 'external';
+      } catch (e) {}
+    }
+    return 'link';
+  }
+
+  function sendClick(label, category, href) {
+    var mainHosts = ['elyesferchichi.com', 'seyle450.github.io', 'localhost', '127.0.0.1'];
+    var isMain = mainHosts.some(function (h) { return location.hostname === h; });
+    var page = (isMain ? '' : location.hostname) + location.pathname;
+    fetch(WORKER_URL + '/event', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type: 'click', label: label, category: category,
+        href: (href || '').slice(0, 200), page: page,
+        sessionId: getSessionId(), visitorId: getVisitorId(), timestamp: Date.now(),
+      }),
+      keepalive: true,
+    }).catch(function () {});
+  }
+
+  function onClick(ev) {
+    if (!hasConsent()) return;
+    var el = ev.target.closest('a, button, [data-track]');
+    if (!el) return;
+    if (el.closest('#_acb')) return; // Consent-Banner ignorieren
+    sendClick(clickLabel(el), clickCategory(el), el.getAttribute('href') || '');
+  }
+
   // ── Consent-Banner ───────────────────────────────────────────────────────
   function injectBanner() {
     if (document.getElementById('_acb')) return;
@@ -333,6 +387,7 @@
     document.addEventListener('visibilitychange', function () {
       if (document.visibilityState === 'hidden') onLeave();
     });
+    document.addEventListener('click', onClick, true);
   }
 
   function patchHistory(method) {

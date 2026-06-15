@@ -582,6 +582,12 @@ body { min-height: 100svh; }
         <div class="kpi-value" id="kpiBounce">–</div>
         <div class="kpi-sub">1-Seiten-Sessions</div>
       </div>
+      <div class="kpi-card" style="--kpi-accent:#22d3ee">
+        <div class="kpi-icon">🖱️</div>
+        <div class="kpi-label">Klicks</div>
+        <div class="kpi-value" id="kpiClicks">–</div>
+        <div class="kpi-sub" id="kpiClicksSub">Buttons &amp; Links</div>
+      </div>
     </div>
 
     <!-- Daily Chart -->
@@ -642,6 +648,30 @@ body { min-height: 100svh; }
       <div class="panel-body" style="padding:.75rem 1rem">
         <div class="flow-list" id="flowList">
           <div class="spinner-wrap"><div class="spinner"></div> Journeys laden…</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Klicks & Interaktionen -->
+    <div class="section-label">Klicks &amp; Interaktionen</div>
+    <div class="panel-grid" style="margin-bottom:1.25rem">
+      <div class="panel">
+        <div class="panel-header">
+          <h3>Meistgeklickt</h3>
+          <span style="font-size:.72rem;color:var(--muted)">Buttons &amp; Links</span>
+        </div>
+        <div class="panel-body">
+          <table><thead><tr><th>Element</th><th>Klicks</th></tr></thead>
+          <tbody id="tbClicks"></tbody></table>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-header">
+          <h3>Klick-Typen</h3>
+          <span style="font-size:.72rem;color:var(--muted)">nach Kategorie</span>
+        </div>
+        <div class="panel-body" style="padding:.75rem 1rem">
+          <div class="country-list" id="clickCategories"></div>
         </div>
       </div>
     </div>
@@ -775,7 +805,8 @@ var API_TOKEN     = 'c42cc5a275f6b8849ffb536c195a3c1197a81ef406ad440347412402e3c
 
 // ── Seiten-Label-System ───────────────────────────────────────────────────────
 var PAGE_SITES = {
-  portfolio:  { label: 'Portfolio · Home',   bg: '#4f46e5', text: '#fff' },
+  webdesign:  { label: 'Webdesign Bremen',   bg: '#2B50E2', text: '#fff' },
+  portfolio:  { label: 'Portfolio (CV)',     bg: '#4f46e5', text: '#fff' },
   freelance:  { label: 'Freelance',          bg: '#6366f1', text: '#fff' },
   starscape:  { label: 'Starscape',          bg: '#009fad', text: '#fff' },
   bens:       { label: "Ben's Catering",     bg: '#222',    text: '#f0ece4' },
@@ -783,6 +814,7 @@ var PAGE_SITES = {
   cafeniki:   { label: 'Café Niki',          bg: '#9A7B4F', text: '#fff' },
   lokma:      { label: 'Lokma Lovers',       bg: '#c8860a', text: '#fff' },
   antepli:    { label: 'Antepli Baklava',    bg: '#d0a93d', text: '#18230f' },
+  impressum:  { label: 'Impressum',          bg: '#64748b', text: '#fff' },
   datenschutz:{ label: 'Datenschutz',        bg: '#475569', text: '#fff' },
   analytics:  { label: 'Analytics',          bg: '#7c3aed', text: '#fff' },
 };
@@ -794,16 +826,21 @@ var STARSCAPE_SUBS = {
 
 function getSiteKey(path) {
   var p = decodeURIComponent(path || '').toLowerCase();
-  if (p === '/portfolio/' || p === '/portfolio' || p === '/' || p.endsWith('/portfolio/index.html')) return 'portfolio';
-  if (p.includes('freelance'))   return 'freelance';
-  if (p.includes('datenschutz')) return 'datenschutz';
-  if (p.includes('analytics'))   return 'analytics';
+  // Projekte / Subdomains zuerst (Hostname-Präfix enthält den Namen)
   if (p.includes('starscape'))   return 'starscape';
   if (p.includes("ben"))         return 'bens';
   if (p.includes("hevi"))        return 'hevis';
   if (p.includes("niki"))        return 'cafeniki';
   if (p.includes("lokma"))       return 'lokma';
   if (p.includes("antepli"))     return 'antepli';
+  // Hauptseiten
+  if (p.includes('portfolio'))   return 'portfolio';
+  if (p.includes('impressum'))   return 'impressum';
+  if (p.includes('datenschutz')) return 'datenschutz';
+  if (p.includes('analytics'))   return 'analytics';
+  if (p.includes('freelance'))   return 'freelance';
+  // Wurzel → Webdesign-Bremen-Startseite
+  if (p === '/' || p === '' || p.endsWith('/index.html')) return 'webdesign';
   return null;
 }
 
@@ -811,11 +848,6 @@ function labelPage(path) {
   if (!path) return '(direkt)';
   var p = decodeURIComponent(path);
   var lower = p.toLowerCase();
-
-  if (lower === '/portfolio/' || lower === '/portfolio' || lower === '/') return 'Portfolio · Home';
-  if (lower.includes('freelance')) return 'Freelance';
-  if (lower.includes('datenschutz')) return 'Datenschutz';
-  if (lower.includes('analytics')) return 'Analytics';
 
   if (lower.includes('starscape')) {
     for (var sub in STARSCAPE_SUBS) {
@@ -828,6 +860,13 @@ function labelPage(path) {
   if (lower.includes("niki"))    return "Café Niki";
   if (lower.includes("lokma"))   return "Lokma Lovers";
   if (lower.includes("antepli")) return "Antepli Baklava";
+
+  if (lower.includes('portfolio'))   return 'Portfolio (CV)';
+  if (lower.includes('impressum'))   return 'Impressum';
+  if (lower.includes('datenschutz')) return 'Datenschutz';
+  if (lower.includes('analytics'))   return 'Analytics';
+  if (lower.includes('freelance'))   return 'Freelance';
+  if (lower === '/' || lower === '' || lower.endsWith('/index.html')) return 'Webdesign Bremen';
 
   var parts = p.replace(/\.html$/i, '').split('/').filter(Boolean);
   return parts[parts.length - 1] || path;
@@ -1000,6 +1039,9 @@ function renderAll() {
   document.getElementById('kpiTopPageViews').textContent = top ? top.views + ' Aufrufe' : '';
   document.getElementById('kpiSessions').textContent = (s.totalSessions != null ? s.totalSessions : '–').toLocaleString('de');
   document.getElementById('kpiBounce').textContent   = s.bounceRate != null ? s.bounceRate + '%' : '–';
+  document.getElementById('kpiClicks').textContent   = (s.totalClicks || 0).toLocaleString('de');
+  var topClk = s.topClicks && s.topClicks[0];
+  document.getElementById('kpiClicksSub').textContent = topClk ? 'Top: ' + topClk.label : 'Buttons & Links';
 
   renderDailyChart(s.dailyStats || []);
   renderPagesChart(s.topPages   || []);
@@ -1008,6 +1050,7 @@ function renderAll() {
   renderFlowMap(s.topSessionPaths || []);
   renderReferrersTable(s.topReferrers || []);
   renderUtmPanel(s.topUtmSources || [], s.topUtmCampaigns || []);
+  renderClicksPanel(s.topClicks || [], s.clickCategories || []);
   renderLandingTable(s.topLandingPages || []);
   renderPagesTable(s.topPages || [], s.totalPageviews);
   renderEventsTable(rawEvents);
@@ -1691,6 +1734,50 @@ function renderUtmPanel(topUtmSources, topUtmCampaigns) {
         + '<div style="width:' + pct + '%;height:100%;background:var(--purple);border-radius:2px"></div></div></td></tr>';
     }).join('');
   }
+}
+
+// ── Klicks & Interaktionen ──────────────────────────────────────────────────────
+var CLICK_CAT = {
+  whatsapp: { label: 'WhatsApp',     icon: '💬', color: '#25D366' },
+  email:    { label: 'E-Mail',       icon: '✉️', color: '#6366f1' },
+  phone:    { label: 'Anruf',        icon: '📞', color: '#22c55e' },
+  anchor:   { label: 'Sprungmarken', icon: '⚓', color: '#a78bfa' },
+  button:   { label: 'Buttons',      icon: '🔘', color: '#f59e0b' },
+  external: { label: 'Externe Links',icon: '🔗', color: '#22d3ee' },
+  link:     { label: 'Interne Links',icon: '↪',  color: '#94a3b8' },
+};
+function renderClicksPanel(topClicks, clickCategories) {
+  var tb = document.getElementById('tbClicks');
+  if (!topClicks.length) {
+    tb.innerHTML = '<tr><td colspan="2" style="color:var(--muted);text-align:center;padding:1.5rem;font-size:.8rem">'
+      + 'Noch keine Klicks erfasst.<br><span style="opacity:.6;font-size:.73rem">Wächst, sobald Besucher Buttons/Links anklicken</span></td></tr>';
+  } else {
+    var max = topClicks[0].count;
+    tb.innerHTML = topClicks.map(function (c) {
+      var pct = max > 0 ? Math.round(c.count / max * 100) : 0;
+      return '<tr><td><span style="font-size:.82rem">' + esc(c.label) + '</span></td>'
+        + '<td><span style="color:var(--accent2);font-weight:600">' + c.count + '</span>'
+        + '<div style="width:50px;height:3px;background:var(--border2);border-radius:2px;margin:.25rem 0 0 .4rem;display:inline-block;vertical-align:middle">'
+        + '<div style="width:' + pct + '%;height:100%;background:var(--accent2);border-radius:2px"></div></div></td></tr>';
+    }).join('');
+  }
+
+  var cc = document.getElementById('clickCategories');
+  if (!clickCategories.length) {
+    cc.innerHTML = '<p style="color:var(--muted);font-size:.78rem;padding:.25rem 0">Noch keine Daten</p>';
+    return;
+  }
+  var maxC = clickCategories[0].count;
+  cc.innerHTML = clickCategories.map(function (c) {
+    var meta = CLICK_CAT[c.category] || { label: c.category, icon: '•', color: '#94a3b8' };
+    var pct = maxC > 0 ? Math.round(c.count / maxC * 100) : 0;
+    return '<div class="country-row">'
+      + '<span class="country-flag">' + meta.icon + '</span>'
+      + '<span class="country-name" style="font-size:.8rem;color:var(--muted2)">' + esc(meta.label) + '</span>'
+      + '<div class="mini-bar" style="width:50px"><div class="mini-bar-fill" style="width:' + pct + '%;background:' + meta.color + '"></div></div>'
+      + '<span class="country-count">' + c.count + '</span>'
+      + '</div>';
+  }).join('');
 }
 
 // ── Live Mode ─────────────────────────────────────────────────────────────────
