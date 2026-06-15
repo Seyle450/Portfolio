@@ -247,6 +247,33 @@
     sendClick(clickLabel(el), clickCategory(el), el.getAttribute('href') || '');
   }
 
+  // ── Scroll-Tiefe (25/50/75/100 %) ────────────────────────────────────────
+  var _scrollFired = {};
+  function sendScroll(depth) {
+    var mainHosts = ['elyesferchichi.com', 'seyle450.github.io', 'localhost', '127.0.0.1'];
+    var isMain = mainHosts.some(function (h) { return location.hostname === h; });
+    var page = (isMain ? '' : location.hostname) + location.pathname;
+    fetch(WORKER_URL + '/event', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type: 'scroll', category: 'scroll', depth: depth,
+        label: 'Scroll ' + depth + '%', page: page,
+        sessionId: getSessionId(), visitorId: getVisitorId(), timestamp: Date.now(),
+      }),
+      keepalive: true,
+    }).catch(function () {});
+  }
+  function onScroll() {
+    if (!hasConsent()) return;
+    var doc = document.documentElement;
+    var scrollable = doc.scrollHeight - doc.clientHeight;
+    if (scrollable < 200) return; // sehr kurze Seiten ignorieren
+    var pct = (doc.scrollTop || document.body.scrollTop) / scrollable * 100;
+    [25, 50, 75, 100].forEach(function (m) {
+      if (pct >= m && !_scrollFired[m]) { _scrollFired[m] = true; sendScroll(m); }
+    });
+  }
+
   // ── Consent-Banner ───────────────────────────────────────────────────────
   function injectBanner() {
     if (document.getElementById('_acb')) return;
@@ -388,6 +415,11 @@
       if (document.visibilityState === 'hidden') onLeave();
     });
     document.addEventListener('click', onClick, true);
+    var _scrollTimer = null;
+    window.addEventListener('scroll', function () {
+      if (_scrollTimer) return;
+      _scrollTimer = setTimeout(function () { _scrollTimer = null; onScroll(); }, 200);
+    }, { passive: true });
   }
 
   function patchHistory(method) {

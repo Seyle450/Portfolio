@@ -588,6 +588,12 @@ body { min-height: 100svh; }
         <div class="kpi-value" id="kpiClicks">–</div>
         <div class="kpi-sub" id="kpiClicksSub">Buttons &amp; Links</div>
       </div>
+      <div class="kpi-card" style="--kpi-accent:#25D366">
+        <div class="kpi-icon">🎯</div>
+        <div class="kpi-label">Conversion-Rate</div>
+        <div class="kpi-value" id="kpiConversion">–</div>
+        <div class="kpi-sub" id="kpiConversionSub">Kontakt-Klicks / Sessions</div>
+      </div>
     </div>
 
     <!-- Daily Chart -->
@@ -673,6 +679,19 @@ body { min-height: 100svh; }
         <div class="panel-body" style="padding:.75rem 1rem">
           <div class="country-list" id="clickCategories"></div>
         </div>
+      </div>
+    </div>
+
+    <!-- Scroll-Tiefe + Heatmap -->
+    <div class="panel-grid" style="margin-bottom:1.25rem">
+      <div class="chart-card">
+        <h3>Scroll-Tiefe</h3>
+        <div class="chart-wrap-sm"><canvas id="chartScroll"></canvas></div>
+        <p style="font-size:.72rem;color:var(--muted);margin-top:.5rem">Wie weit Besucher nach unten scrollen (alle Seiten).</p>
+      </div>
+      <div class="chart-card">
+        <h3>Beste Zeiten <span style="font-weight:400;color:var(--muted);text-transform:none;letter-spacing:0">· Wochentag × Uhrzeit</span></h3>
+        <div id="heatmap" style="overflow-x:auto;padding-top:.25rem"></div>
       </div>
     </div>
 
@@ -1042,6 +1061,8 @@ function renderAll() {
   document.getElementById('kpiClicks').textContent   = (s.totalClicks || 0).toLocaleString('de');
   var topClk = s.topClicks && s.topClicks[0];
   document.getElementById('kpiClicksSub').textContent = topClk ? 'Top: ' + topClk.label : 'Buttons & Links';
+  document.getElementById('kpiConversion').textContent = (s.conversionRate != null ? s.conversionRate : 0) + '%';
+  document.getElementById('kpiConversionSub').textContent = (s.conversions || 0) + ' von ' + (s.totalSessions || 0) + ' Sessions';
 
   renderDailyChart(s.dailyStats || []);
   renderPagesChart(s.topPages   || []);
@@ -1051,6 +1072,8 @@ function renderAll() {
   renderReferrersTable(s.topReferrers || []);
   renderUtmPanel(s.topUtmSources || [], s.topUtmCampaigns || []);
   renderClicksPanel(s.topClicks || [], s.clickCategories || []);
+  renderScrollChart(s.scrollDepth || {});
+  renderHeatmap(rawEvents);
   renderLandingTable(s.topLandingPages || []);
   renderPagesTable(s.topPages || [], s.totalPageviews);
   renderEventsTable(rawEvents);
@@ -1778,6 +1801,70 @@ function renderClicksPanel(topClicks, clickCategories) {
       + '<span class="country-count">' + c.count + '</span>'
       + '</div>';
   }).join('');
+}
+
+// ── Scroll-Tiefe ──────────────────────────────────────────────────────────────
+function renderScrollChart(scrollDepth) {
+  var labels = ['25%', '50%', '75%', '100%'];
+  var data = [scrollDepth['25'] || 0, scrollDepth['50'] || 0, scrollDepth['75'] || 0, scrollDepth['100'] || 0];
+  destroyChart('scroll');
+  var ctx = document.getElementById('chartScroll').getContext('2d');
+  charts.scroll = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{ label: 'Besucher', data: data,
+        backgroundColor: ['rgba(34,211,238,.4)','rgba(34,211,238,.55)','rgba(34,211,238,.7)','rgba(34,197,94,.8)'],
+        borderRadius: 5, borderSkipped: false }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { x: { ticks: TICK, grid: { display: false } }, y: { ticks: { ...TICK, precision: 0 }, grid: GRID, beginAtZero: true } }
+    }
+  });
+}
+
+// ── Heatmap: Wochentag × Uhrzeit (lokale Zeit des Betrachters) ──────────────────
+function renderHeatmap(events) {
+  var el = document.getElementById('heatmap');
+  var dayNames = ['Mo','Di','Mi','Do','Fr','Sa','So'];
+  // grid[day 0=Mo..6=So][hour 0..23]
+  var grid = Array.from({ length: 7 }, function () { return new Array(24).fill(0); });
+  var max = 0;
+  events.forEach(function (e) {
+    if (!e.timestamp) return;
+    var d = new Date(e.timestamp);
+    var day = (d.getDay() + 6) % 7; // JS: 0=So → wir wollen Mo=0
+    var hr = d.getHours();
+    grid[day][hr]++;
+    if (grid[day][hr] > max) max = grid[day][hr];
+  });
+  if (max === 0) {
+    el.innerHTML = '<p style="color:var(--muted);font-size:.78rem;padding:.5rem 0">Noch keine Daten.</p>';
+    return;
+  }
+  function cellColor(v) {
+    if (v === 0) return 'rgba(255,255,255,.03)';
+    var a = 0.15 + (v / max) * 0.85;
+    return 'rgba(99,102,241,' + a.toFixed(2) + ')';
+  }
+  // Stunden-Achse in 3er-Schritten beschriften
+  var html = '<div style="display:grid;grid-template-columns:auto repeat(24,1fr);gap:2px;min-width:520px;font-size:.6rem">';
+  html += '<div></div>';
+  for (var h = 0; h < 24; h++) {
+    html += '<div style="color:var(--muted);text-align:center">' + (h % 3 === 0 ? h : '') + '</div>';
+  }
+  for (var dy = 0; dy < 7; dy++) {
+    html += '<div style="color:var(--muted2);padding-right:.3rem;display:flex;align-items:center">' + dayNames[dy] + '</div>';
+    for (var hh = 0; hh < 24; hh++) {
+      var v = grid[dy][hh];
+      html += '<div title="' + dayNames[dy] + ' ' + hh + ':00 — ' + v + ' Aufrufe" '
+        + 'style="aspect-ratio:1;border-radius:2px;background:' + cellColor(v) + '"></div>';
+    }
+  }
+  html += '</div>';
+  el.innerHTML = html;
 }
 
 // ── Live Mode ─────────────────────────────────────────────────────────────────

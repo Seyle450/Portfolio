@@ -677,9 +677,12 @@ async function handleSummary(request, env) {
     }
   } while (evCursor);
 
-  // Pass 1b: Klick-Events aggregieren (click:<ts>:<rand>)
+  // Pass 1b: Klick-, Scroll- & Conversion-Events aggregieren (click:<ts>:<rand>)
   const clickLabelCount = {};
   const clickCategoryCount = {};
+  const scrollDepthCount = { 25: 0, 50: 0, 75: 0, 100: 0 };
+  const convSessionIdsRaw = new Set();   // Sessions mit Conversion-Klick (roh)
+  const CONV_CATS = new Set(['whatsapp', 'email', 'phone']);
   let totalClicks = 0;
   let clkCursor;
   do {
@@ -695,11 +698,18 @@ async function handleSummary(request, env) {
       try {
         const c = JSON.parse(raw);
         if (excludedIds.has(c.visitorId)) continue;
+        // Scroll-Tiefe getrennt zählen (kein "Klick")
+        if (c.category === 'scroll') {
+          const d = parseInt(c.depth != null ? c.depth : c.label, 10);
+          if (scrollDepthCount[d] != null) scrollDepthCount[d]++;
+          continue;
+        }
         totalClicks++;
         const lbl = c.label || '?';
         clickLabelCount[lbl] = (clickLabelCount[lbl] || 0) + 1;
         const cat = c.category || 'link';
         clickCategoryCount[cat] = (clickCategoryCount[cat] || 0) + 1;
+        if (CONV_CATS.has(cat) && c.sessionId) convSessionIdsRaw.add(c.sessionId);
       } catch { /* skip */ }
     }
   } while (clkCursor);
@@ -817,6 +827,12 @@ async function handleSummary(request, env) {
   const bounceSessions = Object.values(sessionFlows).filter(f => f.length === 1).length;
   const bounceRate = totalSessions > 0 ? Math.round(bounceSessions / totalSessions * 100) : 0;
 
+  // Conversion: Sessions mit Kontakt-Klick (WhatsApp/E-Mail/Anruf), auf gemergte IDs gemappt
+  const convSessions = new Set();
+  convSessionIdsRaw.forEach(sid => convSessions.add(resolveSession(sid)));
+  const conversions = convSessions.size;
+  const conversionRate = totalSessions > 0 ? Math.round(conversions / totalSessions * 1000) / 10 : 0;
+
   const topUtmSources = Object.entries(utmSourceCount).sort((a, b) => b[1] - a[1]).slice(0, 10).map(([source, count]) => ({ source, count }));
   const topUtmCampaigns = Object.entries(utmCampaignCount).sort((a, b) => b[1] - a[1]).slice(0, 10).map(([campaign, count]) => ({ campaign, count }));
   const topUtmMediums = Object.entries(utmMediumCount).sort((a, b) => b[1] - a[1]).slice(0, 10).map(([medium, count]) => ({ medium, count }));
@@ -842,6 +858,9 @@ async function handleSummary(request, env) {
     totalClicks,
     topClicks,
     clickCategories,
+    scrollDepth: scrollDepthCount,
+    conversions,
+    conversionRate,
     recentEvents: recentEvents.sort((a, b) => b.timestamp - a.timestamp).slice(0, 20),
   };
 
