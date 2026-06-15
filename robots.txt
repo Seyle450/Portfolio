@@ -1,6 +1,10 @@
 User-agent: *
 Allow: /
 Disallow: /analytics/
-Disallow: /.htaccess
 
 Sitemap: https://elyesferchichi.com/sitemap.xml
+Sitemap: https://hevis.elyesferchichi.com/sitemap.xml
+Sitemap: https://bens.elyesferchichi.com/sitemap.xml
+Sitemap: https://lokma.elyesferchichi.com/sitemap.xml
+Sitemap: https://niki.elyesferchichi.com/sitemap.xml
+Sitemap: https://antepli.elyesferchichi.com/sitemap.xml
