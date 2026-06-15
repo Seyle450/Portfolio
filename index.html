@@ -89,7 +89,6 @@
   .brand .mono{width:30px;height:30px;border-radius:7px;overflow:hidden;flex:none;}
   .brand .mono img{display:block;width:100%;height:100%;}
   .brand .nm{font-family:var(--head);font-weight:600;font-size:16px;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .brand .nm small{display:block;font-weight:400;font-size:11px;letter-spacing:.04em;color:var(--neutral);margin-top:1px;}
   .nav-links{display:none;gap:28px;flex:1;justify-content:center;}
   .nav-links a{font-family:var(--head);font-size:14px;font-weight:500;color:var(--neutral);transition:color .15s;white-space:nowrap;}
   .nav-links a:hover{color:var(--ink);}
@@ -133,14 +132,6 @@
   .hc.hc-dark .hc-label{color:rgba(246,245,241,.55);}
   .hc.hc-cobalt .hc-label{color:rgba(246,245,241,.65);}
 
-  /* scrolling ticker */
-  .hero-ticker{border-top:1px solid var(--line);padding:0;margin-top:48px;overflow:hidden;}
-  .ticker-inner{display:flex;white-space:nowrap;animation:ticker-move 28s linear infinite;}
-  .ticker-inner:hover{animation-play-state:paused;}
-  .ticker-seg{display:inline-flex;align-items:center;gap:0;padding:14px 0;flex:none;}
-  .ticker-seg span{font-family:var(--head);font-size:12px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;color:var(--neutral);padding:0 22px;}
-  .ticker-seg .dot{width:5px;height:5px;border-radius:50%;background:var(--cobalt);flex:none;}
-  @keyframes ticker-move{from{transform:translateX(0)}to{transform:translateX(-50%)}}
   @media(prefers-reduced-motion:reduce){
     .ticker-inner{animation:none;}
     .reveal{opacity:1;transform:none;transition:none;}
@@ -322,7 +313,7 @@
   <div class="container nav-row">
     <a class="brand" href="/">
       <span class="mono"><img src="ef-monogram-cobalt.svg" alt="EF" width="30" height="30"></span>
-      <span class="nm">Elyes Ferchichi<small>Webdesign · Bremen</small></span>
+      <span class="nm">Elyes Ferchichi</span>
     </a>
     <nav class="nav-links">
       <a href="#pakete">Pakete</a>
@@ -384,15 +375,6 @@
     </div>
   </div>
 
-  <!-- Scrolling project ticker -->
-  <div class="hero-ticker">
-    <div class="ticker-inner">
-      <!-- first copy -->
-      <div class="ticker-seg"><span>Hevi's Café</span><span class="dot"></span><span>Ben's Catering</span><span class="dot"></span><span>Lokma Lovers</span><span class="dot"></span><span>Café Niki</span><span class="dot"></span><span>Antepli Baklava</span><span class="dot"></span><span>Gastronomie-Webdesign</span><span class="dot"></span><span>Restaurants & Cafés</span><span class="dot"></span><span>Food Trucks</span><span class="dot"></span></div>
-      <!-- duplicate for seamless loop -->
-      <div class="ticker-seg"><span>Hevi's Café</span><span class="dot"></span><span>Ben's Catering</span><span class="dot"></span><span>Lokma Lovers</span><span class="dot"></span><span>Café Niki</span><span class="dot"></span><span>Antepli Baklava</span><span class="dot"></span><span>Gastronomie-Webdesign</span><span class="dot"></span><span>Restaurants & Cafés</span><span class="dot"></span><span>Food Trucks</span><span class="dot"></span></div>
-    </div>
-  </div>
 </section>
 
 <!-- ===== PROBLEM / LÖSUNG ===== -->
