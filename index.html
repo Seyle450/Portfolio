@@ -397,6 +397,35 @@
     .hero::before,.marquee-track{animation:none;}
     .hero h1 .hl{animation:none;-webkit-text-fill-color:var(--cobalt);color:var(--cobalt);}
   }
+
+  /* ===================== SEKTIONS-RHYTHMUS ===================== */
+  /* Große, dezente Kapitel-Nummern */
+  .sec-head{position:relative;}
+  .sec-head>.eyebrow,.sec-head>h2,.sec-head>.lede{position:relative;z-index:1;}
+  .sec-no{position:absolute;top:-30px;right:0;z-index:0;pointer-events:none;
+    font-family:var(--head);font-weight:700;line-height:1;letter-spacing:-.04em;
+    font-size:clamp(62px,13vw,120px);color:transparent;
+    -webkit-text-stroke:1.5px rgba(43,80,226,.16);}
+
+  /* Problem: feines Punkteraster (Planungs-Look) */
+  .problem{background:
+    radial-gradient(rgba(43,80,226,.11) 1.1px, transparent 1.3px) 0 0/22px 22px,
+    var(--white);}
+
+  /* Vergleich: zarte Kobalt-Tönung */
+  .compare{background:#eaeefb;}
+
+  /* Ablauf: dunkle Bühne in der Seitenmitte */
+  .ablauf{background:var(--ink);color:var(--paper);border-color:var(--line-dk);}
+  .ablauf .sec-head h2{color:var(--paper);}
+  .ablauf .lede{color:#b9bcc6;}
+  .ablauf .step{border-top-color:var(--line-dk);}
+  .ablauf .step h3{color:var(--paper);}
+  .ablauf .step p{color:#b1b4be;}
+  .ablauf .sec-no{-webkit-text-stroke-color:rgba(155,176,255,.24);}
+
+  /* Häufige Fragen: weiche Tönung gegen zwei weiße Flächen nebeneinander */
+  #faq{background:linear-gradient(180deg,var(--paper),#efeef8);}
 </style>
 </head>
 <body>
@@ -470,6 +499,7 @@
 <section class="problem">
   <div class="container">
     <div class="sec-head reveal">
+      <span class="sec-no" aria-hidden="true">01</span>
       <span class="eyebrow">Warum überhaupt</span>
       <h2>Ihre Karte ist top. Aber findet man Sie auch online?</h2>
       <p class="lede">Die meisten Gäste schauen erst aufs Handy – und entscheiden in Sekunden, ob sie zu Ihnen kommen oder zum Laden nebenan.</p>
@@ -499,6 +529,7 @@
 <section class="compare" id="vergleich">
   <div class="container">
     <div class="sec-head reveal">
+      <span class="sec-no" aria-hidden="true">02</span>
       <span class="eyebrow">Der Unterschied</span>
       <h2>Warum nicht Wix, Squarespace oder eine Agentur?</h2>
       <p class="lede">Kurz gesagt: weil Sie damit entweder zu viel bezahlen oder zu wenig bekommen.</p>
@@ -542,6 +573,7 @@
 <section id="pakete">
   <div class="container">
     <div class="sec-head reveal">
+      <span class="sec-no" aria-hidden="true">03</span>
       <span class="eyebrow">Pakete & Preise</span>
       <h2>Klare Pakete. Feste Preise. Keine Überraschungen.</h2>
       <p class="lede">Sie wissen vorher genau, was Sie bekommen und was es kostet.</p>
@@ -594,6 +626,7 @@
 <section id="arbeiten" style="background:var(--white);border-top:1px solid var(--line);border-bottom:1px solid var(--line);">
   <div class="container">
     <div class="sec-head reveal">
+      <span class="sec-no" aria-hidden="true">04</span>
       <span class="eyebrow">Ausgewählte Arbeiten</span>
       <h2>Echte Konzepte für echte Lokale.</h2>
       <p class="lede">Alle Projekte sind vollständige Webdesign-Konzepte – von Grund auf selbst entworfen und gebaut.</p>
@@ -673,6 +706,7 @@
 <section class="ablauf" id="ablauf">
   <div class="container">
     <div class="sec-head reveal">
+      <span class="sec-no" aria-hidden="true">05</span>
       <span class="eyebrow">So läuft's ab</span>
       <h2>In vier einfachen Schritten zur fertigen Seite.</h2>
       <p class="lede">Kein technisches Blabla. Sie kümmern sich ums Lokal, ich kümmere mich um die Website.</p>
@@ -702,6 +736,7 @@
 <section id="faq">
   <div class="container">
     <div class="sec-head reveal">
+      <span class="sec-no" aria-hidden="true">06</span>
       <span class="eyebrow">Häufige Fragen</span>
       <h2>Was Sie vielleicht noch wissen wollen.</h2>
     </div>
@@ -734,6 +769,7 @@
 <section id="ueber" style="background:var(--white);border-top:1px solid var(--line);border-bottom:1px solid var(--line);">
   <div class="container">
     <div class="sec-head reveal">
+      <span class="sec-no" aria-hidden="true">07</span>
       <span class="eyebrow">Über mich</span>
       <h2>Eine Person. Direkt. Ohne Agentur-Pingpong.</h2>
     </div>
