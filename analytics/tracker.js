@@ -186,19 +186,31 @@
     });
   }
 
-  // ── Anonymer Besuchs-Ping (ohne Einwilligung) ────────────────────────────
+  // ── Anonymer Ping (ohne Einwilligung) ─────────────────────────────────────
   // Sendet KEINE personenbezogenen Daten: keine visitorId, kein Fingerprint,
-  // keine Session, kein User-Agent. Nur der Seitenname für einen anonymen Zähler.
-  // Es wird bewusst NICHTS auf dem Gerät gespeichert (kein Cookie, kein Storage),
-  // damit für Nicht-Einwilliger §25 TTDSG nicht greift. Daher zählt jeder
-  // Seitenaufruf einzeln (Pageview-Zähler, keine Personen-Wiedererkennung).
-  function sendAnonVisit() {
+  // keine Session, kein gespeicherter User-Agent. Es wird bewusst NICHTS auf dem
+  // Gerät gespeichert oder ausgelesen (kein Cookie, kein Storage), damit §25
+  // TDDDG (ehem. TTDSG) für Nicht-Einwilliger nicht greift. Übertragen wird nur
+  // der Seitenname + Referrer; Land/Gerät/Browser/Sprache leitet der Server aus
+  // den ohnehin gesendeten HTTP-Headern ab und speichert daraus ausschließlich
+  // anonyme Tages-Aggregate (reine Zähler, keine Personen-Wiedererkennung).
+  function anonPage() {
     var mainHosts = ['elyesferchichi.com', 'seyle450.github.io', 'localhost', '127.0.0.1'];
     var isMain = mainHosts.some(function (h) { return location.hostname === h; });
-    var page = (isMain ? '' : location.hostname) + location.pathname;
+    return (isMain ? '' : location.hostname) + location.pathname;
+  }
+  function sendAnonVisit() {
     fetch(WORKER_URL + '/visit', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ page: page }), keepalive: true,
+      body: JSON.stringify({ page: anonPage(), referrer: document.referrer || '' }),
+      keepalive: true,
+    }).catch(function () {});
+  }
+  // Anonymes Klick-Zählen: nur das Label (z. B. "WhatsApp"), kein ID/Session.
+  function sendAnonClick(label) {
+    fetch(WORKER_URL + '/visit', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ page: anonPage(), click: label }), keepalive: true,
     }).catch(function () {});
   }
 
@@ -256,11 +268,15 @@
   }
 
   function onClick(ev) {
-    if (!hasConsent()) return;
     var el = ev.target.closest('a, button, [data-track]');
     if (!el) return;
     if (el.closest('#_acb')) return; // Consent-Banner ignorieren
-    sendClick(clickLabel(el), clickCategory(el), el.getAttribute('href') || '');
+    var label = clickLabel(el);
+    if (hasConsent()) {
+      sendClick(label, clickCategory(el), el.getAttribute('href') || '');
+    } else {
+      sendAnonClick(label); // anonym, nur Label – keine ID/Session
+    }
   }
 
   // ── Scroll-Tiefe (25/50/75/100 %) ────────────────────────────────────────
@@ -361,7 +377,7 @@
     var banner = document.createElement('div');
     banner.id = '_acb';
     banner.setAttribute('role', 'dialog');
-    banner.setAttribute('aria-label', 'Cookie-Einwilligung');
+    banner.setAttribute('aria-label', 'Einwilligung zur Nutzungsmessung');
     banner.innerHTML = [
       '<div id="_acb-card">',
         '<div id="_acb-head">',
@@ -371,13 +387,13 @@
               '<path d="M9 12l2 2 4-4"/>',
             '</svg>',
           '</div>',
-          '<div id="_acb-ttl">Anonyme Website-Analyse</div>',
+          '<div id="_acb-ttl">Hilfst du mir, die Seite zu verbessern?</div>',
         '</div>',
         '<div id="_acb-sub">',
-          'Mit deiner Zustimmung sehe ich nur <b>anonym</b>, welche Inhalte ankommen — so kann ich die Seite besser machen. Kein Verkauf, keine Werbung, keine Weitergabe an Dritte.',
+          'Ich messe — <b>ohne deinen Namen oder Kontaktdaten</b> — wie meine Seite genutzt wird: welche Inhalte ankommen, woher Besucher kommen, was geklickt wird. Damit mache ich sie für dich besser. Kein Verkauf, keine Werbung, keine Weitergabe an Dritte.',
         '</div>',
         '<div id="_acb-chips">',
-          '<span>✓ 100&nbsp;% anonym</span>',
+          '<span>✓ Ohne Name &amp; Kontakt</span>',
           '<span>✓ Keine Werbung</span>',
           '<span>✓ Keine Drittanbieter</span>',
         '</div>',
@@ -411,15 +427,19 @@
 
   // ── Init ─────────────────────────────────────────────────────────────────
   function init() {
-    if (isDenied()) { sendAnonVisit(); return; }
     if (hasConsent()) {
       track();
     } else {
-      // Noch keine Entscheidung: anonym zählen + Banner zeigen
+      // Keine Einwilligung (abgelehnt ODER unentschieden): anonym zählen
       sendAnonVisit();
-      if (document.body) injectBanner();
-      else document.addEventListener('DOMContentLoaded', injectBanner);
+      // Banner nur zeigen, solange noch keine Entscheidung getroffen wurde
+      if (!isDenied()) {
+        if (document.body) injectBanner();
+        else document.addEventListener('DOMContentLoaded', injectBanner);
+      }
     }
+    // Listener für alle: onLeave/onScroll prüfen selbst auf Consent,
+    // onClick zählt ohne Consent anonym (nur Label).
     window.addEventListener('beforeunload', onLeave);
     document.addEventListener('visibilitychange', function () {
       if (document.visibilityState === 'hidden') onLeave();

@@ -72,6 +72,44 @@ function deviceType(screenWidth) {
   return 'desktop';
 }
 
+/** Gerätetyp aus dem User-Agent (für anonyme Aufrufe ohne screenWidth) */
+function uaDevice(ua) {
+  if (/iPad|Tablet/i.test(ua)) return 'tablet';
+  if (/Mobi|Android|iPhone|iPod/i.test(ua)) return 'mobile';
+  if (!ua) return 'unknown';
+  return 'desktop';
+}
+
+/** Browser-Familie aus dem User-Agent (grob, nur für Aggregat-Zählung) */
+function uaBrowser(ua) {
+  if (!ua) return 'Andere';
+  if (/Edg\//.test(ua)) return 'Edge';
+  if (/OPR\/|Opera/.test(ua)) return 'Opera';
+  if (/SamsungBrowser/.test(ua)) return 'Samsung';
+  if (/Firefox\//.test(ua)) return 'Firefox';
+  if (/Chrome\//.test(ua) && !/Chromium/.test(ua)) return 'Chrome';
+  if (/Safari\//.test(ua) && !/Chrome/.test(ua)) return 'Safari';
+  return 'Andere';
+}
+
+/** Primäre Sprache aus dem Accept-Language-Header (z. B. "de-DE,en;q=0.8" → "de") */
+function primaryLang(al) {
+  if (!al) return '';
+  var first = al.split(',')[0].split(';')[0].trim().toLowerCase();
+  return first.split('-')[0].slice(0, 5);
+}
+
+/** Referrer auf die nackte Domain reduzieren; eigene Domains → "intern" */
+function refHost(ref) {
+  if (!ref) return 'direct';
+  try {
+    var h = new URL(ref).hostname.replace(/^www\./, '');
+    var OWN = ['elyesferchichi.com', 'seyle450.github.io', 'localhost', '127.0.0.1'];
+    if (OWN.some(o => h.includes(o))) return 'intern';
+    return h.slice(0, 80);
+  } catch (e) { return 'direct'; }
+}
+
 /** Gibt YYYY-MM-DD für einen Unix-Timestamp (ms) zurück */
 function toDateString(ts) {
   return new Date(ts).toISOString().slice(0, 10);
@@ -167,6 +205,18 @@ async function handleTrack(request, env, ctx) {
     returning: profile.returning, totalVisits: profile.totalPageviews,
   }), { expirationTtl: 60 * 60 * 24 * 90 });
 
+  // ── Event in D1 (primäre Auswertungsquelle für /summary & /data) ──────────
+  if (env.DB) {
+    ctx.waitUntil(env.DB.prepare(
+      `INSERT INTO events (ts,page,previous_page,page_index,referrer,screen_width,language,session_id,visitor_id,device,country,returning,utm_source,utm_medium,utm_campaign)
+       VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`
+    ).bind(
+      timestamp, page, previousPage, pageIndex, referrer, screenWidth || 0, language,
+      sessionId, visitorId, dev, country, profile.returning ? 1 : 0,
+      (utm && utm.source) || null, (utm && utm.medium) || null, (utm && utm.campaign) || null
+    ).run().catch(() => {}));
+  }
+
   // ── Tages-Aggregat ────────────────────────────────────────────────────────
   const dateStr = toDateString(timestamp);
   const dailyKey = `daily:${dateStr}:${page}`;
@@ -224,29 +274,63 @@ async function handleTrack(request, env, ctx) {
 }
 
 // ─── POST /visit ──────────────────────────────────────────────────────────────
-// Anonymer Besuchs-Ping für Nutzer OHNE Einwilligung (abgelehnt oder unentschieden).
-// Speichert KEINE personenbezogenen Daten: keine visitorId, keine IP, kein
-// User-Agent, keine Session. Nur ein anonymer Tageszähler + Telegram-Hinweis.
+// Anonymer Ping für Nutzer OHNE Einwilligung (abgelehnt oder unentschieden).
+// DSGVO/§25 TDDDG-konform: Es wird NICHTS auf dem Gerät gespeichert/gelesen
+// (kein Cookie, kein Storage, kein Fingerprint) und KEINE IP, keine visitorId
+// und keine Session gespeichert. Land/Gerät/Browser/Sprache werden nur aus den
+// ohnehin gesendeten HTTP-Headern abgeleitet und ausschließlich als anonyme
+// Tages-Aggregate (reine Zähler) abgelegt – ohne jeden Personenbezug. Das ist
+// der Ansatz cookieloser Analyse (vgl. Plausible/Fathom).
 async function handleVisit(request, env, ctx) {
   const origin = request.headers.get('Origin') || '';
   let body;
   try { body = await request.json(); } catch { body = {}; }
 
-  const page = String(body.page || '/').slice(0, 200);
   const ts = Date.now();
   const date = toDateString(ts);
+  const isClick = !!body.click;
 
-  // Anonymer Tageszähler (nur eine Zahl pro Tag, kein Personenbezug)
-  const key = 'anon:' + date;
-  const cur = await env.ANALYTICS.get(key);
-  const n = (cur ? parseInt(cur, 10) || 0 : 0) + 1;
-  await env.ANALYTICS.put(key, String(n), { expirationTtl: 60 * 60 * 24 * 400 });
+  // Tages-Aggregat laden (ein JSON-Blob pro Tag, nur Zähler)
+  const aggKey = 'anonagg:' + date;
+  let agg;
+  try { agg = JSON.parse(await env.ANALYTICS.get(aggKey) || '{}'); } catch { agg = {}; }
+  agg.pages = agg.pages || {}; agg.refs = agg.refs || {}; agg.countries = agg.countries || {};
+  agg.devices = agg.devices || {}; agg.browsers = agg.browsers || {}; agg.langs = agg.langs || {};
+  agg.clicks = agg.clicks || {};
 
-  // Telegram-Hinweis nur alle 15 anonymen Besuche (gebündelt, keine identifizierenden Daten)
-  if (n % 15 === 0) {
+  let n = null;
+  if (isClick) {
+    // Reiner Klick-Ping: nur den (nicht-personenbezogenen) Klick-Label zählen
+    const label = String(body.click).slice(0, 80);
+    agg.clicks[label] = (agg.clicks[label] || 0) + 1;
+  } else {
+    // Pageview: anonymen Tageszähler + Aggregate hochzählen
+    const key = 'anon:' + date;
+    const cur = await env.ANALYTICS.get(key);
+    n = (cur ? parseInt(cur, 10) || 0 : 0) + 1;
+    await env.ANALYTICS.put(key, String(n), { expirationTtl: 60 * 60 * 24 * 400 });
+
+    const ua = request.headers.get('User-Agent') || '';
+    const country = request.headers.get('CF-IPCountry') || '';
+    const lang = primaryLang(request.headers.get('Accept-Language') || '');
+    const ref = refHost(body.referrer || '');
+    const page = String(body.page || '/').slice(0, 200);
+
+    agg.pages[page] = (agg.pages[page] || 0) + 1;
+    if (ref && ref !== 'intern') agg.refs[ref] = (agg.refs[ref] || 0) + 1;
+    if (country) agg.countries[country] = (agg.countries[country] || 0) + 1;
+    agg.devices[uaDevice(ua)] = (agg.devices[uaDevice(ua)] || 0) + 1;
+    agg.browsers[uaBrowser(ua)] = (agg.browsers[uaBrowser(ua)] || 0) + 1;
+    if (lang) agg.langs[lang] = (agg.langs[lang] || 0) + 1;
+  }
+
+  await env.ANALYTICS.put(aggKey, JSON.stringify(agg), { expirationTtl: 60 * 60 * 24 * 400 });
+
+  // Telegram-Hinweis nur alle 15 anonymen Aufrufe (gebündelt, keine identifizierenden Daten)
+  if (!isClick && n % 15 === 0) {
     ctx.waitUntil(sendTelegram(env,
       `🕶 <b>${n} anonyme Aufrufe heute</b>\n` +
-      `<i>Besucher ohne Einwilligung (nicht getrackt)</i>`
+      `<i>Besucher ohne Einwilligung (anonym aggregiert)</i>`
     ));
   }
 
@@ -298,19 +382,29 @@ async function handleEvent(request, env, ctx) {
 
   const {
     label = '', category = 'link', href = '', page = '/',
-    sessionId = '', timestamp = Date.now(),
+    sessionId = '', timestamp = Date.now(), type = 'click',
   } = body;
   const visitorId = body.visitorId || deriveVisitorId(request);
   const lbl = String(label).trim().slice(0, 80);
   if (!lbl) return json({ ok: true }, 200, origin);
+  const cat = String(category).slice(0, 20);
+  const depth = body.depth != null ? (parseInt(body.depth, 10) || null) : null;
 
   const randId = Math.random().toString(36).slice(2, 8);
   await env.ANALYTICS.put(`click:${timestamp}:${randId}`, JSON.stringify({
-    label: lbl,
-    category: String(category).slice(0, 20),
+    label: lbl, category: cat, depth,
     href: String(href).slice(0, 200),
     page, sessionId, visitorId, timestamp,
   }), { expirationTtl: 60 * 60 * 24 * 90 });
+
+  // ── In D1 (primäre Auswertungsquelle) ─────────────────────────────────────
+  if (env.DB) {
+    ctx.waitUntil(env.DB.prepare(
+      `INSERT INTO clicks (ts,type,label,category,depth,href,page,session_id,visitor_id)
+       VALUES (?,?,?,?,?,?,?,?,?)`
+    ).bind(timestamp, cat === 'scroll' ? 'scroll' : (type || 'click'), lbl, cat, depth,
+      String(href).slice(0, 200), page, sessionId, visitorId).run().catch(() => {}));
+  }
 
   // Summary-Caches invalidieren (Klicks fließen in /summary ein)
   ctx.waitUntil(Promise.all(
@@ -332,6 +426,20 @@ function escHtml(s) {
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
+/** Verifiziert ein Cloudflare-Turnstile-Token serverseitig */
+async function verifyTurnstile(secret, token, ip) {
+  if (!token) return false;
+  try {
+    const form = new FormData();
+    form.append('secret', secret);
+    form.append('response', token);
+    if (ip) form.append('remoteip', ip);
+    const r = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', { method: 'POST', body: form });
+    const d = await r.json();
+    return !!d.success;
+  } catch { return false; }
+}
+
 async function handleContact(request, env, ctx) {
   const origin = request.headers.get('Origin') || '';
   let body;
@@ -339,6 +447,13 @@ async function handleContact(request, env, ctx) {
 
   // Honeypot — Bots füllen das versteckte Feld; wir tun "erfolgreich" ohne Aktion
   if (body.website) return json({ ok: true }, 200, origin);
+
+  // Turnstile-Bot-Schutz — nur erzwungen, wenn das Secret gesetzt ist
+  if (env.TURNSTILE_SECRET) {
+    const ok = await verifyTurnstile(env.TURNSTILE_SECRET, body.turnstileToken || '',
+      request.headers.get('CF-Connecting-IP') || '');
+    if (!ok) return json({ error: 'Bot-Schutz fehlgeschlagen. Bitte Seite neu laden und erneut versuchen.' }, 403, origin);
+  }
 
   const clean = (v, n) => String(v == null ? '' : v).trim().slice(0, n);
   const company      = clean(body.company, 100);
@@ -388,10 +503,17 @@ async function handleContact(request, env, ctx) {
   // Als Conversion zählen (nur wenn Analytics-Consent → sessionId mitgeschickt)
   const sessionId = clean(body.sessionId, 60);
   if (sessionId) {
+    const convPage = clean(body.page, 200) || '/';
     await env.ANALYTICS.put(`click:${ts}:${randId}`, JSON.stringify({
       label: 'Formular: Anfrage gesendet', category: 'form', href: '',
-      page: clean(body.page, 200) || '/', sessionId, visitorId, timestamp: ts,
+      page: convPage, sessionId, visitorId, timestamp: ts,
     }), { expirationTtl: 60 * 60 * 24 * 90 });
+    if (env.DB) {
+      ctx.waitUntil(env.DB.prepare(
+        `INSERT INTO clicks (ts,type,label,category,depth,href,page,session_id,visitor_id)
+         VALUES (?,?,?,?,?,?,?,?,?)`
+      ).bind(ts, 'click', 'Formular: Anfrage gesendet', 'form', null, '', convPage, sessionId, visitorId).run().catch(() => {}));
+    }
   }
 
   // Summary-Caches invalidieren
@@ -502,30 +624,20 @@ async function handleData(request, env) {
   const since = Date.now() - days * 24 * 60 * 60 * 1000;
   const excludedIds = includeExcluded ? new Set() : await loadExcludedIds(env);
 
-  // KV-Liste aller event: Keys (max 1000 pro list-Aufruf, Paginierung)
+  // Events aus D1 laden (eine SQL-Query statt KV-Scan)
   const events = [];
-  let cursor;
-  do {
-    const opts = { prefix: 'event:', limit: 1000 };
-    if (cursor) opts.cursor = cursor;
-    const listed = await env.ANALYTICS.list(opts);
-    cursor = listed.list_complete ? null : listed.cursor;
-
-    for (const key of listed.keys) {
-      // Timestamp steht im Key: event:<ts>:<rand>
-      const parts = key.name.split(':');
-      const ts = parseInt(parts[1], 10);
-      if (ts >= since) {
-        const raw = await env.ANALYTICS.get(key.name);
-        if (raw) {
-          try {
-            const ev = JSON.parse(raw);
-            if (!excludedIds.has(ev.visitorId)) events.push(ev);
-          } catch { /* skip */ }
-        }
+  if (env.DB) {
+    try {
+      const res = await env.DB.prepare(
+        `SELECT ts,page,previous_page,page_index,referrer,screen_width,language,session_id,visitor_id,device,country,returning,utm_source,utm_medium,utm_campaign
+         FROM events WHERE ts >= ? ORDER BY ts DESC LIMIT 5000`
+      ).bind(since).all();
+      for (const r of (res.results || [])) {
+        if (!includeExcluded && excludedIds.has(r.visitor_id)) continue;
+        events.push(rowToEvent(r));
       }
-    }
-  } while (cursor);
+    } catch (e) { /* D1 noch nicht eingerichtet → leer */ }
+  }
 
   events.sort((a, b) => b.timestamp - a.timestamp);
   const dataJson = JSON.stringify({ events, count: events.length });
@@ -753,6 +865,20 @@ function buildSessionMergeMap(events) {
   return resolve;
 }
 
+// Wandelt eine D1-events-Zeile in das interne Event-Objekt (gleiche Feldnamen wie KV)
+function rowToEvent(r) {
+  return {
+    timestamp: r.ts, page: r.page || '/', previousPage: r.previous_page || '',
+    pageIndex: r.page_index || 1, referrer: r.referrer || '',
+    screenWidth: r.screen_width || 0, language: r.language || '',
+    sessionId: r.session_id || '', visitorId: r.visitor_id || '',
+    device: r.device || '', country: r.country || '', returning: !!r.returning,
+    utm: (r.utm_source || r.utm_medium || r.utm_campaign)
+      ? { source: r.utm_source || '', medium: r.utm_medium || '', campaign: r.utm_campaign || '' }
+      : null,
+  };
+}
+
 // ─── GET /summary ─────────────────────────────────────────────────────────────
 
 async function handleSummary(request, env) {
@@ -791,60 +917,56 @@ async function handleSummary(request, env) {
   const utmMediumCount = {}; // utm_medium → count
   let totalDurationMs = 0; // sum of all event-level durations (via /duration events)
 
-  // Tages-Aggregate aus KV lesen (effizient, kein Event-Scan nötig für Summen)
-  for (const date of dateRange) {
-    dailyMap[date] = { pageviews: 0, visitors: new Set() };
-    let dayCursor;
-    do {
-      const opts = { prefix: `daily:${date}:`, limit: 1000 };
-      if (dayCursor) opts.cursor = dayCursor;
-      const listed = await env.ANALYTICS.list(opts);
-      dayCursor = listed.list_complete ? null : listed.cursor;
+  // dailyMap initialisieren – Summen werden weiter unten aus den D1-Events berechnet
+  for (const date of dateRange) dailyMap[date] = { pageviews: 0, visitors: new Set() };
 
-      for (const key of listed.keys) {
-        const raw = await env.ANALYTICS.get(key.name);
-        if (!raw) continue;
-        let d;
-        try { d = JSON.parse(raw); } catch { continue; }
-        const page = key.name.split(':').slice(2).join(':');
-        totalPageviews += d.pageviews || 0;
-        dailyMap[date].pageviews += d.pageviews || 0;
-        (d.visitors || []).forEach(v => {
-          uniqueVisitors.add(v);
-          dailyMap[date].visitors.add(v);
-        });
-        pageCount[page] = (pageCount[page] || 0) + (d.pageviews || 0);
-      }
-    } while (dayCursor);
-  }
-
-  // Anonyme Besuche (Nutzer ohne Einwilligung) – nur ein Tageszähler, kein Personenbezug
+  // Anonyme Besuche (Nutzer ohne Einwilligung) – nur Tages-Aggregate, kein Personenbezug
   let anonymousVisits = 0;
+  const anonPages = {}, anonRefs = {}, anonCountries = {};
+  const anonDevices = {}, anonBrowsers = {}, anonLangs = {}, anonClicks = {};
+  const mergeCounts = (src, dst) => { if (src) for (const k in src) dst[k] = (dst[k] || 0) + src[k]; };
   for (const date of dateRange) {
     const raw = await env.ANALYTICS.get('anon:' + date);
     if (raw) anonymousVisits += parseInt(raw, 10) || 0;
+    const aggRaw = await env.ANALYTICS.get('anonagg:' + date);
+    if (aggRaw) {
+      let a; try { a = JSON.parse(aggRaw); } catch { a = null; }
+      if (a) {
+        mergeCounts(a.pages, anonPages); mergeCounts(a.refs, anonRefs);
+        mergeCounts(a.countries, anonCountries); mergeCounts(a.devices, anonDevices);
+        mergeCounts(a.browsers, anonBrowsers); mergeCounts(a.langs, anonLangs);
+        mergeCounts(a.clicks, anonClicks);
+      }
+    }
   }
+  const topCounts = (obj, n, kName) => Object.entries(obj)
+    .sort((a, b) => b[1] - a[1]).slice(0, n)
+    .map(([k, count]) => ({ [kName]: k, count }));
+  const anonStats = {
+    pages:      topCounts(anonPages, 10, 'page'),
+    referrers:  topCounts(anonRefs, 10, 'referrer'),
+    countries:  topCounts(anonCountries, 15, 'country'),
+    devices:    anonDevices,
+    browsers:   topCounts(anonBrowsers, 8, 'browser'),
+    languages:  topCounts(anonLangs, 8, 'language'),
+    clicks:     topCounts(anonClicks, 15, 'label'),
+  };
 
-  // Pass 1: alle Events im Zeitraum aus KV laden
+  // Pass 1: alle Events im Zeitraum aus D1 laden (eine SQL-Query statt KV-Scan)
   const excludedIds = includeExcluded ? new Set() : await loadExcludedIds(env);
   const allEvents = [];
-  let evCursor;
-  do {
-    const opts = { prefix: 'event:', limit: 1000 };
-    if (evCursor) opts.cursor = evCursor;
-    const listed = await env.ANALYTICS.list(opts);
-    evCursor = listed.list_complete ? null : listed.cursor;
-    for (const key of listed.keys) {
-      const ts = parseInt(key.name.split(':')[1], 10);
-      if (ts < since) continue;
-      const raw = await env.ANALYTICS.get(key.name);
-      if (!raw) continue;
-      try {
-        const ev = JSON.parse(raw);
-        if (!excludedIds.has(ev.visitorId)) allEvents.push(ev);
-      } catch { /* skip */ }
-    }
-  } while (evCursor);
+  if (env.DB) {
+    try {
+      const res = await env.DB.prepare(
+        `SELECT ts,page,previous_page,page_index,referrer,screen_width,language,session_id,visitor_id,device,country,returning,utm_source,utm_medium,utm_campaign
+         FROM events WHERE ts >= ? ORDER BY ts ASC`
+      ).bind(since).all();
+      for (const r of (res.results || [])) {
+        if (!includeExcluded && excludedIds.has(r.visitor_id)) continue;
+        allEvents.push(rowToEvent(r));
+      }
+    } catch (e) { /* D1 noch nicht eingerichtet → Auswertung bleibt leer */ }
+  }
 
   // Pass 1b: Klick-, Scroll- & Conversion-Events aggregieren (click:<ts>:<rand>)
   const clickLabelCount = {};
@@ -853,22 +975,15 @@ async function handleSummary(request, env) {
   const convSessionIdsRaw = new Set();   // Sessions mit Conversion-Klick (roh)
   const CONV_CATS = new Set(['whatsapp', 'email', 'phone', 'form']);
   let totalClicks = 0;
-  let clkCursor;
-  do {
-    const opts = { prefix: 'click:', limit: 1000 };
-    if (clkCursor) opts.cursor = clkCursor;
-    const listed = await env.ANALYTICS.list(opts);
-    clkCursor = listed.list_complete ? null : listed.cursor;
-    for (const key of listed.keys) {
-      const ts = parseInt(key.name.split(':')[1], 10);
-      if (ts < since) continue;
-      const raw = await env.ANALYTICS.get(key.name);
-      if (!raw) continue;
-      try {
-        const c = JSON.parse(raw);
-        if (excludedIds.has(c.visitorId)) continue;
+  if (env.DB) {
+    try {
+      const res = await env.DB.prepare(
+        `SELECT ts,type,label,category,depth,session_id,visitor_id FROM clicks WHERE ts >= ?`
+      ).bind(since).all();
+      for (const c of (res.results || [])) {
+        if (!includeExcluded && excludedIds.has(c.visitor_id)) continue;
         // Scroll-Tiefe getrennt zählen (kein "Klick")
-        if (c.category === 'scroll') {
+        if (c.category === 'scroll' || c.type === 'scroll') {
           const d = parseInt(c.depth != null ? c.depth : c.label, 10);
           if (scrollDepthCount[d] != null) scrollDepthCount[d]++;
           continue;
@@ -878,10 +993,10 @@ async function handleSummary(request, env) {
         clickLabelCount[lbl] = (clickLabelCount[lbl] || 0) + 1;
         const cat = c.category || 'link';
         clickCategoryCount[cat] = (clickCategoryCount[cat] || 0) + 1;
-        if (CONV_CATS.has(cat) && c.sessionId) convSessionIdsRaw.add(c.sessionId);
-      } catch { /* skip */ }
-    }
-  } while (clkCursor);
+        if (CONV_CATS.has(cat) && c.session_id) convSessionIdsRaw.add(c.session_id);
+      }
+    } catch (e) { /* D1 noch nicht eingerichtet */ }
+  }
 
   const topClicks = Object.entries(clickLabelCount)
     .sort((a, b) => b[1] - a[1]).slice(0, 15)
@@ -895,6 +1010,16 @@ async function handleSummary(request, env) {
 
   // Pass 3: Events auswerten
   for (const ev of allEvents) {
+    // Summen direkt aus den (bereits gefilterten) Events
+    totalPageviews++;
+    if (ev.visitorId) uniqueVisitors.add(ev.visitorId);
+    pageCount[ev.page] = (pageCount[ev.page] || 0) + 1;
+    const ds = toDateString(ev.timestamp);
+    if (dailyMap[ds]) {
+      dailyMap[ds].pageviews++;
+      if (ev.visitorId) dailyMap[ds].visitors.add(ev.visitorId);
+    }
+
     const dev = ev.device || deviceType(ev.screenWidth);
     if (dev in deviceCount) deviceCount[dev]++;
     else deviceCount.unknown++;
@@ -937,25 +1062,6 @@ async function handleSummary(request, env) {
     .sort((a, b) => b[1] - a[1])
     .slice(0, 10)
     .map(([referrer, count]) => ({ referrer, count }));
-
-  // When exclusion is active, the daily KV aggregates include all visitors and can't
-  // be filtered retroactively. Recompute all aggregate-based stats from the
-  // already-filtered events so every metric is consistent.
-  if (!includeExcluded && excludedIds.size > 0) {
-    totalPageviews = allEvents.length;
-    uniqueVisitors.clear();
-    Object.keys(pageCount).forEach(k => delete pageCount[k]);
-    for (const date of dateRange) dailyMap[date] = { pageviews: 0, visitors: new Set() };
-    for (const ev of allEvents) {
-      if (ev.visitorId) uniqueVisitors.add(ev.visitorId);
-      pageCount[ev.page] = (pageCount[ev.page] || 0) + 1;
-      const ds = toDateString(ev.timestamp);
-      if (dailyMap[ds]) {
-        dailyMap[ds].pageviews++;
-        if (ev.visitorId) dailyMap[ds].visitors.add(ev.visitorId);
-      }
-    }
-  }
 
   const topPages = Object.entries(pageCount)
     .sort((a, b) => b[1] - a[1])
@@ -1031,12 +1137,75 @@ async function handleSummary(request, env) {
     conversions,
     conversionRate,
     anonymousVisits,
+    anonStats,
     recentEvents: recentEvents.sort((a, b) => b.timestamp - a.timestamp).slice(0, 20),
   };
 
   const sumJson = JSON.stringify(summary);
   await env.ANALYTICS.put(sumCacheKey, sumJson, { expirationTtl: 180 });
   return new Response(sumJson, { status: 200, headers: { 'Content-Type': 'application/json', ...corsHeaders(origin) } });
+}
+
+// ─── GET /migrate-kv-to-d1 ──────────────────────────────────────────────────────
+// Einmaliger Backfill: überträgt bestehende KV-Events/Klicks nach D1.
+// Schutz vor Doppel-Import via Guard-Key; mit ?force=1 erzwingbar.
+async function handleMigrate(request, env) {
+  const origin = request.headers.get('Origin') || '';
+  if (!isAuthorized(request, env)) return unauthorized(origin);
+  if (!env.DB) return json({ error: 'D1 (env.DB) nicht gebunden' }, 400, origin);
+
+  const force = new URL(request.url).searchParams.get('force') === '1';
+  if (!force && await env.ANALYTICS.get('migrated:d1')) {
+    return json({ error: 'Bereits migriert. Mit ?force=1 erneut (Achtung: erzeugt Duplikate).' }, 409, origin);
+  }
+
+  let evCount = 0, clkCount = 0;
+
+  let cursor;
+  do {
+    const listed = await env.ANALYTICS.list({ prefix: 'event:', limit: 1000, ...(cursor ? { cursor } : {}) });
+    cursor = listed.list_complete ? null : listed.cursor;
+    const stmts = [];
+    for (const key of listed.keys) {
+      const raw = await env.ANALYTICS.get(key.name);
+      if (!raw) continue;
+      let ev; try { ev = JSON.parse(raw); } catch { continue; }
+      stmts.push(env.DB.prepare(
+        `INSERT INTO events (ts,page,previous_page,page_index,referrer,screen_width,language,session_id,visitor_id,device,country,returning,utm_source,utm_medium,utm_campaign)
+         VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`
+      ).bind(ev.timestamp, ev.page || '/', ev.previousPage || '', ev.pageIndex || 1, ev.referrer || '',
+        ev.screenWidth || 0, ev.language || '', ev.sessionId || '', ev.visitorId || '', ev.device || '',
+        ev.country || '', ev.returning ? 1 : 0,
+        (ev.utm && ev.utm.source) || null, (ev.utm && ev.utm.medium) || null, (ev.utm && ev.utm.campaign) || null));
+    }
+    if (stmts.length) { await env.DB.batch(stmts); evCount += stmts.length; }
+  } while (cursor);
+
+  cursor = undefined;
+  do {
+    const listed = await env.ANALYTICS.list({ prefix: 'click:', limit: 1000, ...(cursor ? { cursor } : {}) });
+    cursor = listed.list_complete ? null : listed.cursor;
+    const stmts = [];
+    for (const key of listed.keys) {
+      const raw = await env.ANALYTICS.get(key.name);
+      if (!raw) continue;
+      let c; try { c = JSON.parse(raw); } catch { continue; }
+      stmts.push(env.DB.prepare(
+        `INSERT INTO clicks (ts,type,label,category,depth,href,page,session_id,visitor_id)
+         VALUES (?,?,?,?,?,?,?,?,?)`
+      ).bind(c.timestamp, c.category === 'scroll' ? 'scroll' : 'click', c.label || '', c.category || 'link',
+        c.depth != null ? c.depth : null, c.href || '', c.page || '/', c.sessionId || '', c.visitorId || ''));
+    }
+    if (stmts.length) { await env.DB.batch(stmts); clkCount += stmts.length; }
+  } while (cursor);
+
+  await env.ANALYTICS.put('migrated:d1', String(Date.now()));
+  // Summary-Cache leeren, damit die migrierten Daten sofort erscheinen
+  await Promise.all(['7', '30', '90'].flatMap(d => [
+    env.ANALYTICS.delete('cache:summary:' + d),
+    env.ANALYTICS.delete('cache:summary:' + d + ':all'),
+  ]));
+  return json({ ok: true, migratedEvents: evCount, migratedClicks: clkCount }, 200, origin);
 }
 
 // ─── Router ───────────────────────────────────────────────────────────────────
@@ -1054,6 +1223,21 @@ export default {
     }
 
     const url = new URL(request.url);
+
+    // ── Natives Rate Limiting (Workers Paid) ──────────────────────────────────
+    // Schützt offene Endpunkte vor Flooding. Bindings sind optional: fehlen sie
+    // (z. B. lokal), wird einfach nicht limitiert.
+    if (request.method === 'POST') {
+      const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
+      if (env.TRACK_LIMITER && ['/track', '/visit', '/event', '/duration'].includes(url.pathname)) {
+        const { success } = await env.TRACK_LIMITER.limit({ key: ip });
+        if (!success) return json({ error: 'Rate limit' }, 429, origin);
+      }
+      if (env.CONTACT_LIMITER && url.pathname === '/contact') {
+        const { success } = await env.CONTACT_LIMITER.limit({ key: ip });
+        if (!success) return json({ error: 'Zu viele Anfragen. Bitte später erneut versuchen.' }, 429, origin);
+      }
+    }
 
     if (url.pathname === '/track' && request.method === 'POST') {
       return handleTrack(request, env, ctx);
@@ -1083,6 +1267,9 @@ export default {
     }
     if (url.pathname === '/profiles' && request.method === 'GET') {
       return handleProfiles(request, env);
+    }
+    if (url.pathname === '/migrate-kv-to-d1' && (request.method === 'GET' || request.method === 'POST')) {
+      return handleMigrate(request, env);
     }
     // PUT /visitor/<visitorId>  – Alias / Notiz setzen
     if (url.pathname.startsWith('/visitor/') && (request.method === 'PUT' || request.method === 'PATCH')) {

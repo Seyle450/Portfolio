@@ -650,6 +650,38 @@ body { min-height: 100svh; }
       </div>
     </div>
 
+    <!-- Anonyme Besucher (ohne Einwilligung) -->
+    <div class="section-label">Anonyme Besucher <span style="font-weight:400;color:var(--muted);text-transform:none;letter-spacing:0">· ohne Einwilligung · aggregiert, kein Personenbezug</span></div>
+    <div class="panel-grid" style="margin-bottom:1.25rem">
+      <div class="panel">
+        <div class="panel-header"><h3>Seiten</h3><span style="font-size:.72rem;color:var(--muted)">anonyme Aufrufe</span></div>
+        <div class="panel-body" style="padding:.75rem 1rem"><div class="country-list" id="anonPages"></div></div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><h3>Quellen</h3><span style="font-size:.72rem;color:var(--muted)">Referrer</span></div>
+        <div class="panel-body" style="padding:.75rem 1rem"><div class="country-list" id="anonRefs"></div></div>
+      </div>
+    </div>
+    <div class="chart-grid chart-grid-3col" style="margin-bottom:1.25rem">
+      <div class="chart-card">
+        <h3>Länder</h3>
+        <div class="country-list" id="anonCountries" style="max-height:180px;overflow-y:auto;padding-top:.25rem"></div>
+      </div>
+      <div class="chart-card">
+        <h3>Geräte</h3>
+        <div class="country-list" id="anonDevices" style="padding-top:.25rem"></div>
+      </div>
+      <div class="chart-card">
+        <h3>Browser &amp; Sprache</h3>
+        <div class="country-list" id="anonBrowsers" style="padding-top:.25rem"></div>
+        <div class="country-list" id="anonLangs" style="padding-top:.4rem;margin-top:.4rem;border-top:1px solid var(--border)"></div>
+      </div>
+    </div>
+    <div class="panel full" style="margin-bottom:1.25rem">
+      <div class="panel-header"><h3>Anonyme Klicks</h3><span style="font-size:.72rem;color:var(--muted)">nur Label, ohne Personenbezug</span></div>
+      <div class="panel-body" style="padding:.75rem 1rem"><div class="country-list" id="anonClicks"></div></div>
+    </div>
+
     <!-- Journey Map -->
     <div class="section-label">Besucher-Journey &amp; Kampagnen</div>
     <div class="panel full" style="margin-bottom:1.25rem">
@@ -1077,6 +1109,7 @@ function renderAll() {
   renderCountries(s.topCountries || []);
   renderFlowMap(s.topSessionPaths || []);
   renderReferrersTable(s.topReferrers || []);
+  renderAnonPanel(s.anonStats || {});
   renderUtmPanel(s.topUtmSources || [], s.topUtmCampaigns || []);
   renderClicksPanel(s.topClicks || [], s.clickCategories || []);
   renderScrollChart(s.scrollDepth || {});
@@ -1231,6 +1264,53 @@ function renderCountries(topCountries) {
       + '<span class="country-count">' + c.count + '</span>'
       + '</div>';
   }).join('');
+}
+
+function renderAnonPanel(a) {
+  if (!a) a = {};
+  function bars(elId, items, getName) {
+    var el = document.getElementById(elId);
+    if (!el) return;
+    items = items || [];
+    if (!items.length) { el.innerHTML = '<p style="color:var(--muted);font-size:.78rem;padding:.25rem 0">Noch keine Daten</p>'; return; }
+    var max = items[0].count || 1;
+    el.innerHTML = items.map(function (it) {
+      var pct = max > 0 ? Math.round(it.count / max * 100) : 0;
+      return '<div class="country-row">'
+        + '<span class="country-name" style="flex:1;font-size:.8rem;color:var(--muted2)">' + getName(it) + '</span>'
+        + '<div class="mini-bar" style="width:50px"><div class="mini-bar-fill" style="width:' + pct + '%"></div></div>'
+        + '<span class="country-count">' + it.count + '</span>'
+        + '</div>';
+    }).join('');
+  }
+  bars('anonPages', a.pages, function (it) { return esc(labelPage(it.page)); });
+  bars('anonRefs', a.referrers, function (it) { return esc(it.referrer === 'direct' ? 'Direkt / keine Quelle' : it.referrer); });
+
+  // Länder mit Flagge
+  var el = document.getElementById('anonCountries');
+  if (el) {
+    var cs = a.countries || [];
+    if (!cs.length) { el.innerHTML = '<p style="color:var(--muted);font-size:.78rem;padding:.25rem 0">Noch keine Daten</p>'; }
+    else {
+      var cmax = cs[0].count || 1;
+      el.innerHTML = cs.slice(0, 8).map(function (c) {
+        var pct = Math.round(c.count / cmax * 100);
+        return '<div class="country-row"><span class="country-flag">' + countryFlag(c.country) + '</span>'
+          + '<span class="country-name" style="font-size:.8rem;color:var(--muted2)">' + esc(countryName(c.country)) + '</span>'
+          + '<div class="mini-bar" style="width:50px"><div class="mini-bar-fill" style="width:' + pct + '%"></div></div>'
+          + '<span class="country-count">' + c.count + '</span></div>';
+      }).join('');
+    }
+  }
+
+  // Geräte (Objekt → sortierte Liste)
+  var dev = a.devices || {};
+  var devItems = Object.keys(dev).map(function (k) { return { name: k, count: dev[k] }; })
+    .sort(function (x, y) { return y.count - x.count; });
+  bars('anonDevices', devItems, function (it) { return esc(it.name.charAt(0).toUpperCase() + it.name.slice(1)); });
+  bars('anonBrowsers', a.browsers, function (it) { return esc(it.browser); });
+  bars('anonLangs', a.languages, function (it) { return esc((it.language || '').toUpperCase()); });
+  bars('anonClicks', a.clicks, function (it) { return esc(it.label); });
 }
 
 function renderFlowMap(flows) {

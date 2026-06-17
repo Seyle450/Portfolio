@@ -7,12 +7,39 @@ compatibility_date = "2024-01-01"
 binding = "ANALYTICS"
 id     = "9b6e7e529c0e4143a32ce8f71de96913"
 
+# ── D1 (SQLite) für Events & Klicks ───────────────────────────────────────────
+# Einrichten:
+#   wrangler d1 create portfolio-analytics      → database_id unten eintragen
+#   wrangler d1 execute portfolio-analytics --remote --file=schema.sql
+[[d1_databases]]
+binding       = "DB"
+database_name = "portfolio-analytics"
+database_id   = "TODO_NACH_d1_create_EINTRAGEN"
+
 # Optionaler Preview-Namespace für lokale Entwicklung
 # preview_id = "TODO_PREVIEW_KV_ID"
 
 [triggers]
 crons = ["* * * * *"]
 
+# ── Natives Rate Limiting (Workers Paid) ──────────────────────────────────────
+# Schützt die offenen Endpunkte vor Flooding/Spam. namespace_id ist eine frei
+# wählbare Zahl pro Limiter; period muss 10 oder 60 (Sekunden) sein.
+[[unsafe.bindings]]
+name = "TRACK_LIMITER"
+type = "ratelimit"
+namespace_id = "1001"
+simple = { limit = 200, period = 60 }   # /track /visit /event /duration: 200 Anfragen/Min/IP
+
+[[unsafe.bindings]]
+name = "CONTACT_LIMITER"
+type = "ratelimit"
+namespace_id = "1002"
+simple = { limit = 5, period = 60 }      # /contact: 5 Anfragen/Min/IP
+
 [vars]
-# AUTH_TOKEN wird als Secret gesetzt: `wrangler secret put AUTH_TOKEN`
-# Hier keinen echten Token eintragen!
+# Secrets per `wrangler secret put <NAME>` setzen (NICHT hier eintragen):
+#   AUTH_TOKEN        – Bearer-Token für /data und /summary
+#   TURNSTILE_SECRET  – Secret-Key des Cloudflare-Turnstile-Widgets (Bot-Schutz
+#                       fürs Formular). Solange nicht gesetzt, bleibt das Formular
+#                       wie bisher offen (Turnstile wird dann nicht erzwungen).
