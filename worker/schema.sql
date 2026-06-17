@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS events (
   visitor_id    TEXT,
   device        TEXT,
   country       TEXT,
-  returning     INTEGER,                 -- 0/1
+  is_returning  INTEGER,                 -- 0/1
   utm_source    TEXT,
   utm_medium    TEXT,
   utm_campaign  TEXT

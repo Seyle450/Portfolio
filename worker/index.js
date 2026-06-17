@@ -208,7 +208,7 @@ async function handleTrack(request, env, ctx) {
   // ── Event in D1 (primäre Auswertungsquelle für /summary & /data) ──────────
   if (env.DB) {
     ctx.waitUntil(env.DB.prepare(
-      `INSERT INTO events (ts,page,previous_page,page_index,referrer,screen_width,language,session_id,visitor_id,device,country,returning,utm_source,utm_medium,utm_campaign)
+      `INSERT INTO events (ts,page,previous_page,page_index,referrer,screen_width,language,session_id,visitor_id,device,country,is_returning,utm_source,utm_medium,utm_campaign)
        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`
     ).bind(
       timestamp, page, previousPage, pageIndex, referrer, screenWidth || 0, language,
@@ -629,7 +629,7 @@ async function handleData(request, env) {
   if (env.DB) {
     try {
       const res = await env.DB.prepare(
-        `SELECT ts,page,previous_page,page_index,referrer,screen_width,language,session_id,visitor_id,device,country,returning,utm_source,utm_medium,utm_campaign
+        `SELECT ts,page,previous_page,page_index,referrer,screen_width,language,session_id,visitor_id,device,country,is_returning,utm_source,utm_medium,utm_campaign
          FROM events WHERE ts >= ? ORDER BY ts DESC LIMIT 5000`
       ).bind(since).all();
       for (const r of (res.results || [])) {
@@ -872,7 +872,7 @@ function rowToEvent(r) {
     pageIndex: r.page_index || 1, referrer: r.referrer || '',
     screenWidth: r.screen_width || 0, language: r.language || '',
     sessionId: r.session_id || '', visitorId: r.visitor_id || '',
-    device: r.device || '', country: r.country || '', returning: !!r.returning,
+    device: r.device || '', country: r.country || '', returning: !!r.is_returning,
     utm: (r.utm_source || r.utm_medium || r.utm_campaign)
       ? { source: r.utm_source || '', medium: r.utm_medium || '', campaign: r.utm_campaign || '' }
       : null,
@@ -958,7 +958,7 @@ async function handleSummary(request, env) {
   if (env.DB) {
     try {
       const res = await env.DB.prepare(
-        `SELECT ts,page,previous_page,page_index,referrer,screen_width,language,session_id,visitor_id,device,country,returning,utm_source,utm_medium,utm_campaign
+        `SELECT ts,page,previous_page,page_index,referrer,screen_width,language,session_id,visitor_id,device,country,is_returning,utm_source,utm_medium,utm_campaign
          FROM events WHERE ts >= ? ORDER BY ts ASC`
       ).bind(since).all();
       for (const r of (res.results || [])) {
@@ -1171,7 +1171,7 @@ async function handleMigrate(request, env) {
       if (!raw) continue;
       let ev; try { ev = JSON.parse(raw); } catch { continue; }
       stmts.push(env.DB.prepare(
-        `INSERT INTO events (ts,page,previous_page,page_index,referrer,screen_width,language,session_id,visitor_id,device,country,returning,utm_source,utm_medium,utm_campaign)
+        `INSERT INTO events (ts,page,previous_page,page_index,referrer,screen_width,language,session_id,visitor_id,device,country,is_returning,utm_source,utm_medium,utm_campaign)
          VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`
       ).bind(ev.timestamp, ev.page || '/', ev.previousPage || '', ev.pageIndex || 1, ev.referrer || '',
         ev.screenWidth || 0, ev.language || '', ev.sessionId || '', ev.visitorId || '', ev.device || '',
