@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Habitat · Bremen — Kaffee &amp; Bewegung unter einem Dach</title>
+<meta name="description" content="Habitat in Schwachhausen – Café, Yoga, Pilates, Sound Baths &amp; Kakao-Zeremonien. Finde deinen Kurs und buche direkt online.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --oat:#ece3d4; --paper:#f8f3ea; --clay:#b3744d; --deepclay:#8a5638;
+    --sage:#869476; --ink:#2f2a23; --muted:#857c6e;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:'Inter',sans-serif;color:var(--ink);background:var(--paper);line-height:1.7;-webkit-font-smoothing:antialiased}
+  h1,h2,h3{font-family:'Fraunces',serif;font-weight:500;line-height:1.08;letter-spacing:-.01em}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 30px}
+  a{color:inherit;text-decoration:none}
+  .lead{font-size:.74rem;letter-spacing:.26em;text-transform:uppercase;color:var(--clay);font-weight:600}
+
+  nav{position:sticky;top:0;z-index:40;background:rgba(248,243,234,.85);backdrop-filter:blur(10px);border-bottom:1px solid #e6dac6}
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:72px}
+  .logo{font-family:'Fraunces';font-size:1.5rem;font-weight:600;letter-spacing:-.01em}
+  .navlinks{display:flex;gap:30px;font-size:.92rem;font-weight:500}
+  .navlinks a{color:var(--muted)}.navlinks a:hover{color:var(--ink)}
+  .btn{display:inline-block;background:var(--clay);color:#fff;padding:13px 26px;border-radius:100px;font-weight:600;font-size:.92rem;transition:transform .15s,background .2s}
+  .btn:hover{transform:translateY(-2px);background:var(--deepclay)}
+  @media(max-width:760px){.navlinks{display:none}}
+
+  .hero{position:relative;padding:92px 0 100px;background:
+     radial-gradient(680px 360px at 80% 0%, rgba(134,148,118,.45),transparent 60%),
+     linear-gradient(160deg,#b3744d,#8a5638);color:#fff;overflow:hidden}
+  .hero .eyebrow{display:inline-block;font-size:.78rem;letter-spacing:.2em;text-transform:uppercase;color:#f0dcc8;font-weight:600;margin-bottom:22px}
+  .hero h1{font-size:clamp(2.6rem,6.5vw,4.7rem);max-width:16ch;color:#fff}
+  .hero h1 em{font-style:italic;color:#e9d3bd}
+  .hero p{margin-top:24px;max-width:46ch;font-size:1.12rem;color:#f1e3d6}
+  .hero .actions{margin-top:36px;display:flex;gap:16px;flex-wrap:wrap}
+  .btn-ghost{display:inline-block;padding:13px 26px;border-radius:100px;border:1px solid rgba(255,255,255,.4);color:#fff;font-weight:600;font-size:.92rem}
+
+  section{padding:88px 0}
+  .center{text-align:center;max-width:34ch;margin:0 auto 50px}
+  h2{font-size:clamp(2.1rem,4.6vw,3.2rem)}
+  .center h2{margin-top:12px}
+  h2 em{font-style:italic;color:var(--clay)}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  @media(max-width:820px){.grid2{grid-template-columns:1fr}}
+  .big{border-radius:22px;padding:44px 40px;color:#fff;position:relative;overflow:hidden;min-height:280px;display:flex;flex-direction:column;justify-content:flex-end}
+  .big.cafe{background:linear-gradient(160deg,#c08a5e,#8a5638)}
+  .big.move{background:linear-gradient(160deg,#9aa886,#5f6e4e)}
+  .big .lead{color:rgba(255,255,255,.85)}
+  .big h3{font-size:1.9rem;color:#fff;margin:10px 0 8px}
+  .big p{color:rgba(255,255,255,.9);font-size:1rem;max-width:34ch}
+
+  /* schedule */
+  .sched{background:var(--oat)}
+  .table{margin-top:40px;background:var(--paper);border-radius:20px;overflow:hidden;border:1px solid #e6dac6}
+  .trow{display:grid;grid-template-columns:120px 1fr auto;gap:16px;align-items:center;padding:20px 28px;border-bottom:1px solid #ece2d2}
+  .trow:last-child{border:none}
+  .trow .t{font-family:'Fraunces';font-size:1.2rem;color:var(--clay)}
+  .trow .c h4{font-family:'Fraunces';font-weight:500;font-size:1.2rem}
+  .trow .c span{font-size:.9rem;color:var(--muted)}
+  .trow .b{font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--sage);font-weight:600;border:1px solid var(--sage);padding:6px 14px;border-radius:100px}
+  @media(max-width:620px){.trow{grid-template-columns:80px 1fr;}.trow .b{display:none}}
+  .note{text-align:center;margin-top:24px;font-size:.86rem;color:var(--muted)}
+
+  .booking{text-align:center}
+  .booking .box{margin-top:30px;background:var(--sage);color:#fff;border-radius:24px;padding:54px 40px}
+  .booking .box h2{color:#fff}
+  .booking .box p{margin:16px auto 28px;max-width:40ch;color:#eef2e8}
+  .booking .box .btn{background:#fff;color:var(--deepclay)}
+
+  .info{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:46px}
+  @media(max-width:820px){.info{grid-template-columns:1fr}}
+  .row{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid #ece2d2;font-size:.97rem}
+  .row:last-child{border:none}.row b{font-weight:600}
+  .info h3{font-size:1.5rem;margin-bottom:18px}
+
+  footer{padding:46px 0;text-align:center;color:var(--muted);font-size:.84rem;border-top:1px solid #e6dac6}
+  .concept{display:block;margin-top:8px;color:#a99e8c}
+</style>
+</head>
+<body>
+<nav><div class="wrap">
+  <div class="logo">Habitat</div>
+  <div class="navlinks"><a href="#dach">Konzept</a><a href="#kurse">Kursplan</a><a href="#buchen">Buchen</a><a href="#finden">Finden</a></div>
+  <a href="#buchen" class="btn">Kurs buchen</a>
+</div></nav>
+
+<header class="hero"><div class="wrap">
+  <span class="eyebrow">Schwachhausen · Bremen</span>
+  <h1>Kaffee &amp; Bewegung <em>unter einem Dach.</em></h1>
+  <p>Habitat ist Café und Studio zugleich – für Yoga, Pilates, Sound Baths und Kakao-Zeremonien. Ein Ort, der gut tut.</p>
+  <div class="actions">
+    <a href="#kurse" class="btn" style="background:#fff;color:var(--deepclay)">Zum Kursplan</a>
+    <a href="#dach" class="btn-ghost">Unser Konzept</a>
+  </div>
+</div></header>
+
+<section id="dach"><div class="wrap">
+  <div class="center"><span class="lead">Zwei Welten</span><h2>Ein Ort, <em>zwei Rituale.</em></h2></div>
+  <div class="grid2">
+    <div class="big cafe"><span class="lead">Das Café</span><h3>Erst ankommen.</h3><p>Specialty Coffee, hausgemachte Kleinigkeiten und ein Platz, an dem du einfach sein darfst.</p></div>
+    <div class="big move"><span class="lead">Das Studio</span><h3>Dann bewegen.</h3><p>Yoga, Pilates, Sound Baths &amp; Kakao-Zeremonien – in kleinen Gruppen, achtsam angeleitet.</p></div>
+  </div>
+</div></section>
+
+<section id="kurse" class="sched"><div class="wrap">
+  <div class="center" style="max-width:40ch"><span class="lead">Diese Woche</span><h2>Kursplan &amp; <em>Stundenplan</em></h2></div>
+  <div class="table">
+    <div class="trow"><div class="t">08:00</div><div class="c"><h4>Morning Flow Yoga</h4><span>60 Min · alle Level · Lisa</span></div><div class="b">Plätze frei</div></div>
+    <div class="trow"><div class="t">10:30</div><div class="c"><h4>Pilates Mat</h4><span>50 Min · Kräftigung · Luisa</span></div><div class="b">Plätze frei</div></div>
+    <div class="trow"><div class="t">17:30</div><div class="c"><h4>Slow &amp; Restore</h4><span>75 Min · sanft · Mirko</span></div><div class="b">wenige Plätze</div></div>
+    <div class="trow"><div class="t">19:30</div><div class="c"><h4>Sound Bath</h4><span>60 Min · Klangreise</span></div><div class="b">Anmeldung</div></div>
+  </div>
+  <p class="note">Beispiel-Stundenplan · der echte Wochenplan wird hier live gepflegt – mit Klick direkt zur Buchung.</p>
+</div></section>
+
+<section id="buchen" class="booking"><div class="wrap">
+  <div class="box">
+    <span class="lead" style="color:#eef2e8">Schluss mit Buchen per DM</span>
+    <h2>Deinen Platz sicherst du in <em style="color:#fff">10 Sekunden.</em></h2>
+    <p>Kurs auswählen, Platz buchen, fertig. Keine Nachrichten hin und her – Habitat kümmert sich um den Rest.</p>
+    <a href="#finden" class="btn">Kurs &amp; Termin wählen</a>
+  </div>
+</div></section>
+
+<section id="finden"><div class="wrap">
+  <div class="center"><span class="lead">Besuch</span><h2>Öffnungszeiten &amp; <em>Anfahrt</em></h2></div>
+  <div class="info">
+    <div>
+      <h3>Café-Zeiten</h3>
+      <div class="row"><span>Montag – Freitag</span><b>08:00 – 18:00</b></div>
+      <div class="row"><span>Samstag &amp; Sonntag</span><b>09:00 – 16:00</b></div>
+      <div class="row"><span>Kurse</span><b>siehe Kursplan</b></div>
+      <p style="margin-top:14px;font-size:.84rem;color:var(--muted)">Zeiten beispielhaft – bitte bestätigen.</p>
+    </div>
+    <div>
+      <h3>So findest du uns</h3>
+      <div class="row"><span>Adresse</span><b>Schwachhauser Heerstr. 12–14</b></div>
+      <div class="row"><span>Stadtteil</span><b>28203 Bremen</b></div>
+      <div class="row"><span>Instagram</span><b>@hihabitat</b></div>
+      <a href="https://www.google.com/maps/search/?api=1&query=Habitat+Schwachhauser+Heerstraße+12+Bremen" target="_blank" class="btn" style="margin-top:22px">In Maps öffnen</a>
+    </div>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  © Habitat · Schwachhauser Heerstraße 12–14 · 28203 Bremen
+  <span class="concept">Konzept-Entwurf gestaltet von Elyes Ferchichi · elyesferchichi.com</span>
+</div></footer>
+</body>
+</html>

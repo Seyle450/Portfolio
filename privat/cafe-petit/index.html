@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Café Petit · Bremen — Coffee, slow &amp; beautiful</title>
+<meta name="description" content="Café Petit in Schwachhausen – Signature Drinks, hausgemacht, vegan &amp; glutenfrei. Ein ästhetischer Ort zum Verlangsamen.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#faf6f1; --cream:#f1e9df; --blush:#cf8d7c; --sage:#9aa88f;
+    --ink:#2a2723; --muted:#8c8278;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:'Inter',sans-serif;color:var(--ink);background:var(--paper);line-height:1.7;-webkit-font-smoothing:antialiased}
+  h1,h2,h3{font-family:'Cormorant Garamond',serif;font-weight:500;line-height:1.05;letter-spacing:.005em}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 30px}
+  a{color:inherit;text-decoration:none}
+  .lead{font-size:.74rem;letter-spacing:.32em;text-transform:uppercase;color:var(--blush);font-weight:600}
+
+  nav{position:sticky;top:0;z-index:40;background:rgba(250,246,241,.82);backdrop-filter:blur(12px);border-bottom:1px solid #ece2d6}
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:74px}
+  .logo{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:600;letter-spacing:.02em}
+  .navlinks{display:flex;gap:34px;font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;font-weight:500}
+  .navlinks a{color:var(--muted)}.navlinks a:hover{color:var(--ink)}
+  @media(max-width:760px){.navlinks{display:none}}
+
+  /* hero — editorial, asymmetric */
+  .hero{padding:80px 0 70px}
+  .hero .wrap{display:grid;grid-template-columns:1.15fr .85fr;gap:56px;align-items:end}
+  @media(max-width:860px){.hero .wrap{grid-template-columns:1fr;gap:36px}}
+  .hero h1{font-size:clamp(3.2rem,8vw,6rem);margin:22px 0 0}
+  .hero h1 em{font-style:italic;color:var(--blush)}
+  .hero p{margin-top:26px;max-width:40ch;color:#5a5249;font-size:1.08rem}
+  .hero .actions{margin-top:32px;display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+  .btn{display:inline-block;background:var(--ink);color:var(--paper);padding:14px 30px;border-radius:2px;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;font-weight:600;transition:background .2s}
+  .btn:hover{background:var(--blush)}
+  .underline{font-size:.82rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;border-bottom:1px solid var(--ink);padding-bottom:3px}
+  .heroart{aspect-ratio:3/4;border-radius:3px;background:
+     linear-gradient(150deg,#e7d3c4,#cf8d7c 75%);position:relative;box-shadow:0 40px 70px -40px rgba(207,141,124,.7)}
+  .heroart span{position:absolute;left:18px;bottom:16px;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.85)}
+
+  .marq{border-top:1px solid #e7dccd;border-bottom:1px solid #e7dccd;padding:20px 0;overflow:hidden;white-space:nowrap}
+  .marq span{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.5rem;color:var(--sage);margin:0 26px}
+
+  section{padding:88px 0}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+  @media(max-width:860px){.two{grid-template-columns:1fr;gap:34px}}
+  h2{font-size:clamp(2.4rem,5vw,3.6rem)}
+  .about p{margin-top:20px;color:#5a5249;font-size:1.06rem}
+  .square{aspect-ratio:1;border-radius:3px;background:linear-gradient(150deg,#d9e0d2,#9aa88f);position:relative}
+  .square span{position:absolute;left:18px;bottom:16px;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.85)}
+
+  /* menu */
+  .menu{background:var(--cream)}
+  .menu .wrap{max-width:760px}
+  .mhead{text-align:center;margin-bottom:50px}
+  .mitem{display:flex;justify-content:space-between;align-items:baseline;gap:18px;padding:20px 0;border-bottom:1px solid #e2d6c6}
+  .mitem h3{font-size:1.7rem}
+  .mitem .d{flex:1;border-bottom:1px dotted #c9bba7;margin:0 6px;transform:translateY(-5px)}
+  .mitem .p{font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:var(--blush)}
+  .mitem small{display:block;font-family:'Inter';font-size:.84rem;color:var(--muted);letter-spacing:0;text-transform:none;margin-top:3px}
+  .tags{margin-top:34px;text-align:center;font-size:.82rem;color:var(--muted);letter-spacing:.04em}
+  .tags b{color:var(--sage)}
+
+  .info{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+  @media(max-width:860px){.info{grid-template-columns:1fr}}
+  .info h3{font-size:1.9rem;margin-bottom:18px}
+  .row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #e7dccd;font-size:.97rem}
+  .row:last-child{border:none}.row b{font-weight:600}
+
+  .cta{text-align:center;background:var(--ink);color:var(--paper)}
+  .cta h2{color:var(--paper);max-width:16ch;margin:0 auto}.cta .lead{color:var(--blush)}
+  .cta p{margin:20px auto 32px;max-width:42ch;color:#cbc3ba}
+
+  footer{padding:44px 0;text-align:center;color:var(--muted);font-size:.84rem;border-top:1px solid #e7dccd}
+  .concept{display:block;margin-top:8px;color:#b0a596}
+</style>
+</head>
+<body>
+<nav><div class="wrap">
+  <div class="logo">Café Petit</div>
+  <div class="navlinks"><a href="#about">Über uns</a><a href="#menu">Signature Drinks</a><a href="#besuch">Besuch</a></div>
+</div></nav>
+
+<header class="hero"><div class="wrap">
+  <div>
+    <span class="lead">Schwachhausen · Bremen</span>
+    <h1>Coffee,<br><em>slow</em> &amp; beautiful.</h1>
+    <p>Ein kleiner Ort mit großer Handschrift. Hausgemachte Signature Drinks, viel Liebe zum Detail – und Zeit, die einfach gut tut.</p>
+    <div class="actions">
+      <a href="#menu" class="btn">Unsere Drinks</a>
+      <a href="#besuch" class="underline">Hartwigstraße 2c →</a>
+    </div>
+  </div>
+  <div class="heroart"><span>Foto: Petit Signature Latte</span></div>
+</div></header>
+
+<div class="marq"><span>· hausgemacht ·</span><span>vegan</span><span>· glutenfrei ·</span><span>specialty coffee</span><span>· slow mornings ·</span><span>made in Bremen</span><span>· hausgemacht ·</span><span>vegan</span></div>
+
+<section id="about" class="about"><div class="wrap two">
+  <div class="square"><span>Foto: Petit Interior</span></div>
+  <div>
+    <span class="lead">Die Idee</span>
+    <h2>Klein. Fein.<br>Mit Charakter.</h2>
+    <p>Café Petit ist das Café einer neuen Generation – ästhetisch, persönlich, nahbar. Von Lina &amp; Lisa mit dem Anspruch geführt, dass jedes Detail stimmt: vom Schaum auf dem Matcha bis zur Musik im Raum.</p>
+    <p>Alles hausgemacht, vieles vegan und glutenfrei. Ein Platz, an dem du nicht nur einen Kaffee bekommst, sondern eine kleine Pause vom Tag.</p>
+  </div>
+</div></section>
+
+<section id="menu" class="menu"><div class="wrap">
+  <div class="mhead"><span class="lead">Hausgemacht</span><h2 style="margin-top:12px">Signature Drinks</h2></div>
+  <div class="mitem"><div><h3>Petit Signature Latte</h3><small>Espresso, Hausmilch, Sirup nach Saison</small></div><div class="d"></div><div class="p">5,2</div></div>
+  <div class="mitem"><div><h3>Ceremonial Matcha</h3><small>steingemahlen, mit Hafer oder Kokos</small></div><div class="d"></div><div class="p">5,5</div></div>
+  <div class="mitem"><div><h3>Iced Spanish Latte</h3><small>cremig, süß, perfekt für warme Tage</small></div><div class="d"></div><div class="p">5,8</div></div>
+  <div class="mitem"><div><h3>Hausgemachter Kuchen</h3><small>täglich frisch, oft vegan &amp; glutenfrei</small></div><div class="d"></div><div class="p">4,5</div></div>
+  <p class="tags">Beispielkarte · <b>vegan</b> &amp; <b>glutenfreie</b> Optionen täglich · Preise bitte final bestätigen</p>
+</div></section>
+
+<section id="besuch"><div class="wrap">
+  <div style="text-align:center;margin-bottom:46px"><span class="lead">Komm vorbei</span><h2 style="margin-top:12px">Besuch &amp; Öffnungszeiten</h2></div>
+  <div class="info">
+    <div>
+      <h3>Öffnungszeiten</h3>
+      <div class="row"><span>Montag – Freitag</span><b>08:30 – 18:00</b></div>
+      <div class="row"><span>Samstag &amp; Sonntag</span><b>09:30 – 18:00</b></div>
+      <div class="row"><span>Feiertage</span><b>nach Aushang</b></div>
+      <p style="margin-top:16px;font-size:.85rem;color:var(--muted)">Zeiten beispielhaft – bitte bestätigen.</p>
+    </div>
+    <div>
+      <h3>Hier sind wir</h3>
+      <div class="row"><span>Adresse</span><b>Hartwigstraße 2c</b></div>
+      <div class="row"><span>Stadtteil</span><b>28209 Bremen · Schwachhausen</b></div>
+      <div class="row"><span>Instagram</span><b>@petitcoffeeclub</b></div>
+      <a href="https://www.google.com/maps/search/?api=1&query=Café+Petit+Hartwigstraße+2c+Bremen" target="_blank" class="btn" style="margin-top:22px">In Maps öffnen</a>
+    </div>
+  </div>
+</div></section>
+
+<section class="cta"><div class="wrap">
+  <span class="lead">Bis gleich</span>
+  <h2 style="margin-top:14px">Ein guter Tag beginnt mit einem guten Kaffee.</h2>
+  <p>Wir freuen uns auf dich in der Hartwigstraße.</p>
+  <a href="https://www.instagram.com/petitcoffeeclub/" target="_blank" class="btn" style="background:var(--blush)">Auf Instagram folgen</a>
+</div></section>
+
+<footer><div class="wrap">
+  © Café Petit · Hartwigstraße 2c · 28209 Bremen
+  <span class="concept">Konzept-Entwurf gestaltet von Elyes Ferchichi · elyesferchichi.com</span>
+</div></footer>
+</body>
+</html>

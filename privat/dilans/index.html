@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dilan's Café · Bremen — Frühstück mit Hafenblick</title>
+<meta name="description" content="Dilan's Café in der Überseestadt – Frühstück, Kaffee und Dachterrasse über dem Hafen. Dein Lieblingsplatz am Wasser.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sand:#f4ecdd; --paper:#fcf8f0; --sea:#22707d; --deep:#16424a;
+    --sun:#e3a049; --ink:#1d2426; --muted:#6d7b7d;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:'Inter',sans-serif;color:var(--ink);background:var(--paper);line-height:1.65;-webkit-font-smoothing:antialiased}
+  h1,h2,h3{font-family:'Space Grotesk',sans-serif;font-weight:600;line-height:1.05;letter-spacing:-.02em}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 28px}
+  a{color:inherit;text-decoration:none}
+  .lead{font-size:.76rem;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:var(--sea)}
+
+  nav{position:sticky;top:0;z-index:40;background:rgba(252,248,240,.85);backdrop-filter:blur(10px);border-bottom:1px solid #ece2cf}
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:70px}
+  .logo{font-family:'Space Grotesk';font-size:1.4rem;font-weight:700;letter-spacing:-.03em}
+  .logo b{color:var(--sun)}
+  .navlinks{display:flex;gap:30px;font-size:.92rem;font-weight:500}
+  .navlinks a{color:var(--muted)}.navlinks a:hover{color:var(--ink)}
+  .btn{display:inline-block;background:var(--sea);color:#fff;padding:13px 26px;border-radius:100px;font-weight:600;font-size:.92rem;transition:transform .15s,background .2s}
+  .btn:hover{transform:translateY(-2px);background:var(--deep)}
+  @media(max-width:760px){.navlinks{display:none}}
+
+  .hero{position:relative;padding:90px 0 100px;background:
+     radial-gradient(700px 380px at 85% 0%, rgba(227,160,73,.4),transparent 60%),
+     linear-gradient(165deg,var(--sea),var(--deep));color:#fff;overflow:hidden}
+  .hero:after{content:"";position:absolute;inset:auto 0 -2px 0;height:90px;
+     background:radial-gradient(120% 90px at 50% 100%, rgba(252,248,240,.18),transparent)}
+  .hero .eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:.78rem;letter-spacing:.2em;text-transform:uppercase;color:#ffe6c4;font-weight:600;margin-bottom:22px}
+  .hero h1{font-size:clamp(2.7rem,6.5vw,4.8rem);max-width:15ch;color:#fff}
+  .hero h1 b{color:var(--sun)}
+  .hero p{margin-top:24px;max-width:44ch;font-size:1.12rem;color:#d6e6e6}
+  .hero .actions{margin-top:36px;display:flex;gap:16px;flex-wrap:wrap}
+  .btn-ghost{display:inline-block;padding:13px 26px;border-radius:100px;border:1px solid rgba(255,255,255,.4);color:#fff;font-weight:600;font-size:.92rem}
+  .stats{margin-top:52px;display:flex;gap:40px;flex-wrap:wrap}
+  .stats div b{font-family:'Space Grotesk';font-size:1.7rem;display:block;color:#fff}
+  .stats div span{font-size:.85rem;color:#bcd2d2}
+
+  section{padding:88px 0}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+  @media(max-width:860px){.two{grid-template-columns:1fr;gap:32px}}
+  h2{font-size:clamp(2.1rem,4.4vw,3.1rem)}
+  .about p{margin-top:18px;color:#46514f;font-size:1.05rem}
+  .deck{aspect-ratio:5/4;border-radius:22px;background:
+     linear-gradient(160deg,#2f8a96,#16424a);position:relative;box-shadow:0 34px 64px -34px rgba(22,66,74,.7);overflow:hidden}
+  .deck:before{content:"";position:absolute;top:0;left:0;right:0;height:42%;background:linear-gradient(180deg,#e9b463,#e3a049)}
+  .deck span{position:absolute;left:20px;bottom:18px;font-size:.8rem;color:rgba(255,255,255,.85)}
+
+  .feat{background:var(--sand)}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:44px}
+  @media(max-width:820px){.grid3{grid-template-columns:1fr}}
+  .card{background:#fff;border-radius:18px;padding:32px 28px;border:1px solid #ece1cd}
+  .card .n{font-family:'Space Grotesk';font-size:.9rem;font-weight:700;color:var(--sun);letter-spacing:.05em}
+  .card h3{font-size:1.3rem;margin:10px 0 8px}
+  .card p{color:var(--muted);font-size:.97rem}
+
+  .info{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+  @media(max-width:820px){.info{grid-template-columns:1fr}}
+  .panel{border-radius:22px;padding:42px 38px}
+  .panel.dark{background:var(--deep);color:#fff}
+  .panel.light{background:#fff;border:1px solid #ece1cd}
+  .panel h3{font-size:1.5rem;margin-bottom:20px}
+  .row{display:flex;justify-content:space-between;padding:11px 0;font-size:.97rem;border-bottom:1px solid rgba(255,255,255,.12)}
+  .panel.light .row{border-color:#f0e7d6}.row:last-child{border:none}.row b{font-weight:600}
+
+  .cta{background:linear-gradient(165deg,var(--sun),#c9863a);color:#3a2a12;text-align:center}
+  .cta h2{max-width:18ch;margin:0 auto;color:#3a2a12}
+  .cta p{margin:18px auto 32px;max-width:42ch;color:#5a4624}
+  .cta .btn{background:var(--deep);color:#fff}
+
+  footer{padding:44px 0;text-align:center;color:var(--muted);font-size:.85rem;border-top:1px solid #ece1cd}
+  .concept{display:block;margin-top:8px;color:#9aa6a6}
+</style>
+</head>
+<body>
+<nav><div class="wrap">
+  <div class="logo">Dilan<b>'</b>s</div>
+  <div class="navlinks"><a href="#about">Café</a><a href="#terrasse">Dachterrasse</a><a href="#fruehstueck">Frühstück</a><a href="#finden">Finden</a></div>
+  <a href="#finden" class="btn">Zu uns</a>
+</div></nav>
+
+<header class="hero"><div class="wrap">
+  <span class="eyebrow">● Überseestadt · direkt am Wasser</span>
+  <h1>Frühstück mit <b>Hafenblick.</b></h1>
+  <p>Dilan's Café ist dein Lieblingsplatz in der Überseestadt – guter Kaffee, ein Frühstück, das verwöhnt, und eine Dachterrasse über dem Hafen.</p>
+  <div class="actions">
+    <a href="#fruehstueck" class="btn" style="background:var(--sun);color:#3a2a12">Frühstückskarte</a>
+    <a href="#terrasse" class="btn-ghost">Die Dachterrasse</a>
+  </div>
+  <div class="stats">
+    <div><b>~4.000</b><span>auf Instagram</span></div>
+    <div><b>Rooftop</b><span>Terrasse am Hafen</span></div>
+    <div><b>Täglich</b><span>frisches Frühstück</span></div>
+  </div>
+</div></header>
+
+<section id="about" class="about"><div class="wrap two">
+  <div>
+    <span class="lead">Willkommen</span>
+    <h2>Das Café, das die Überseestadt liebt.</h2>
+    <p>Was auf Instagram längst ein Hit ist, gibt es jetzt zum Anfassen: Dilan's steht für entspannte Vormittage, herzlichen Service und den schönsten Blick übers Wasser.</p>
+    <p>Bisher findet man uns nur auf Social Media. Diese Seite ist dein direkter Weg zu uns – mit Karte, Zeiten und Anfahrt auf einen Blick.</p>
+  </div>
+  <div class="deck"><span>Foto: Dachterrasse mit Hafenblick</span></div>
+</div></section>
+
+<section id="terrasse" class="feat"><div class="wrap">
+  <span class="lead">Warum Dilan's</span>
+  <h2>Drei gute Gründe, heute vorbeizukommen.</h2>
+  <div class="grid3">
+    <div class="card"><div class="n">01</div><h3>Die Dachterrasse</h3><p>Sonne, Wasser, Weite. Der beste Platz der Überseestadt für ein langes Frühstück oder den Feierabend-Kaffee.</p></div>
+    <div class="card"><div class="n">02</div><h3>Frühstück, das verwöhnt</h3><p>Von der Bowl bis zum herzhaften Teller – frisch zubereitet, schön angerichtet, jeden Tag.</p></div>
+    <div class="card"><div class="n">03</div><h3>Mitten im Geschehen</h3><p>Konsul-Smidt-Straße, bestens erreichbar, mit dem Lebensgefühl des neuen Bremer Hafenviertels.</p></div>
+  </div>
+</div></section>
+
+<section id="fruehstueck"><div class="wrap two">
+  <div class="deck" style="aspect-ratio:4/5;background:linear-gradient(160deg,#e9b463,#c9863a)"><span>Foto: Frühstücksteller</span></div>
+  <div>
+    <span class="lead">Guten Morgen</span>
+    <h2>Frühstück &amp; Kaffee</h2>
+    <p style="margin-top:18px;color:#46514f;font-size:1.05rem">Bowls, Eggs, frische Backwaren und Spezialitätenkaffee – die ganze Karte findest du bald hier. Bis dahin: einfach vorbeikommen und durchprobieren.</p>
+    <a href="https://www.instagram.com/dilans_cafe/" target="_blank" class="btn" style="margin-top:24px">Karte auf Instagram</a>
+  </div>
+</div></section>
+
+<section id="finden" class="feat"><div class="wrap">
+  <div style="text-align:center;margin-bottom:44px"><span class="lead">Besuch</span><h2 style="margin-top:12px">Öffnungszeiten &amp; Anfahrt</h2></div>
+  <div class="info">
+    <div class="panel dark">
+      <h3>Öffnungszeiten</h3>
+      <div class="row"><span>Montag – Freitag</span><b>08:30 – 18:00</b></div>
+      <div class="row"><span>Samstag &amp; Sonntag</span><b>09:00 – 18:00</b></div>
+      <div class="row"><span>Sonnenuntergang</span><b>Terrasse offen</b></div>
+      <p style="margin-top:16px;font-size:.84rem;color:#bcd2d2">Zeiten beispielhaft – bitte bestätigen.</p>
+    </div>
+    <div class="panel light">
+      <h3>So findest du uns</h3>
+      <div class="row"><span>Adresse</span><b>Konsul-Smidt-Str. 82</b></div>
+      <div class="row"><span>Stadtteil</span><b>28217 Bremen · Überseestadt</b></div>
+      <div class="row"><span>Telefon</span><b>0421 84498180</b></div>
+      <div class="row"><span>Instagram</span><b>@dilans_cafe</b></div>
+      <a href="https://www.google.com/maps/search/?api=1&query=Dilans+Café+Konsul-Smidt-Straße+82+Bremen" target="_blank" class="btn" style="margin-top:22px">In Maps öffnen</a>
+    </div>
+  </div>
+</div></section>
+
+<section class="cta"><div class="wrap">
+  <h2>Die Sonne steht günstig. Komm vorbei.</h2>
+  <p>Dein Platz auf der Dachterrasse wartet – mit Kaffee und Hafenblick.</p>
+  <a href="https://www.google.com/maps/search/?api=1&query=Dilans+Café+Konsul-Smidt-Straße+82+Bremen" target="_blank" class="btn">Route planen</a>
+</div></section>
+
+<footer><div class="wrap">
+  © Dilan's Café · Konsul-Smidt-Straße 82 · 28217 Bremen
+  <span class="concept">Konzept-Entwurf gestaltet von Elyes Ferchichi · elyesferchichi.com</span>
+</div></footer>
+</body>
+</html>
