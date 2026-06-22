@@ -19,9 +19,9 @@
 <meta name="twitter:image" content="https://elyesferchichi.com/assets/og-image.png" />
 <link rel="icon" type="image/svg+xml" href="assets/ef-monogram-cobalt.svg" />
 <link rel="apple-touch-icon" sizes="180x180" href="assets/ef-monogram-cobalt.svg" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="preload" href="assets/fonts/space-grotesk-600-latin.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="assets/fonts/inter-400-latin.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="assets/fonts.css" />
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -114,7 +114,7 @@
   /* ---------- hero ---------- */
   .hero{padding:52px 0 0;overflow:hidden;}
   .hero-inner{padding-bottom:60px;}
-  .hero h1{font-size:clamp(36px,9vw,62px);margin:22px 0 0;text-wrap:balance;line-height:1.04;}
+  .hero h1{font-size:clamp(36px,9vw,62px);margin:22px 0 0;text-wrap:pretty;line-height:1.04;}
   .hero h1 .hl{color:var(--cobalt);}
   .hero .hsub{margin-top:20px;max-width:44ch;font-size:17px;color:#3f3f47;line-height:1.6;}
   .hero-actions{display:flex;flex-direction:column;gap:12px;margin-top:32px;}
@@ -328,7 +328,7 @@
     .foot-row{flex-direction:row;justify-content:space-between;align-items:flex-end;}
   }
   @media(min-width:1024px){
-    .hero h1{font-size:72px;}
+    .hero h1{font-size:72px;text-wrap:balance;}
   }
 
   /* ===================== FEINSCHLIFF / POLISH ===================== */
@@ -439,10 +439,63 @@
     --acb-shadow:0 20px 56px -14px rgba(22,22,26,.32);
     --acb-font:"Inter",sans-serif;--acb-btn-r:10px;--acb-radius:18px;
   }
+
+  /* ===================== ÄSTHETIK & BEWEGUNG ===================== */
+  /* Hero: dezentes, langsam driftendes Blueprint-Raster (Struktur/Bauen) */
+  .hero::after{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+    background-image:
+      linear-gradient(rgba(43,80,226,.055) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(43,80,226,.055) 1px,transparent 1px);
+    background-size:46px 46px;
+    -webkit-mask-image:radial-gradient(72% 62% at 28% 28%,#000,transparent 76%);
+    mask-image:radial-gradient(72% 62% at 28% 28%,#000,transparent 76%);
+    animation:gridDrift 26s linear infinite;}
+  @keyframes gridDrift{to{background-position:46px 46px,46px 46px;}}
+
+  /* Hero-Einstieg: orchestrierte Sequenz beim Laden */
+  .hero-enter > *{opacity:0;}
+  .hero-enter .eyebrow{animation:heroUp .7s cubic-bezier(.2,.7,.2,1) .05s both;}
+  .hero-enter h1{animation:heroUp 1s cubic-bezier(.2,.7,.2,1) .18s both;}
+  .hero-enter .hsub{animation:heroUp .8s cubic-bezier(.2,.7,.2,1) .42s both;}
+  .hero-enter .hero-actions{animation:heroUp .8s cubic-bezier(.2,.7,.2,1) .56s both;}
+  .hero-enter .trust-pills{animation:heroUp .8s cubic-bezier(.2,.7,.2,1) .68s both;}
+  @keyframes heroUp{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:none;}}
+
+  /* Navigation: animierte Unterstreichung + aktiver Abschnitt (Scroll-Spy) */
+  .nav-links a{position:relative;}
+  .nav-links a::after{content:"";position:absolute;left:0;right:100%;bottom:-7px;height:2px;
+    background:var(--cobalt);border-radius:2px;transition:right .32s cubic-bezier(.2,.7,.2,1);}
+  .nav-links a:hover::after,.nav-links a.active::after{right:0;}
+  .nav-links a.active{color:var(--ink);}
+
+  @media(prefers-reduced-motion:reduce){
+    .hero::after{animation:none;}
+    .hero-enter > *{opacity:1;}
+    .hero-enter .eyebrow,.hero-enter h1,.hero-enter .hsub,
+    .hero-enter .hero-actions,.hero-enter .trust-pills{animation:none;clip-path:none;}
+  }
+
+  /* ===================== BARRIEREFREIHEIT ===================== */
+  /* Sichtbarer Tastatur-Fokus (nur bei Keyboard, nicht bei Maus) */
+  :focus-visible{outline:2.5px solid var(--cobalt);outline-offset:3px;border-radius:5px;}
+  /* Auf dunklen Flächen heller Ring fürs Kontrast */
+  .cta :focus-visible,.ablauf :focus-visible,footer :focus-visible,
+  .solution :focus-visible,.card.feat :focus-visible,.cmp-best :focus-visible,
+  .mobile-menu :focus-visible{outline-color:#9bb0ff;}
+
+  /* „Zum Inhalt springen" – erscheint nur bei Tastatur-Fokus */
+  .skip-link{position:fixed;top:10px;left:50%;z-index:100;
+    transform:translate(-50%,-160%);
+    background:var(--cobalt);color:var(--paper);
+    font-family:var(--head);font-weight:600;font-size:14px;
+    padding:11px 20px;border-radius:9px;box-shadow:0 8px 24px -8px rgba(43,80,226,.6);
+    transition:transform .22s cubic-bezier(.2,.7,.2,1);}
+  .skip-link:focus{transform:translate(-50%,0);outline:none;}
 </style>
 </head>
 <body>
 
+<a class="skip-link" href="#top">Zum Inhalt springen</a>
 <div class="scroll-prog" id="scrollProg"></div>
 <div class="grain" aria-hidden="true"></div>
 
@@ -481,7 +534,7 @@
 <!-- ===== HERO ===== -->
 <section class="hero">
   <div class="container hero-inner">
-    <div class="reveal" style="max-width:820px;">
+    <div class="hero-enter" style="max-width:820px;">
       <span class="eyebrow">Webdesign Bremen</span>
       <h1>Mehr Kunden – durch eine Website, die <span class="hl">für Sie arbeitet</span>.</h1>
       <p class="hsub" style="max-width:52ch;margin-top:22px;">Webdesign aus Bremen für Selbstständige und kleine Unternehmen – egal welche Branche. Schnell, modern und so gebaut, dass aus einem Klick eine echte Anfrage wird.</p>
@@ -650,7 +703,7 @@
         <div class="frame">
           <a href="https://hevis.elyesferchichi.com" target="_blank" rel="noopener">
             <div class="work-thumb">
-              <img src="previews/hevis.png" alt="Hevi's Café Website" loading="lazy" style="object-position:top;" />
+              <img src="previews/hevis.webp" alt="Hevi's Café Website" loading="lazy" decoding="async" width="1600" height="1016" style="object-position:top;" />
             </div>
           </a>
         </div>
@@ -663,7 +716,7 @@
         <div class="frame">
           <a href="https://bens.elyesferchichi.com" target="_blank" rel="noopener">
             <div class="work-thumb">
-              <img src="previews/bens.png" alt="Ben's Catering Website" loading="lazy" style="object-position:top;" />
+              <img src="previews/bens.webp" alt="Ben's Catering Website" loading="lazy" decoding="async" width="1200" height="762" style="object-position:top;" />
             </div>
           </a>
         </div>
@@ -676,7 +729,7 @@
         <div class="frame">
           <a href="Webdesign-Agentur/Starscape/" target="_blank" rel="noopener">
             <div class="work-thumb">
-              <img src="previews/starscape.png" alt="Starscape – STARS EU Campus Plattform" loading="lazy" style="object-position:top;" />
+              <img src="previews/starscape.webp" alt="Starscape – STARS EU Campus Plattform" loading="lazy" decoding="async" width="1200" height="762" style="object-position:top;" />
             </div>
           </a>
         </div>
@@ -689,7 +742,7 @@
         <div class="frame">
           <a href="https://niki.elyesferchichi.com" target="_blank" rel="noopener">
             <div class="work-thumb">
-              <img src="previews/niki.png" alt="Café Niki Website" loading="lazy" style="object-position:top;" />
+              <img src="previews/niki.webp" alt="Café Niki Website" loading="lazy" decoding="async" width="1200" height="762" style="object-position:top;" />
             </div>
           </a>
         </div>
@@ -702,7 +755,7 @@
         <div class="frame">
           <a href="https://antepli.elyesferchichi.com" target="_blank" rel="noopener">
             <div class="work-thumb">
-              <img src="previews/antepli.png" alt="Antepli Baklava Website" loading="lazy" style="object-position:top;" />
+              <img src="previews/antepli.webp" alt="Antepli Baklava Website" loading="lazy" decoding="async" width="1200" height="762" style="object-position:top;" />
             </div>
           </a>
         </div>
@@ -987,6 +1040,30 @@
     });
   }, {threshold: 0.1, rootMargin: '0px 0px -40px 0px'});
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  /* Scroll-Spy: aktiven Navi-Punkt je nach Abschnitt markieren */
+  (function(){
+    const links = Array.from(document.querySelectorAll('.nav-links a'));
+    const map = new Map();
+    links.forEach(a => {
+      const href = a.getAttribute('href');
+      if(href && href.startsWith('#')){
+        const sec = document.querySelector(href);
+        if(sec) map.set(sec, a);
+      }
+    });
+    if(!map.size) return;
+    const spy = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if(e.isIntersecting){
+          links.forEach(l => l.classList.remove('active'));
+          const a = map.get(e.target);
+          if(a) a.classList.add('active');
+        }
+      });
+    }, {rootMargin: '-45% 0px -50% 0px', threshold: 0});
+    map.forEach((a, sec) => spy.observe(sec));
+  })();
 
   /* Angebots-Formular */
   (function(){
