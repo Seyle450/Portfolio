@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+﻿ <!DOCTYPE html>
 <html lang="en"><head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +10,11 @@
   <meta property="og:url" content="https://starscape.elyesferchichi.com/">
   <meta property="og:title" content="STARSCAPE — STARS EU Campus Platform">
   <meta property="og:description" content="STARSCAPE — digital campus platform for STARS EU students. Explore courses, events, and campus life in one place.">
-  <meta property="og:image" content="https://elyesferchichi.com/previews/starscape.png">
+  <meta property="og:image" content="https://starscape.elyesferchichi.com/assets/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://starscape.elyesferchichi.com/assets/og.png">
   <meta property="og:site_name" content="STARSCAPE">
   <meta name="robots" content="index, follow">
   <script type="application/ld+json">
@@ -26,18 +30,17 @@
   }
   </script>
   <script src="i18n.js" defer></script>
-  <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="favicon.svg">
+  <link rel="icon" href="favicon.svg?v=2" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="favicon.svg?v=2">
   <link rel="stylesheet" href="style.css">
 <script src="https://elyesferchichi.com/analytics/tracker.js" defer></script>
-<style>#_acb{--acb-bg:#1a1f2e;--acb-border:rgba(0,159,173,.18);--acb-text:#e0eaf0;--acb-sub:rgba(224,234,240,.55);--acb-accent:#009fad;--acb-accent-soft:rgba(0,159,173,.12);--acb-accent-fg:#fff;--acb-deny-bg:rgba(255,255,255,.06);--acb-deny-text:rgba(224,234,240,.55);--acb-deny-hover:rgba(255,255,255,.1);--acb-shadow:0 -8px 48px rgba(0,0,0,.4);--acb-btn-r:6px;}</style></head>
+<style>#_acb{--acb-bg:#1a1f2e;--acb-border:rgba(27,47,247,.18);--acb-text:#e0eaf0;--acb-sub:rgba(224,234,240,.55);--acb-accent:#1b2ff7;--acb-accent-soft:rgba(27,47,247,.12);--acb-accent-fg:#fff;--acb-deny-bg:rgba(255,255,255,.06);--acb-deny-text:rgba(224,234,240,.55);--acb-deny-hover:rgba(255,255,255,.1);--acb-shadow:0 -8px 48px rgba(0,0,0,.4);--acb-btn-r:6px;}</style></head>
 <body>
 
 <!-- SIDEBAR -->
 <aside class="sidebar" id="sidebar">
   <a href="index.html" class="s-logo">
-    <span class="s-logo-name">STARSCAPE</span>
-    <span class="s-logo-short">SC</span>
+    <img class="s-logo-img" src="assets/logo.svg" alt="STARSCAPE" height="30">
     <span class="s-logo-sub">STARS EU Campus Platform</span>
   </a>
   <button class="sidebar-collapse-btn" id="collapseBtn" title="Collapse sidebar">
@@ -118,6 +121,7 @@
 
     <!-- Welcome Banner -->
     <div class="banner reveal">
+      <canvas id="netfield" aria-hidden="true"></canvas>
       <div class="banner-text">
         <h1 data-i18n="hero_h1">Science in the City.</h1>
         <p data-i18n="hero_p">HSB connects students, teachers, courses, knowledge, and spaces across the STARS EU network — anchored in Bremen, looking into the world.</p>
@@ -238,7 +242,7 @@
         <div class="space-item">
           <div class="space-img">
             <img src="assets/raum.png" alt="Lernraum 316" style="width:100%;height:100%;object-fit:cover;display:block;">
-            <div class="space-overlay"><button class="book-btn" onclick="showToast('Lernraum 316')" data-i18n="bookNow">Book Now</button></div>
+            <div class="space-overlay"><button class="book-btn" onclick="openBooking('lernraum-316')" data-i18n="bookNow">Book Now</button></div>
           </div>
           <div class="space-info">
             <div class="space-details"><h4>Lernraum 316</h4><p>Hochschule Bremen. Gebäude AB</p></div>
@@ -248,7 +252,7 @@
         <div class="space-item">
           <div class="space-img">
             <img src="assets/raum.png" alt="AB Galerie" style="width:100%;height:100%;object-fit:cover;display:block;">
-            <div class="space-overlay"><button class="book-btn" onclick="showToast('AB Galerie')" data-i18n="bookNow">Book Now</button></div>
+            <div class="space-overlay"><button class="book-btn" onclick="openBooking('ab-galerie')" data-i18n="bookNow">Book Now</button></div>
           </div>
           <div class="space-info">
             <div class="space-details"><h4>AB Galerie</h4><p>Hochschule Bremen. Gebäude AB</p></div>
@@ -259,7 +263,41 @@
     </div>
 
   </main>
-  <footer style="text-align:center;padding:1.25rem 1.5rem;font-size:.72rem;color:#64748b;border-top:1px solid #e2e8f0;display:flex;align-items:center;justify-content:center;gap:1.25rem;flex-wrap:wrap"><a href="https://elyesferchichi.com/datenschutz.html?site=starscape" style="color:#64748b;text-decoration:none">Datenschutz</a><span style="color:#e2e8f0">·</span><a href="https://elyesferchichi.com/" target="_blank" rel="noopener" style="color:#009fad;text-decoration:none;font-size:.72rem;letter-spacing:.04em">✦ Webdesign · Elyes Ferchichi</a></footer>
+  <footer style="text-align:center;padding:1.25rem 1.5rem;font-size:.72rem;color:#64748b;border-top:1px solid #e2e8f0;display:flex;align-items:center;justify-content:center;gap:1.25rem;flex-wrap:wrap"><a href="https://elyesferchichi.com/datenschutz.html?site=starscape" style="color:#64748b;text-decoration:none">Datenschutz</a><span style="color:#e2e8f0">·</span><a href="https://elyesferchichi.com/" target="_blank" rel="noopener" style="color:#1b2ff7;text-decoration:none;font-size:.72rem;letter-spacing:.04em">✦ Webdesign · Elyes Ferchichi</a></footer>
+</div>
+
+<!-- Booking Modal -->
+<div class="booking-modal" id="bookingModal" role="dialog" aria-modal="true" aria-labelledby="bkName">
+  <div class="booking-backdrop" data-bk-close></div>
+  <div class="booking-dialog">
+    <button class="booking-close" data-bk-close aria-label="Close">&times;</button>
+    <div class="booking-head">
+      <span class="bk-ico" id="bkIcon"></span>
+      <div>
+        <h3 id="bkName">—</h3>
+        <p id="bkLoc">—</p>
+      </div>
+    </div>
+    <div class="booking-section">
+      <div class="booking-label"><span data-i18n="bk_choose_date">Choose a date</span></div>
+      <div class="date-row" id="bkDates"></div>
+    </div>
+    <div class="booking-section">
+      <div class="booking-label">
+        <span data-i18n="bk_choose_time">Choose a time</span>
+        <span class="booking-legend">
+          <span><i class="lg-free"></i><span data-i18n="bk_legend_free">Free</span></span>
+          <span><i class="lg-booked"></i><span data-i18n="bk_legend_booked">Booked</span></span>
+          <span><i class="lg-sel"></i><span data-i18n="bk_legend_sel">Selected</span></span>
+        </span>
+      </div>
+      <div class="slot-grid" id="bkSlots"></div>
+    </div>
+    <div class="booking-footer">
+      <div class="booking-summary" id="bkSummary" data-i18n="bk_summary_empty">Select a date and a time slot.</div>
+      <button class="booking-confirm" id="bkConfirm" disabled data-i18n="bk_confirm">Confirm Booking</button>
+    </div>
+  </div>
 </div>
 
 <!-- Toast -->

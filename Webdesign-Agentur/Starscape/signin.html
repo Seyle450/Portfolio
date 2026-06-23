@@ -5,21 +5,21 @@
   <title>Sign In — STARSCAPE</title>
   <meta name="robots" content="noindex, follow">
   <link rel="canonical" href="https://starscape.elyesferchichi.com/signin.html">
-  <link rel="apple-touch-icon" href="favicon.svg">
+  <link rel="apple-touch-icon" href="favicon.svg?v=2">
   <script src="i18n.js" defer></script>
-  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon.svg?v=2" type="image/svg+xml">
   <link rel="stylesheet" href="style.css">
 <script src="https://elyesferchichi.com/analytics/tracker.js" defer></script>
-<style>#_acb{--acb-bg:#1a1f2e;--acb-border:rgba(0,159,173,.18);--acb-text:#e0eaf0;--acb-sub:rgba(224,234,240,.55);--acb-accent:#009fad;--acb-accent-soft:rgba(0,159,173,.12);--acb-accent-fg:#fff;--acb-deny-bg:rgba(255,255,255,.06);--acb-deny-text:rgba(224,234,240,.55);--acb-deny-hover:rgba(255,255,255,.1);--acb-shadow:0 -8px 48px rgba(0,0,0,.4);--acb-btn-r:6px;}</style></head>
+<style>#_acb{--acb-bg:#1a1f2e;--acb-border:rgba(27,47,247,.18);--acb-text:#e0eaf0;--acb-sub:rgba(224,234,240,.55);--acb-accent:#1b2ff7;--acb-accent-soft:rgba(27,47,247,.12);--acb-accent-fg:#fff;--acb-deny-bg:rgba(255,255,255,.06);--acb-deny-text:rgba(224,234,240,.55);--acb-deny-hover:rgba(255,255,255,.1);--acb-shadow:0 -8px 48px rgba(0,0,0,.4);--acb-btn-r:6px;}</style></head>
 <body>
 
 <div class="signin-wrap">
+  <canvas id="netfield" aria-hidden="true"></canvas>
   <div class="signin-card">
 
     <!-- Logo -->
     <div class="signin-logo">
-      <svg viewBox="0 0 24 24" fill="none" stroke="var(--navy)" stroke-width="1.5" style="width:40px;height:40px;margin-bottom:.5rem;"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
-      <div class="signin-logo-name">STARSCAPE</div>
+      <img src="assets/logo.svg" alt="STARSCAPE" class="signin-logo-img">
       <div class="signin-logo-sub">STARS EU Campus Platform</div>
     </div>
 
@@ -50,13 +50,20 @@
       <!-- Email/Password form -->
       <form class="signin-form" onsubmit="handleSignIn(event)">
         <div class="form-group">
-          <label class="form-label" data-i18n="signin_email">Email address</label>
-          <input type="email" class="form-control" id="signinEmail" placeholder="you@university.eu" required>
+          <label class="form-label" for="signinEmail" data-i18n="signin_email">Email address</label>
+          <input type="email" class="form-control" id="signinEmail" placeholder="you@university.eu" required autocomplete="email">
         </div>
         <div class="form-group">
-          <a href="#" class="forgot-link" data-i18n="signin_forgot">Forgot password?</a>
-          <label class="form-label" data-i18n="signin_password">Password</label>
-          <input type="password" class="form-control" id="signinPassword" placeholder="••••••••" required>
+          <div class="label-row">
+            <label class="form-label" for="signinPassword" data-i18n="signin_password">Password</label>
+            <a href="#" class="forgot-link" data-i18n="signin_forgot">Forgot password?</a>
+          </div>
+          <div class="pw-field">
+            <input type="password" class="form-control" id="signinPassword" placeholder="••••••••" required autocomplete="current-password">
+            <button type="button" class="pw-toggle" onclick="togglePw(this)" aria-label="Show password" aria-pressed="false">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            </button>
+          </div>
         </div>
         <button type="submit" class="btn-primary" style="width:100%;justify-content:center;margin-top:.5rem;">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
@@ -101,6 +108,16 @@
   function handleSSO(provider) {
     document.getElementById('signinContent').style.display = 'none';
     document.getElementById('signinSuccess').style.display = 'block';
+  }
+
+  function togglePw(btn) {
+    const inp = document.getElementById('signinPassword');
+    const reveal = inp.type === 'password';
+    inp.type = reveal ? 'text' : 'password';
+    btn.classList.toggle('on', reveal);
+    btn.setAttribute('aria-pressed', reveal ? 'true' : 'false');
+    btn.setAttribute('aria-label', reveal ? 'Hide password' : 'Show password');
+    inp.focus();
   }
 </script>
 

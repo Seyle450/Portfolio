@@ -61,6 +61,24 @@ const TRANSLATIONS = {
     available: 'Available',
     bookNow: 'Book Now',
 
+    /* BOOKING MODAL */
+    bk_choose_date: 'Choose a date',
+    bk_choose_time: 'Choose a time',
+    bk_legend_free: 'Free',
+    bk_legend_booked: 'Booked',
+    bk_legend_sel: 'Selected',
+    bk_free: 'Free',
+    bk_taken: 'Booked',
+    bk_past: 'Past',
+    bk_yours: 'Yours',
+    bk_summary_empty: 'Select a date and a time slot.',
+    bk_summary: 'Book {time} on {date}',
+    bk_confirm: 'Confirm Booking',
+    bk_success: '{space} booked — {date}, {time}!',
+    bk_cancelled: 'Booking for {time} cancelled.',
+    bk_full: 'Fully booked on this day.',
+    bk_today: 'Today',
+
     /* BREADCRUMB */
     bc_home: 'Home',
     bc_ask: 'Ask Questions',
@@ -203,6 +221,24 @@ const TRANSLATIONS = {
     spaces_now: 'Jetzt verfügbare Räume',
     available: 'Verfügbar',
     bookNow: 'Jetzt buchen',
+
+    /* BOOKING MODAL */
+    bk_choose_date: 'Datum wählen',
+    bk_choose_time: 'Uhrzeit wählen',
+    bk_legend_free: 'Frei',
+    bk_legend_booked: 'Belegt',
+    bk_legend_sel: 'Gewählt',
+    bk_free: 'Frei',
+    bk_taken: 'Belegt',
+    bk_past: 'Vorbei',
+    bk_yours: 'Deins',
+    bk_summary_empty: 'Datum und Uhrzeit wählen.',
+    bk_summary: '{time} am {date} buchen',
+    bk_confirm: 'Buchung bestätigen',
+    bk_success: '{space} gebucht — {date}, {time}!',
+    bk_cancelled: 'Buchung für {time} storniert.',
+    bk_full: 'An diesem Tag ausgebucht.',
+    bk_today: 'Heute',
 
     /* BREADCRUMB */
     bc_home: 'Startseite',

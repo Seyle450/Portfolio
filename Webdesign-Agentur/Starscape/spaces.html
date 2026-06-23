@@ -9,20 +9,23 @@
   <meta property="og:url" content="https://starscape.elyesferchichi.com/spaces.html">
   <meta property="og:title" content="Book Spaces — STARSCAPE">
   <meta property="og:description" content="Book study spaces, rooms and facilities across STARS EU campuses through STARSCAPE.">
-  <meta property="og:image" content="https://elyesferchichi.com/previews/starscape.png">
-  <link rel="apple-touch-icon" href="favicon.svg">
+  <meta property="og:image" content="https://starscape.elyesferchichi.com/assets/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://starscape.elyesferchichi.com/assets/og.png">
+  <link rel="apple-touch-icon" href="favicon.svg?v=2">
   <script src="i18n.js" defer></script>
-  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon.svg?v=2" type="image/svg+xml">
   <link rel="stylesheet" href="style.css">
 <script src="https://elyesferchichi.com/analytics/tracker.js" defer></script>
-<style>#_acb{--acb-bg:#1a1f2e;--acb-border:rgba(0,159,173,.18);--acb-text:#e0eaf0;--acb-sub:rgba(224,234,240,.55);--acb-accent:#009fad;--acb-accent-soft:rgba(0,159,173,.12);--acb-accent-fg:#fff;--acb-deny-bg:rgba(255,255,255,.06);--acb-deny-text:rgba(224,234,240,.55);--acb-deny-hover:rgba(255,255,255,.1);--acb-shadow:0 -8px 48px rgba(0,0,0,.4);--acb-btn-r:6px;}</style></head>
+<style>#_acb{--acb-bg:#1a1f2e;--acb-border:rgba(27,47,247,.18);--acb-text:#e0eaf0;--acb-sub:rgba(224,234,240,.55);--acb-accent:#1b2ff7;--acb-accent-soft:rgba(27,47,247,.12);--acb-accent-fg:#fff;--acb-deny-bg:rgba(255,255,255,.06);--acb-deny-text:rgba(224,234,240,.55);--acb-deny-hover:rgba(255,255,255,.1);--acb-shadow:0 -8px 48px rgba(0,0,0,.4);--acb-btn-r:6px;}</style></head>
 <body>
 
 <!-- SIDEBAR -->
 <aside class="sidebar" id="sidebar">
   <a href="index.html" class="s-logo">
-    <span class="s-logo-name">STARSCAPE</span>
-    <span class="s-logo-short">SC</span>
+    <img class="s-logo-img" src="assets/logo.svg" alt="STARSCAPE" height="30">
     <span class="s-logo-sub">STARS EU Campus Platform</span>
   </a>
   <button class="sidebar-collapse-btn" id="collapseBtn" title="Collapse sidebar">
@@ -117,11 +120,11 @@
     <div class="spaces-grid">
 
       <!-- Lernraum A1 -->
-      <div class="space-card reveal">
+      <div class="space-card reveal" data-space="lernraum-a1">
         <div class="space-card-img">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
           <div class="space-card-overlay">
-            <button class="book-btn" onclick="showToast('Lernraum A1')" data-i18n="bookNow">Book Now</button>
+            <button class="book-btn" onclick="openBooking('lernraum-a1')" data-i18n="bookNow">Book Now</button>
           </div>
         </div>
         <div class="space-card-body">
@@ -138,11 +141,11 @@
       </div>
 
       <!-- Lernraum B2 -->
-      <div class="space-card reveal rd1">
-        <div class="space-card-img" style="background:linear-gradient(135deg,rgba(0,159,173,.1),rgba(0,63,128,.06));">
+      <div class="space-card reveal rd1" data-space="lernraum-316">
+        <div class="space-card-img" style="background:linear-gradient(135deg,rgba(27,47,247,.1),rgba(20,32,122,.06));">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2"></rect><path d="M16 7V5a2 2 0 0 0-4 0v2"></path></svg>
           <div class="space-card-overlay">
-            <button class="book-btn" onclick="showToast('Lernraum 316')" data-i18n="bookNow">Book Now</button>
+            <button class="book-btn" onclick="openBooking('lernraum-316')" data-i18n="bookNow">Book Now</button>
           </div>
         </div>
         <div class="space-card-body">
@@ -159,11 +162,11 @@
       </div>
 
       <!-- Media Studio -->
-      <div class="space-card reveal rd2">
+      <div class="space-card reveal rd2" data-space="ab-galerie">
         <div class="space-card-img" style="background:none;">
           <img src="assets/raum.png" alt="AB Galerie" style="width:100%;height:100%;object-fit:cover;display:block;">
           <div class="space-card-overlay">
-            <button class="book-btn" onclick="showToast('AB Galerie')" data-i18n="bookNow">Book Now</button>
+            <button class="book-btn" onclick="openBooking('ab-galerie')" data-i18n="bookNow">Book Now</button>
           </div>
         </div>
         <div class="space-card-body">
@@ -179,12 +182,12 @@
         </div>
       </div>
 
-      <!-- Innovation Lab — Booked -->
-      <div class="space-card reveal rd3">
-        <div class="space-card-img" style="background:linear-gradient(135deg,rgba(245,158,11,.07),rgba(0,63,128,.04));">
+      <!-- Innovation Lab — Booked today -->
+      <div class="space-card reveal rd3" data-space="innovation-lab">
+        <div class="space-card-img" style="background:linear-gradient(135deg,rgba(245,158,11,.07),rgba(20,32,122,.04));">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"></path></svg>
           <div class="space-card-overlay">
-            <button class="book-btn" style="background:rgba(220,38,38,.85);" onclick="showToast('Innovation Lab — currently booked')">Booked</button>
+            <button class="book-btn" onclick="openBooking('innovation-lab')" data-i18n="bookNow">Book Now</button>
           </div>
         </div>
         <div class="space-card-body">
@@ -203,11 +206,11 @@
       </div>
 
       <!-- Conference Room -->
-      <div class="space-card reveal">
-        <div class="space-card-img" style="background:linear-gradient(135deg,rgba(16,185,129,.07),rgba(0,63,128,.05));">
+      <div class="space-card reveal" data-space="conference">
+        <div class="space-card-img" style="background:linear-gradient(135deg,rgba(16,185,129,.07),rgba(20,32,122,.05));">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
           <div class="space-card-overlay">
-            <button class="book-btn" onclick="showToast('Conference Room')" data-i18n="bookNow">Book Now</button>
+            <button class="book-btn" onclick="openBooking('conference')" data-i18n="bookNow">Book Now</button>
           </div>
         </div>
         <div class="space-card-body">
@@ -223,12 +226,12 @@
         </div>
       </div>
 
-      <!-- Rooftop Terrace — Booked -->
-      <div class="space-card reveal rd1">
-        <div class="space-card-img" style="background:linear-gradient(135deg,rgba(14,165,233,.08),rgba(0,159,173,.06));">
+      <!-- Rooftop Terrace — Booked today -->
+      <div class="space-card reveal rd1" data-space="rooftop">
+        <div class="space-card-img" style="background:linear-gradient(135deg,rgba(14,165,233,.08),rgba(27,47,247,.06));">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
           <div class="space-card-overlay">
-            <button class="book-btn" style="background:rgba(220,38,38,.85);" onclick="showToast('Rooftop Terrace — currently booked')">Booked</button>
+            <button class="book-btn" onclick="openBooking('rooftop')" data-i18n="bookNow">Book Now</button>
           </div>
         </div>
         <div class="space-card-body">
@@ -250,7 +253,41 @@
 
   </main>
 
-  <footer style="padding:.85rem 2rem;font-size:.72rem;color:#64748b;border-top:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;background:#f1f5f9"><a href="https://elyesferchichi.com/datenschutz.html?site=starscape" style="color:#64748b;text-decoration:none">Datenschutz</a><a href="https://elyesferchichi.com/" target="_blank" rel="noopener" style="color:#009fad;text-decoration:none;letter-spacing:.04em">✦ Webdesign · Elyes Ferchichi</a></footer>
+  <footer style="padding:.85rem 2rem;font-size:.72rem;color:#64748b;border-top:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;background:#f1f5f9"><a href="https://elyesferchichi.com/datenschutz.html?site=starscape" style="color:#64748b;text-decoration:none">Datenschutz</a><a href="https://elyesferchichi.com/" target="_blank" rel="noopener" style="color:#1b2ff7;text-decoration:none;letter-spacing:.04em">✦ Webdesign · Elyes Ferchichi</a></footer>
+</div>
+
+<!-- Booking Modal -->
+<div class="booking-modal" id="bookingModal" role="dialog" aria-modal="true" aria-labelledby="bkName">
+  <div class="booking-backdrop" data-bk-close></div>
+  <div class="booking-dialog">
+    <button class="booking-close" data-bk-close aria-label="Close">&times;</button>
+    <div class="booking-head">
+      <span class="bk-ico" id="bkIcon"></span>
+      <div>
+        <h3 id="bkName">—</h3>
+        <p id="bkLoc">—</p>
+      </div>
+    </div>
+    <div class="booking-section">
+      <div class="booking-label"><span data-i18n="bk_choose_date">Choose a date</span></div>
+      <div class="date-row" id="bkDates"></div>
+    </div>
+    <div class="booking-section">
+      <div class="booking-label">
+        <span data-i18n="bk_choose_time">Choose a time</span>
+        <span class="booking-legend">
+          <span><i class="lg-free"></i><span data-i18n="bk_legend_free">Free</span></span>
+          <span><i class="lg-booked"></i><span data-i18n="bk_legend_booked">Booked</span></span>
+          <span><i class="lg-sel"></i><span data-i18n="bk_legend_sel">Selected</span></span>
+        </span>
+      </div>
+      <div class="slot-grid" id="bkSlots"></div>
+    </div>
+    <div class="booking-footer">
+      <div class="booking-summary" id="bkSummary" data-i18n="bk_summary_empty">Select a date and a time slot.</div>
+      <button class="booking-confirm" id="bkConfirm" disabled data-i18n="bk_confirm">Confirm Booking</button>
+    </div>
+  </div>
 </div>
 
 <!-- Toast -->
