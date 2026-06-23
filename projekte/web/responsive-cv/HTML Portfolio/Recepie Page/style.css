@@ -1,0 +1,187 @@
+body {
+    background-color: #1A1A1A;
+    font-family: 'Segoe UI';
+    margin: 0px;
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+}
+
+
+header {
+    background-color: #959595;
+    display: flex;
+    height: 6vh;
+}
+.space {
+    color: #1a1a1a00;
+    min-width: 50px;
+    max-width: 500px;
+    flex: 9;
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+}
+.Buttons {
+    margin-block: auto;
+    flex: auto;
+    text-align: center;
+    padding-inline: min(10px);
+    font-size: 100%;
+    height: 3vh;
+    padding-block: 1.5vh;
+}
+
+.Buttons:hover {
+    background-color: #797979;
+}
+.Random {
+    margin-block: auto;
+    margin-left: auto;
+    margin-right: 11px;
+
+    background-color: #D68316;
+    color: whitesmoke;
+
+    border: 0px;
+    border-radius: 8px;
+
+    height: 28px;
+    width: 95px;
+}
+.Filters {
+    color: whitesmoke;
+    display: flex;
+}
+.Filter {
+    margin-inline: 11px;
+    margin-bottom: 0px;
+}
+.placeholder {
+    margin-inline: 15px;
+    margin-bottom: 0px;
+}
+.hr {
+    margin-inline: 11px;
+    background-color: whitesmoke;
+    height: 1.5px;
+    border-radius: 2px;
+    border: none;
+}
+
+.containers {
+    margin-inline: auto;
+
+    width: 95%;
+    display: flex;
+    flex-wrap: wrap;
+}
+.container {
+    flex: 1;
+    margin: 10px;
+    margin-inline: 15px;
+    margin-inline-start: 10px;
+
+    aspect-ratio: 1;
+    min-width: 200px;
+    background-color: #3E3E3E;
+    transition: 250ms;
+    border-radius: 15px;
+    transition: 250ms;
+}
+
+
+.Name {
+    text-align: center;
+    color: whitesmoke;
+    font-size: 30px;
+    font-weight: bolder;
+    margin-block: auto;
+    margin-top: 33%;
+    transition: 250ms;
+
+}
+
+@media (max-width: 660px) {
+    .Buttons {
+        display: none;
+    }
+    .show {
+        display: flex;
+        font-weight: bold;
+
+    }
+
+    .Home:hover {
+        background-color: #1a1a1a00;
+        font-weight: 800;
+    }
+
+}
+.hide {
+    display: none;
+}
+@media (max-width: 500px) {
+    .Filter {
+        display: none;
+        font-weight: normal;
+    }
+    .show {
+        display: flex;
+        width: 10px;
+        flex: 0;
+    }
+
+}
+
+@media (max-width: 255px) {
+    .container {
+        min-width: 150px;
+    }
+}
+#container:hover > #text {
+    font-size: 20px;
+    margin-top: 5%;
+    transition: 250ms;
+}
+.container:hover {
+    background-color: #D68316;
+    transition: 250ms;
+}
+.nutritiens {
+    margin-top: 0px;
+    display: none;
+
+    text-align: left;
+    margin-inline: 8%;
+    color: whitesmoke;
+    margin-bottom: 0px;
+    height: 0px;
+}
+#container:hover > #nutritiens {
+    font-size: 100%;
+    transition: 250ms;
+    height: fit-content;
+    margin-block: auto;
+    margin-top: 8%;
+    height: 0px;
+}
+.ingredient {
+    display: none;
+    margin-top: 0px;
+
+
+    text-align: left;
+    margin-inline: 8%;
+    color: whitesmoke;
+    margin-bottom: 0px;
+    height: 0px;
+}
+#container:hover > #ingredient {
+    font-size: 100%;
+    transition: 250ms;
+    height: fit-content;
+    margin-block: auto;
+    margin-top: 8%;
+    height: 0px;
+}

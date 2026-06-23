@@ -1,0 +1,58 @@
+body {
+    background-color: #DEBDA4;
+    font-family: Georgia, Times, 'Times New Roman', serif;
+    font-weight: bold;
+    
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+    
+}
+
+.first {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.token {
+    color: #6E0E0E;
+    position: absolute;
+    left: 3vw;
+    font-size: 3vw;
+}
+h1 {
+    color: #6E0E0E;
+    font-family: Georgia, Times, 'Times New Roman', serif;
+    font-size: 10vw;
+    margin: 10px;
+}
+.link {
+    position: absolute;
+    right: 3%;
+}
+
+button {
+    color: #6E0E0E;
+    background-color: #BB9277;
+    border-color: #6E0E0E;
+    border-style: solid;
+    font-family: Georgia, Times, 'Times New Roman', serif;
+    font-weight: bold;
+    font-size: 3vw;
+    cursor:pointer;
+}
+.Home {
+    height: 6vmin;
+    width: 13vw;
+}
+hr {
+    color: gray;
+    width: 40%;
+    margin-bottom: 20px;
+}
+
+
+
+

@@ -1,0 +1,1 @@
+Wörter = ["vogel","fliege","wand","reis","raupe","kugel","nachname","bildschirm","handy","hund","wort","pflanze","baum","bildschirm","fernseher","tablet","flasche","trank","wasser","decke"]

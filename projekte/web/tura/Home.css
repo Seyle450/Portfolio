@@ -1,0 +1,286 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  overflow-x: hidden;
+}
+.Willkommen {
+  width: 120vw;
+  position: absolute;
+  top: 5vmin;
+  left: -5vw;
+  filter: blur(10px);
+  z-index: -1;
+}
+.WillkommenContainer {
+  display: flex;
+  text-align: center;
+}
+.WillkommenText {
+  font-size: 5vw;
+  font-weight: 800;
+  color: #f4f4f4;
+  text-align: center;
+  margin-inline: auto;
+  margin-top: 20vmin;
+  width: 50vw;
+  z-index: 0;
+}
+.ZahlenContainer {
+  margin-top: 15vmin;
+  background-color: #038500;
+  width: 100vw;
+  height: auto;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: flex-start;
+  padding: 5vmin 0;
+  flex-wrap: wrap;
+}
+
+.Zahlenbox {
+  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 25vw;
+  text-align: center;
+  color: white;
+}
+
+.ZahlenInner {
+  position: relative;
+  width: 15vmin;
+  height: 15vmin;
+}
+
+.ZahlenBoxBox {
+  width: 150%;
+  position: absolute;
+  height: 150%;
+  top: -25%;
+  left: -25%;
+  
+}
+
+.ZahlenBoxZahl {
+  position: absolute;
+  top: 35%;
+  left: 50%;
+  width: 100%;
+  text-wrap: wrap;
+  transform: translate(-50%, -50%);
+  font-size: 2.4vmin;
+  font-weight: bold;
+  color: white;
+  z-index: 1;
+}
+.Zahlenbox h2 {
+  font-size: 3vmin;
+  font-weight: 800;
+  color: white;
+  margin-top: 2vmin;
+}
+
+.AboutUsContainer {
+  display: flex;
+
+  width: 100vw;
+  height: fit-content;
+  background-color: #e6e6e6;
+  padding: 5vw;
+}
+.AboutUsText {
+  width: 50vw;
+}
+.AboutUsText h2 {
+  font-size: 5vmin;
+  font-weight: 800;
+  margin-bottom: 2vmin;
+}
+.AboutUsText p {
+  font-size: 2vmin;
+  font-weight: 700;
+  margin-bottom: 2vmin;
+}
+.AboutUsImage {
+  height: 40vmin;
+  
+  margin-right: 10vmin;
+  margin-left: auto;
+  border-radius: 10px;
+}
+.AboutUsText span {
+  font-weight: 800;
+  color: #038500;
+}
+.BlogContainer {
+  width: 90vw;
+  background-color: #f4f4f4;
+  padding: 5vw;
+}
+.BlogContainer h1 {
+  font-size: 5vmin;
+  font-weight: 800;
+  margin-bottom: 3vmin;
+}
+.BlogGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(25vw, 1fr));
+  gap: 2vmin;
+  width: 100%;
+  height: auto;
+}
+.BlogCard {
+  width: 25vw;
+  height: fit-content;
+  background-color: white;
+  border-radius: 10px;
+  padding: 1vmin;
+  text-align: center;
+
+}
+.BlogCard img {
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
+}
+.BlogCard h1 {
+  text-align: left;
+  font-size: 2vmin;
+  font-weight: 800;
+  color: #038500;
+  margin: 0;
+}
+.BlogCard h2 {
+  text-align: left;
+  font-size: 1.5vmin;
+  font-weight: 700;
+  color: #000000;
+  margin: 0;
+}
+.BlogCard p {
+  text-align: left;
+  font-size: 1.5vmin;
+  font-weight: 700;
+  color: #333;
+  height: fit-content;
+}
+.BlogCard button {
+  text-align: center;
+
+  background-color: #038500;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 1vmin 2vmin;
+  font-size: 2vmin;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 2vmin;
+  width: 90%;
+}
+
+.KontaktContainer {
+  width: 90vw;
+  height: fit-content;
+  background-color: #e6e6e6;
+  padding: 5vw;
+}
+.KontaktContainer h1 {
+  font-size: 5vmin;
+  font-weight: 800;
+  margin-bottom: 3vmin;
+}
+.KontaktContainer h2 {
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-size: 3vmin;
+  font-weight: 800;
+  margin: 0;
+}
+.KontaktContainer p {
+  width: 80vw;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 500;
+}
+.KontaktContainer table p {
+  margin: 0;
+  font-size: 2vmin;
+  font-weight: 400;
+  margin-bottom: 1vmin;
+  width: fit-content;
+}
+.KontaktContainer table td {
+  vertical-align: top;
+  width: 40vw;
+}
+.KontaktContainer span {
+  font-weight: 700;
+}
+
+hr {
+  border: none;
+  border-top: 2px solid #000;
+  margin-block: 4vmin;
+  width: 90vw;
+  margin-left: auto;
+  margin-left: right;
+}
+
+
+.FooterContainer {
+  width: 94vw;
+  height: fit-content;
+  background-color: #038500;
+  padding: 3vw;
+  color: white;
+}
+
+.FooterContainer .Links table {
+  width: fit-content;
+  margin-inline: auto;
+  text-align: center;
+}
+.FooterContainer .Links td {
+  padding-inline: 1vmin;
+  height: fit-content;
+}
+.FooterContainer .Links p {
+  color: white;
+  font-weight: 700;
+  margin: 0;
+}
+.FooterContainer .Links a {
+  text-decoration: none;
+}
+
+.FooterContainer .Rechtliches table {
+  width: fit-content;
+  margin-inline: auto;
+  text-align: center;
+}
+.FooterContainer .Rechtliches td {
+  padding-inline: 1vmin;
+}
+.FooterContainer .Rechtliches p {
+  color: #013500;
+  font-weight: 700;
+}
+.FooterContainer .Rechtliches a {
+  text-decoration: none;
+}
+.FooterContainer .Copyright {
+  text-align: center;
+  font-size: 2vmin;
+  font-weight: 700;
+  color: white;
+  margin: 0;
+}
+.FooterContainer .Copyright p {
+  margin: 0;
+  color: #013500;
+}
+.FooterContainer .Copyright a {
+  color: #012200;
+}

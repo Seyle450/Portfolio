@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#000000">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="../../../assets/favicon.svg">
+<link rel="stylesheet" href="../../../Extra/fonts.css">
+<link rel="stylesheet" href="../../../style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" crossorigin="anonymous">
+<title>Hangman — Code · Elyes Ferchichi</title>
+</head>
+<body>
+<div class="page">
+  <a class="back-link" href="../../../code.html">‹ Zurück zu den Code-Projekten</a>
+  <h1 class="viewer-title">Hangman</h1>
+  <div class="viewer-date">Nov. 2023 · Python</div>
+  <p class="viewer-sub">Galgenmännchen mit ASCII-Grafiken für jeden Fehlversuch und eigener Wörterliste.</p>
+  <ul class="project-tags viewer-meta"><li>Python</li></ul>
+  <div class="run-bar">
+    <button id="runBtn" class="run-btn" type="button">▶ Ausführen</button>
+    <button id="stopBtn" class="run-btn stop" type="button" hidden>■ Stop</button>
+    <span class="run-hint">Läuft direkt im Browser (Python via Pyodide) — Ein- und Ausgabe im Terminal.</span>
+  </div>
+  <div id="terminal" class="terminal" hidden>
+    <div id="termOut" class="term-out" aria-live="polite"></div>
+    <div id="termInputRow" class="term-input-row" hidden>
+      <span id="termPrompt" class="term-prompt"></span>
+      <input id="termInput" class="term-input-field" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Eingabe">
+    </div>
+  </div>
+  <div class="code-file">
+    <div class="code-file-head"><span class="cf-name">main.py</span><span class="cf-lang">Python</span></div>
+    <pre><code class="language-python">from Zeichnungen import Zeichnungen
+from Wörter import Wörter
+import random
+import os
+
+
+word = random.choice(Wörter)
+
+
+progress = [&quot;_&quot;] * len(word)
+
+
+incorrect_guesses = 6
+Anzeige = Zeichnungen[incorrect_guesses]
+
+
+while &quot;_&quot; in progress and incorrect_guesses &gt; 0:
+    os.system(&#x27;cls&#x27;)
+    
+    print(&quot; &quot;.join(progress))
+    print(f&quot;Verfügbare Versuche: {incorrect_guesses}&quot;)
+    print (Anzeige)
+    
+    guess = input(&quot;Buchstabe: &quot;).lower()
+
+    # Check if the guess is in the word
+    if guess in word:
+        # Update the player&#x27;s progress
+        for i in range(len(word)):
+            if word[i] == guess:
+                progress[i] = guess
+    else:
+        # Update the number of incorrect guesses
+        incorrect_guesses -= 1
+    Anzeige = Zeichnungen[incorrect_guesses]
+
+# Check if the player has won
+if &quot;_&quot; not in progress:
+    print(&quot;Glückwunsch das Wort war &quot;+word+&quot;.&quot;)
+else:
+    print(&quot;Leider hast du keine Versuche mehr, das Wort war &quot; + word + &quot;.&quot;)
+
+input(&quot;Drücke [ENTER] zum schliesen&quot;)</code></pre>
+  </div>
+  <div class="code-file">
+    <div class="code-file-head"><span class="cf-name">Wörter.py</span><span class="cf-lang">Python</span></div>
+    <pre><code class="language-python">Wörter = [&quot;vogel&quot;,&quot;fliege&quot;,&quot;wand&quot;,&quot;reis&quot;,&quot;raupe&quot;,&quot;kugel&quot;,&quot;nachname&quot;,&quot;bildschirm&quot;,&quot;handy&quot;,&quot;hund&quot;,&quot;wort&quot;,&quot;pflanze&quot;,&quot;baum&quot;,&quot;bildschirm&quot;,&quot;fernseher&quot;,&quot;tablet&quot;,&quot;flasche&quot;,&quot;trank&quot;,&quot;wasser&quot;,&quot;decke&quot;]</code></pre>
+  </div>
+  <div class="code-file">
+    <div class="code-file-head"><span class="cf-name">Zeichnungen.py</span><span class="cf-lang">Python</span></div>
+    <pre><code class="language-python">Zeichnungen = [
+    &quot;&quot;&quot;
+    ---------------
+    |             |
+    |             |
+    |             O
+    |            /|\ 
+    |            /\ 
+    |\ 
+    | \ 
+    |__\___________
+    &quot;&quot;&quot;,
+    &quot;&quot;&quot;
+    ---------------
+    |             |
+    |             |
+    |             O
+    |            /|\ 
+    |            
+    |\ 
+    | \ 
+    |__\___________
+    &quot;&quot;&quot;,
+    &quot;&quot;&quot;
+    ---------------
+    |             |
+    |             |
+    |             O
+    |            
+    |            
+    |\ 
+    | \ 
+    |__\___________
+    &quot;&quot;&quot;,
+    &quot;&quot;&quot;
+    ---------------
+    |             |
+    |             |
+    |             
+    |            
+    |            
+    |\ 
+    | \ 
+    |__\___________
+    &quot;&quot;&quot;,
+    &quot;&quot;&quot;
+    ---------------
+    |             
+    |             
+    |             
+    |            
+    |            
+    |\ 
+    | \ 
+    |__\___________
+    &quot;&quot;&quot;,
+    &quot;&quot;&quot;
+    
+    |             
+    |             
+    |             
+    |            
+    |            
+    |\ 
+    | \ 
+    |__\___________
+    &quot;&quot;&quot;,
+    &quot;&quot;&quot;
+    
+    |             
+    |             
+    |             
+    |            
+    |            
+    | 
+    |  
+    |______________
+    &quot;&quot;&quot;
+    
+]</code></pre>
+  </div>
+  <footer class="footer">
+    <div>Offen für Möglichkeiten im Web Development.</div>
+    <div class="tag">© 2026 — Elyes Ferchichi</div>
+  </footer>
+</div>
+<script src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js" crossorigin="anonymous"></script>
+<script id="pyproject" type="application/json">{"main": "main.py", "files": {"main.py": "from Zeichnungen import Zeichnungen\nfrom Wörter import Wörter\nimport random\nimport os\n\n\nword = random.choice(Wörter)\n\n\nprogress = [\"_\"] * len(word)\n\n\nincorrect_guesses = 6\nAnzeige = Zeichnungen[incorrect_guesses]\n\n\nwhile \"_\" in progress and incorrect_guesses > 0:\n    os.system('cls')\n    \n    print(\" \".join(progress))\n    print(f\"Verfügbare Versuche: {incorrect_guesses}\")\n    print (Anzeige)\n    \n    guess = input(\"Buchstabe: \").lower()\n\n    # Check if the guess is in the word\n    if guess in word:\n        # Update the player's progress\n        for i in range(len(word)):\n            if word[i] == guess:\n                progress[i] = guess\n    else:\n        # Update the number of incorrect guesses\n        incorrect_guesses -= 1\n    Anzeige = Zeichnungen[incorrect_guesses]\n\n# Check if the player has won\nif \"_\" not in progress:\n    print(\"Glückwunsch das Wort war \"+word+\".\")\nelse:\n    print(\"Leider hast du keine Versuche mehr, das Wort war \" + word + \".\")\n\ninput(\"Drücke [ENTER] zum schliesen\")", "Wörter.py": "Wörter = [\"vogel\",\"fliege\",\"wand\",\"reis\",\"raupe\",\"kugel\",\"nachname\",\"bildschirm\",\"handy\",\"hund\",\"wort\",\"pflanze\",\"baum\",\"bildschirm\",\"fernseher\",\"tablet\",\"flasche\",\"trank\",\"wasser\",\"decke\"]", "Zeichnungen.py": "Zeichnungen = [\n    \"\"\"\n    ---------------\n    |             |\n    |             |\n    |             O\n    |            /|\\ \n    |            /\\ \n    |\\ \n    | \\ \n    |__\\___________\n    \"\"\",\n    \"\"\"\n    ---------------\n    |             |\n    |             |\n    |             O\n    |            /|\\ \n    |            \n    |\\ \n    | \\ \n    |__\\___________\n    \"\"\",\n    \"\"\"\n    ---------------\n    |             |\n    |             |\n    |             O\n    |            \n    |            \n    |\\ \n    | \\ \n    |__\\___________\n    \"\"\",\n    \"\"\"\n    ---------------\n    |             |\n    |             |\n    |             \n    |            \n    |            \n    |\\ \n    | \\ \n    |__\\___________\n    \"\"\",\n    \"\"\"\n    ---------------\n    |             \n    |             \n    |             \n    |            \n    |            \n    |\\ \n    | \\ \n    |__\\___________\n    \"\"\",\n    \"\"\"\n    \n    |             \n    |             \n    |             \n    |            \n    |            \n    |\\ \n    | \\ \n    |__\\___________\n    \"\"\",\n    \"\"\"\n    \n    |             \n    |             \n    |             \n    |            \n    |            \n    | \n    |  \n    |______________\n    \"\"\"\n    \n]"}}</script>
+<script src="../_run.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" crossorigin="anonymous"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

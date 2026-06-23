@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elyesfolio - Kontakt</title>
+    <link rel="stylesheet" href="kontakt.css">
+    <link rel="stylesheet" href="menu.css">
+    <link rel="stylesheet" href="bg.css">
+</head>
+<body>
+    <div class="bg"></div>
+
+    <a href="index.html"><img class="logo" src="Logo.png" alt=""></a>    <div class="vl"></div>
+    <h1>KONTAKT</h1>
+    <hr>
+
+    <div class="container ">
+        <table class="table pc">
+  <tr>
+    <th class="Name">E-MAIL</th>
+    <th class="inhalt"><a href="mailto:elyes.ferchichi@icloud.com" class="links">elyes.ferchichi@icloud.com</a></th>
+    <th class="Platz"></th>
+    <th class="Name">WEITERES</th>
+    <th class="inhalt"><a href="https://github.com/Seyle450">GitHub</a></th>
+  </tr>
+  <tr>
+    <td class="Name">NUMMER</td>
+    <td class="inhalt"><a href="tel:+49 157 73550528" class="links">+49 157 73550528</a></td>
+    <td class="Platz"></td>
+    <td></td>
+    <td class="inhalt"><a href="https://www.linkedin.com/in/seyle/">LinkedIn</a></td>
+  </tr>
+    </div>
+  <div class="container ">
+        <table class="table mobile">
+  <tr class="space">  
+    <th class="Name">E-MAIL</th>
+    <th class="inhalt"><a href="mailto:elyes.ferchichi@icloud.com" class="links">elyes.ferchichi@icloud.com</a></th>
+  <tr class="space">
+    <td class="Name">NUMMER</td>
+    <td class="inhalt"><a href="tel:+49 157 73550528" class="links">+49 157 73550528</a></td>
+  </tr>
+  <tr class="space">
+    <td class="Name ">WEITERES</td>
+    <th class="inhalt"><a class="LinkedIn" href="https://github.com/Seyle450">GitHub</a> <a href="https://www.linkedin.com/in/seyle/">LinkedIn</a>
+      </th>
+    
+  </div>
+    <section class="Menu">
+      <div id="menu" class="MenuScreen hide">
+      <div class="menuItem">
+        <a href="index.html"><p class="MenuText hide"><span class="num">01</span> HOME</p></a>
+        <a href="Projekte.html"><p class="MenuText hide"><span class="num">02</span> PROJEKTE</p></a>
+        <a href="Lebenslauf.pdf"><p class="MenuText hide"><span class="num">03</span> LEBENSLAUF</p></a>
+        <a href="Kontakt.html"><p class="MenuText hide"><span class="num">04</span> KONTAKT</p></a>
+      </div>
+
+    </div>
+    <div class="menu" onclick="myFunction(this)">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </div>
+      
+      <script>
+      function myFunction(x) {
+        x.classList.toggle("change");
+        menu.classList.toggle("hide");
+        const texts = document.querySelectorAll(".MenuText");
+        texts.forEach(el => el.classList.toggle("hide"));
+      }
+      </script>
+    </section>
+</body>
+</html>

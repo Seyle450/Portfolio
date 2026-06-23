@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#000000">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="../../../assets/favicon.svg">
+<link rel="stylesheet" href="../../../Extra/fonts.css">
+<link rel="stylesheet" href="../../../style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" crossorigin="anonymous">
+<title>XP-Counter — Code · Elyes Ferchichi</title>
+</head>
+<body>
+<div class="page">
+  <a class="back-link" href="../../../code.html">‹ Zurück zu den Code-Projekten</a>
+  <h1 class="viewer-title">XP-Counter</h1>
+  <div class="viewer-date">Sept. 2023 · Python</div>
+  <p class="viewer-sub">Erfahrungspunkte- und Level-Tracker mit fortlaufender Berechnung.</p>
+  <ul class="project-tags viewer-meta"><li>Python</li></ul>
+  <div class="run-bar">
+    <button id="runBtn" class="run-btn" type="button">▶ Ausführen</button>
+    <button id="stopBtn" class="run-btn stop" type="button" hidden>■ Stop</button>
+    <span class="run-hint">Läuft direkt im Browser (Python via Pyodide) — Ein- und Ausgabe im Terminal.</span>
+  </div>
+  <div id="terminal" class="terminal" hidden>
+    <div id="termOut" class="term-out" aria-live="polite"></div>
+    <div id="termInputRow" class="term-input-row" hidden>
+      <span id="termPrompt" class="term-prompt"></span>
+      <input id="termInput" class="term-input-field" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Eingabe">
+    </div>
+  </div>
+  <div class="code-file">
+    <div class="code-file-head"><span class="cf-name">main.py</span><span class="cf-lang">Python</span></div>
+    <pre><code class="language-python">Total = 0
+exp = 1000
+Level = 52
+average = 500
+Minutes = 0
+Hours = 0
+while Level &lt; 100:
+    exp = 1000 * Level
+    print (&quot;Level&quot;, Level, &quot;XP&quot;, exp)
+    Total += exp
+    Level += 1
+    
+print(&quot;&quot;)
+print(&quot;Du brauchst&quot;, Total, &quot;EXP um Level&quot;, Level, &quot;zu erreichen.&quot;)
+Minutes = Total / average
+Hours = Minutes / 60
+print(&quot;Das wären ungefähr&quot;, Hours,&quot;Stunden, oder&quot;,Minutes,&quot;Minuten.&quot;)
+</code></pre>
+  </div>
+  <footer class="footer">
+    <div>Offen für Möglichkeiten im Web Development.</div>
+    <div class="tag">© 2026 — Elyes Ferchichi</div>
+  </footer>
+</div>
+<script src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js" crossorigin="anonymous"></script>
+<script id="pyproject" type="application/json">{"main": "main.py", "files": {"main.py": "Total = 0\nexp = 1000\nLevel = 52\naverage = 500\nMinutes = 0\nHours = 0\nwhile Level < 100:\n    exp = 1000 * Level\n    print (\"Level\", Level, \"XP\", exp)\n    Total += exp\n    Level += 1\n    \nprint(\"\")\nprint(\"Du brauchst\", Total, \"EXP um Level\", Level, \"zu erreichen.\")\nMinutes = Total / average\nHours = Minutes / 60\nprint(\"Das wären ungefähr\", Hours,\"Stunden, oder\",Minutes,\"Minuten.\")\n"}}</script>
+<script src="../_run.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" crossorigin="anonymous"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

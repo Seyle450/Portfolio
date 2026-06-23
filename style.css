@@ -273,7 +273,7 @@ body::before { animation: bgDrift 18s ease-in-out infinite; }
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
     scrollbar-width: none;
-    padding: 4px 2px 18px;
+    padding: 8px 4px 28px;
   }
   .projects-rail::-webkit-scrollbar { display: none; }
   .projects-rail > .project-card {
@@ -425,6 +425,35 @@ body::before { animation: bgDrift 18s ease-in-out infinite; }
   }
   .project-cta:hover::after { transform: translateX(100%); }
 
+  /* ── Featured (bläuliche) Karte ── */
+  .project-card.featured {
+    background:
+      linear-gradient(180deg, rgba(43,80,226,0.18), rgba(43,80,226,0.05)),
+      var(--surface);
+    border-color: rgba(43,80,226,0.50);
+    /* Im Ruhezustand nur der Inset-Ring — Außenschatten würde von der
+       overflow-Rail beschnitten. Der Drop-Shadow kommt erst beim Hover. */
+    box-shadow: 0 0 0 1px rgba(43,80,226,0.16) inset;
+  }
+  .project-card.featured:hover {
+    border-color: rgba(43,80,226,0.75);
+    box-shadow: 0 0 0 1px rgba(43,80,226,0.26) inset, 0 8px 20px rgba(43,80,226,0.22);
+  }
+  .project-card.featured .project-tags li {
+    border-color: rgba(43,80,226,0.32);
+    background: rgba(43,80,226,0.10);
+    color: #b9c4ff;
+  }
+  .project-card.featured .project-cta {
+    background: rgba(43,80,226,0.20);
+    border-color: rgba(43,80,226,0.45);
+    color: #eef1ff;
+  }
+  .project-card.featured .project-cta:hover {
+    background: rgba(43,80,226,0.32);
+    border-color: rgba(43,80,226,0.70);
+  }
+
   .project-card.empty {
     border: 1px dashed var(--border-strong);
     background: transparent;
@@ -569,6 +598,193 @@ body::before { animation: bgDrift 18s ease-in-out infinite; }
   }
   .footer .tag { font-size: 13px; color: var(--fg-dim); margin-top: 8px; font-family: 'JetBrains Mono', monospace; }
 
+  /* ───────── CODE-PROJEKTE (Übersichtsseite) ───────── */
+  .back-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px; letter-spacing: 0.04em;
+    color: var(--fg-muted); text-decoration: none;
+    transition: color .15s ease-out, gap .15s ease-out;
+  }
+  .back-link:hover { color: var(--fg); gap: 10px; }
+  .code-hero h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: clamp(34px, 4.6vw, 60px);
+    letter-spacing: -0.02em; line-height: 1.02;
+    margin-top: 22px; color: #fff;
+  }
+  .code-hero .lead {
+    margin-top: 16px; max-width: 640px;
+    font-size: 17px; color: var(--fg-muted); line-height: 1.55;
+  }
+  .code-hero .tech-pills { justify-content: flex-start; margin-top: 24px; }
+
+  .code-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(248px, 1fr));
+    gap: 16px;
+  }
+  .code-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 18px 16px;
+    display: flex; flex-direction: column;
+    transition: transform .2s cubic-bezier(.2,.9,.3,1), border-color .15s ease-out, box-shadow .2s ease-out;
+  }
+  .code-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--border-strong);
+    box-shadow: 0 14px 40px rgba(0,0,0,0.45);
+  }
+  .code-card .cc-head { display: flex; align-items: center; gap: 10px; }
+  .code-card .cc-icon {
+    flex-shrink: 0;
+    width: 30px; height: 30px; border-radius: 8px;
+    display: grid; place-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; font-weight: 700;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    color: var(--fg-muted);
+  }
+  .code-card.web .cc-icon { background: rgba(230,145,60,0.10); border-color: rgba(230,145,60,0.30); color: #e6913c; }
+  .code-card.py  .cc-icon { background: rgba(43,80,226,0.12);  border-color: rgba(43,80,226,0.35);  color: #7aa0ff; }
+  .code-card h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600; font-size: 15.5px; color: var(--fg);
+  }
+  .code-card p {
+    font-size: 13px; color: var(--fg-muted);
+    margin-top: 12px; line-height: 1.5; flex: 1;
+  }
+  .code-card .project-tags { margin-top: 14px; }
+  a.code-card { text-decoration: none; color: inherit; }
+  .cc-action {
+    margin-top: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; letter-spacing: 0.02em;
+    color: var(--fg-muted);
+    transition: color .15s ease-out, letter-spacing .15s ease-out;
+  }
+  .code-card:hover .cc-action { letter-spacing: 0.05em; }
+  .code-card.web:hover .cc-action { color: #e6b27a; }
+  .code-card.py:hover  .cc-action { color: #9db4ff; }
+  .cc-head h3 { min-width: 0; }
+  .cc-date {
+    margin-left: auto; flex-shrink: 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px; color: var(--fg-dim); white-space: nowrap;
+  }
+  .project-tags .cc-flag {
+    color: #d8b48a;
+    background: rgba(230,145,60,0.10);
+    border-color: rgba(230,145,60,0.30);
+  }
+  .group-head {
+    display: flex; align-items: center; gap: 12px;
+    font-family: 'Space Grotesk', sans-serif; font-weight: 600;
+    font-size: 14px; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--fg-muted); margin: 30px 0 16px;
+  }
+  .group-head:first-of-type { margin-top: 4px; }
+  .group-head::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+  .group-head .gcount { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--fg-dim); letter-spacing: 0; }
+  .code-grid + .group-head { margin-top: 34px; }
+  .code-note {
+    margin-top: 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; color: var(--fg-dim);
+  }
+  .code-note a { color: var(--fg-muted); }
+  .code-note a:hover { color: var(--fg); }
+
+  /* Archiv-/„Veraltete Übungen"-Kennzeichnung (amber) */
+  .project-tags li.is-archive {
+    color: #e6b27a;
+    background: rgba(230,145,60,0.12);
+    border-color: rgba(230,145,60,0.32);
+  }
+  .flag-archive {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px; letter-spacing: 0.04em;
+    color: #e6b27a;
+    background: rgba(230,145,60,0.10);
+    border: 1px solid rgba(230,145,60,0.30);
+    border-radius: 999px;
+    padding: 6px 13px;
+  }
+  .flag-archive::before {
+    content: ""; width: 6px; height: 6px; border-radius: 50%;
+    background: #e6913c; flex-shrink: 0;
+  }
+  .code-hero .flag-archive { margin-top: 22px; }
+
+  /* ── Python-Code-Viewer ── */
+  .viewer-title {
+    font-family: 'Space Grotesk', sans-serif; font-weight: 700;
+    font-size: clamp(28px, 4vw, 46px); letter-spacing: -0.02em;
+    margin-top: 18px; color: #fff;
+  }
+  .viewer-sub { margin-top: 12px; max-width: 680px; color: var(--fg-muted); font-size: 16px; line-height: 1.55; }
+  .viewer-meta { margin-top: 18px; }
+  .code-file {
+    margin-top: 24px;
+    border: 1px solid var(--border); border-radius: 14px;
+    overflow: hidden; background: #0d0e13;
+  }
+  .code-file-head {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 11px 16px; background: #16181f; border-bottom: 1px solid var(--border);
+  }
+  .cf-name { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--fg); }
+  .cf-lang { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--fg-dim); letter-spacing: 0.1em; text-transform: uppercase; }
+  .code-file pre { margin: 0; overflow-x: auto; }
+  .code-file pre code.hljs {
+    padding: 18px; display: block;
+    font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.65;
+    background: #0d0e13;
+  }
+  .viewer-date {
+    margin-top: 10px;
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    color: var(--fg-dim); letter-spacing: 0.04em;
+  }
+
+  /* ── Pyodide-Runner / Terminal ── */
+  .run-bar { display: flex; align-items: center; gap: 14px; margin-top: 24px; flex-wrap: wrap; }
+  .run-btn {
+    font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600;
+    color: #dff5e4; background: rgba(40,200,64,0.14);
+    border: 1px solid rgba(40,200,64,0.42); border-radius: 10px;
+    padding: 11px 20px; cursor: pointer;
+    transition: background .15s ease-out, border-color .15s ease-out, transform .15s cubic-bezier(.2,.9,.3,1);
+  }
+  .run-btn:hover:not(:disabled) { background: rgba(40,200,64,0.24); border-color: rgba(40,200,64,0.65); transform: translateY(-1px); }
+  .run-btn:disabled { opacity: 0.55; cursor: progress; }
+  .run-hint { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: var(--fg-dim); }
+  .run-hint.norun { color: #d8b48a; }
+  .terminal {
+    margin-top: 16px; background: #06090a;
+    border: 1px solid rgba(40,200,64,0.22); border-radius: 12px;
+    padding: 16px 18px; max-height: 380px; overflow: auto;
+    box-shadow: 0 0 0 1px rgba(40,200,64,0.05) inset;
+  }
+  .term-out {
+    font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.6;
+    color: #d6e9d8; white-space: pre-wrap; word-break: break-word;
+  }
+  .run-btn.stop { color: #f4c9c9; background: rgba(220,70,70,0.14); border-color: rgba(220,70,70,0.42); }
+  .run-btn.stop:hover:not(:disabled) { background: rgba(220,70,70,0.24); border-color: rgba(220,70,70,0.65); }
+  .term-input-row { display: flex; align-items: baseline; gap: 8px; margin-top: 2px; }
+  .term-prompt { font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.6; color: #9fe0a8; white-space: pre-wrap; }
+  .term-input-field {
+    flex: 1; min-width: 0; background: transparent; border: none; outline: none; padding: 0;
+    font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.6;
+    color: #eafff0; caret-color: #28c840;
+  }
 
   /* ───────── MOBILE ───────── */
   @media (max-width: 945px) {
@@ -601,6 +817,9 @@ body::before { animation: bgDrift 18s ease-in-out infinite; }
     .docs-grid { grid-template-columns: 1fr; gap: 12px; }
     .doc-btn { font-size: 20px; padding: 26px 16px; }
     .footer { margin-top: 60px; }
+    .code-hero h1 { font-size: 34px; }
+    .code-hero .lead { font-size: 15px; }
+    .code-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
   }
 
   @media (max-width: 480px) {
@@ -608,4 +827,5 @@ body::before { animation: bgDrift 18s ease-in-out infinite; }
     .hero h1 { font-size: 38px; }
     .contact-card { padding: 18px; }
     .docs-block { padding: 20px; }
+    .code-grid { grid-template-columns: 1fr; }
   }

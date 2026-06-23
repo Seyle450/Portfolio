@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#000000">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="../../../assets/favicon.svg">
+<link rel="stylesheet" href="../../../Extra/fonts.css">
+<link rel="stylesheet" href="../../../style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" crossorigin="anonymous">
+<title>Volumen-Rechner — Code · Elyes Ferchichi</title>
+</head>
+<body>
+<div class="page">
+  <a class="back-link" href="../../../code.html">‹ Zurück zu den Code-Projekten</a>
+  <h1 class="viewer-title">Volumen-Rechner</h1>
+  <div class="viewer-date">Jan. 2023 · Python</div>
+  <p class="viewer-sub">Berechnet das Volumen verschiedener geometrischer Körper anhand der Eingaben.</p>
+  <ul class="project-tags viewer-meta"><li>Python</li></ul>
+  <div class="run-bar">
+    <button id="runBtn" class="run-btn" type="button">▶ Ausführen</button>
+    <button id="stopBtn" class="run-btn stop" type="button" hidden>■ Stop</button>
+    <span class="run-hint">Läuft direkt im Browser (Python via Pyodide) — Ein- und Ausgabe im Terminal.</span>
+  </div>
+  <div id="terminal" class="terminal" hidden>
+    <div id="termOut" class="term-out" aria-live="polite"></div>
+    <div id="termInputRow" class="term-input-row" hidden>
+      <span id="termPrompt" class="term-prompt"></span>
+      <input id="termInput" class="term-input-field" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Eingabe">
+    </div>
+  </div>
+  <div class="code-file">
+    <div class="code-file-head"><span class="cf-name">main.py</span><span class="cf-lang">Python</span></div>
+    <pre><code class="language-python">import os
+
+
+os.system (&#x27;cls&#x27;)
+
+print (&quot;----Volumen Rechner----&quot;)
+print ()
+
+
+print (&quot;Wähle eins der folgenden Körper&quot;)
+print (&quot;-Würfel&quot;)
+print (&quot;-Quader&quot;)
+print (&quot;-Pyramide&quot;)
+print (&quot;-Prisma&quot;)
+print ()
+input (&quot;Zum Fortsetzen [Enter] drücken&quot;)
+
+os.system (&#x27;cls&#x27;)
+
+print (&quot;----Volumen Rechner----&quot;)
+print ()
+
+
+Körper = input (&quot;Körper : &quot;) #um zu wissen was berechnet werden soll
+
+#Würfel
+if Körper.lower() == &quot;würfel&quot;:
+        A = float (input (&quot;A : &quot;))
+        print ()
+        print (&quot;Das Volumen dieses Körpers ist&quot;,A*A*A)
+        print (f&quot;Der Rechenweg ist {A} * {A} * {A} = {A * A * A}&quot;)
+
+#Quader
+if Körper.lower() == &quot;quader&quot;:
+       A = float (input (&quot;A : &quot;))
+       B = float (input (&quot;B : &quot;))
+       H = float (input (&quot;H / C : &quot;))
+    
+       print (&quot;Das Volumen dieses Körpers ist&quot;,A*B*H)
+       print (f&quot;Der Rechenweg ist {A} * {B} * {H} = {A * B * H}&quot;)
+
+#Pyramide
+if Körper.lower() == &quot;pyramide&quot;:
+       G = float (input (&quot;Grundfläche : &quot;))
+       H = float (input (&quot;Höhe : &quot;))
+       print ()
+       print (&quot;Das Volumen dieses Körpers ist&quot;,G * H / 3)
+       print (f&quot;Der Rechenweg ist {G} * {H} / 3 = {G * H / 3}&quot;)
+
+#Prisma
+if Körper.lower() == &quot;prisma&quot;:
+    G = float (input (&quot;Grundfläche : &quot;))
+    H = float (input (&quot;Höhe : &quot;))
+    print ()
+    print (&quot;Das Volumen dieses Körpers ist&quot;,G*H)
+    print (f&quot;Der Rechenweg ist {G} * {H} = {G * H}&quot;)
+
+print()
+print()
+input (&quot;Zum Schliesen [Enter] drücken.&quot;)</code></pre>
+  </div>
+  <footer class="footer">
+    <div>Offen für Möglichkeiten im Web Development.</div>
+    <div class="tag">© 2026 — Elyes Ferchichi</div>
+  </footer>
+</div>
+<script src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js" crossorigin="anonymous"></script>
+<script id="pyproject" type="application/json">{"main": "main.py", "files": {"main.py": "import os\n\n\nos.system ('cls')\n\nprint (\"----Volumen Rechner----\")\nprint ()\n\n\nprint (\"Wähle eins der folgenden Körper\")\nprint (\"-Würfel\")\nprint (\"-Quader\")\nprint (\"-Pyramide\")\nprint (\"-Prisma\")\nprint ()\ninput (\"Zum Fortsetzen [Enter] drücken\")\n\nos.system ('cls')\n\nprint (\"----Volumen Rechner----\")\nprint ()\n\n\nKörper = input (\"Körper : \") #um zu wissen was berechnet werden soll\n\n#Würfel\nif Körper.lower() == \"würfel\":\n        A = float (input (\"A : \"))\n        print ()\n        print (\"Das Volumen dieses Körpers ist\",A*A*A)\n        print (f\"Der Rechenweg ist {A} * {A} * {A} = {A * A * A}\")\n\n#Quader\nif Körper.lower() == \"quader\":\n       A = float (input (\"A : \"))\n       B = float (input (\"B : \"))\n       H = float (input (\"H / C : \"))\n    \n       print (\"Das Volumen dieses Körpers ist\",A*B*H)\n       print (f\"Der Rechenweg ist {A} * {B} * {H} = {A * B * H}\")\n\n#Pyramide\nif Körper.lower() == \"pyramide\":\n       G = float (input (\"Grundfläche : \"))\n       H = float (input (\"Höhe : \"))\n       print ()\n       print (\"Das Volumen dieses Körpers ist\",G * H / 3)\n       print (f\"Der Rechenweg ist {G} * {H} / 3 = {G * H / 3}\")\n\n#Prisma\nif Körper.lower() == \"prisma\":\n    G = float (input (\"Grundfläche : \"))\n    H = float (input (\"Höhe : \"))\n    print ()\n    print (\"Das Volumen dieses Körpers ist\",G*H)\n    print (f\"Der Rechenweg ist {G} * {H} = {G * H}\")\n\nprint()\nprint()\ninput (\"Zum Schliesen [Enter] drücken.\")"}}</script>
+<script src="../_run.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" crossorigin="anonymous"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

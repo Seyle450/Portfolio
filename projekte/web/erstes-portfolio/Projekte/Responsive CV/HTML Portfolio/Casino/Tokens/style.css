@@ -1,0 +1,40 @@
+body {
+    background-color: #DEBDA4;
+    font-family: Georgia, Times, 'Times New Roman', serif;
+    font-weight: bold;
+    
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+    
+}
+h1 {
+    color: #6E0E0E;
+    text-align: center;
+    font-family: Georgia, Times, 'Times New Roman', serif;
+    font-size: 15vw;
+    margin: 0px;
+}
+
+button {
+    color: #6E0E0E;
+    background-color: #BB9277;
+    font-family: Georgia, Times, 'Times New Roman', serif;
+    font-weight: bold;
+    font-size: 5vw;
+    cursor:pointer;
+    border-color: #6E0E0E;
+    border-style: solid;
+    padding: 2vmin;
+    margin: 2vmin;
+}
+div {
+text-align: center;}
+
+hr {
+    border: 1px solid #6E0E0E;
+    background-color: #6E0E0E;
+}
+.hl {
+    width: 50vw;
+}

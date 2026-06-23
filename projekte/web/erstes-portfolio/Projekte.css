@@ -1,0 +1,137 @@
+
+h1 {
+    font-size: 3vmin;
+    color: #fff;
+    margin-top: 3vmin;
+    margin-left: 3vmin;
+    text-align: center;
+    text-align: left;
+    font-weight: 500;
+    font-size: 2.8vmin;
+    margin-block: 1vmin;
+    transition: 500ms;
+}
+h2 {
+    font-size: 2vmin;
+    color: #ffeee4;
+    margin-left: 3vmin;
+    width: 20vw;
+    font-size: 3.5vmin;
+    text-align: left;
+    vertical-align: middle;
+}
+
+
+
+.vl {
+    border-left: 1px solid #fff;
+    height: 50vh;
+    position: absolute;
+    left: 50%;
+    top: 20vh;
+    transform: translateX(-50%);
+}
+.Projekte {
+    position: absolute;
+    top: 20vh;
+    left: 50%;
+    width: 50vw;
+}
+.hl {
+    margin-left: 3vmin;
+    height: 1px;
+    width: 35vw;
+    background-color: #fff;
+}
+.container {
+    display: flex;
+}
+
+.datum {
+    color: transparent;
+    transition: 200ms;
+}
+.container .Projekt {
+    pointer-events: none;
+    opacity: 0;
+    transition: cubic-bezier(0.4, 0, 0.2, 1) 200ms;
+}
+.container:hover .Projekt {
+    pointer-events: auto;
+    opacity: 1;
+    transition: cubic-bezier(0.4, 0, 0.2, 1) 200ms;
+}
+.container:hover .typ {
+    color: transparent;
+    transition: 200ms;
+}
+.container:hover .datum {
+    color: #fff;
+    transition: 200ms;
+}
+.container:hover h1{
+    transition: 150ms;
+    font-weight: 700;
+    font-size: 3.1vmin;
+}
+h3 {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;    position: absolute;
+    text-align: right;
+    font-size: 2.5vmin;
+    color: #fff;
+    font-weight: 300;
+    margin-left: 25vw;
+    margin-top: 1vmin;
+    width: 12vw;
+    transition: 200ms;
+}
+.num {
+    margin-top: 2.7vmin;
+
+}
+@media  (max-width: 768px) {
+    .Projekt {
+        display: none;
+    }
+    .Projekte {
+        position:relative;
+        margin-inline: auto;
+        width: 80vw;
+        left: 0;
+        top: 10vh;
+        height: 100vh;
+    }
+    .ProjektName {
+        font-weight: 600;
+    }
+    .hl {
+        width: 75vw;
+    }
+    h1 {
+        font-size: 3vmin;
+
+    }
+    h2 {
+        font-size: 4vmin;
+    }
+    h3 {
+        font-size: 2.8vmin;
+        margin-left: 47vw;
+        width: 30vw;
+    }
+    .vl {
+        display: none;
+    }
+    
+}
+.Projekt {
+    position: fixed;
+    top: 35vh;  
+    left: 5vmin;
+    width: 40vw;
+    height: 20h;
+    
+}
+a {
+    text-decoration: none;
+}

@@ -1,0 +1,97 @@
+.small {
+    display: none;
+}
+body {
+    text-align: center;
+}
+h1 {
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+p {
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+table {
+    flex: 1;
+    width: 500px;
+    aspect-ratio: 1;
+    margin-inline: auto;
+    border-style: solid;
+}
+.Field {
+    width: 100%;
+    aspect-ratio: 1;
+}
+.more {
+    vertical-align: middle;
+    margin-top: 0.7vh;
+    background-color: rgb(176, 176, 176);
+    border-color: rgb(203, 203, 203);
+    border-style:solid;
+    width: 30%;
+    height: 70%;
+    
+}
+.more:hover {
+    background-color: rgb(182, 182, 182);
+}
+.more:active {
+    background-color: rgb(250, 250, 250);
+}
+.reset {
+    margin-top: 2%;
+
+    width: 20%;
+    height: 5vh;
+    font-weight: 3;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+
+}
+
+footer {
+    position: absolute;
+    width: 100vw;
+    height: 5vh;
+    background-color: rgba(32, 32, 32, 0.398);
+    bottom: 0;
+    left: 0;
+}
+
+.x {
+    background-color: rgb(237, 74, 74);
+    border-color: beige;
+}
+.x:hover {
+    background-color: rgb(223, 72, 72);
+}
+.x:active {
+    background-color: rgb(172, 32, 32);
+}
+
+.o {
+    background-color: rgb(74, 117, 237);
+    border-color: beige;
+}
+.o:hover {
+    background-color: rgb(72, 138, 223);
+}
+.o:active {
+    background-color: rgb(32, 130, 172);
+}
+
+@media (max-width:550px) {
+    table,h1,p,button,footer {
+        display: none;
+    }
+    .small {
+        display: flex;
+        position: absolute;
+        text-align: center;
+        left:50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        font-size: 300%;
+    }
+}
+

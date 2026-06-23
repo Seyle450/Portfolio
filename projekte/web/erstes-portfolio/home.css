@@ -1,0 +1,137 @@
+.show {
+    display: none;
+    }
+
+.Box {
+    background-color: #ffffff9a;
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    width: 50vw;
+    margin-left: 3vmin;
+    margin-top: 3vmin;
+    box-shadow:  5px 5px 20px #0000004b;
+    padding: 3vw;
+    height: 45vh;
+    
+}
+h4,h1,h2,h3 {
+    color: #000;
+    margin: 0;
+    font-size: 2vmin;
+}
+a {
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: none;
+    text-shadow: #000000 0px 0px 1px;
+    transition: all 0.1s ease-in-out;
+}
+h1 {
+    margin-bottom: 15px;
+    color: #CA5508;
+    font-size: 5vmin;
+}
+h2 {
+    font-weight: 400;
+    font-size: 3.8vmin;
+}
+h2 span {
+    color: #CA5508;
+    font-weight: 600;
+}
+h3 {
+    font-weight: 500;
+    font-size: 2.5vmin;
+}
+p {
+    font-size: 3.4vmin;}
+p .n1 {
+    font-weight: 600;
+}
+p .n2 {
+    color: #CA5508;
+}
+
+.img {
+  margin-inline: auto;
+  height: 50vmin;
+  width: auto;
+  margin-top: 5vmin;
+  border-radius: 15px;
+}
+.img:hover {
+  transform: scale(1.05);
+  transition: all 0.2s ease-in-out;
+}
+.imgcontainer:hover {
+  transform: scale(1.05);
+  transition: all 0.2s ease-in-out;
+}
+.container {
+  display: flex;
+}
+button {
+  background-color: #ffffffc9;
+  width: 24vw;
+  height: 8vmin;
+  margin-inline: 1vw;
+  border: 0;
+  border-radius: 1vmin;
+  box-shadow:  5px 5px 20px #0000004b;
+  font-size: 3vmin;
+  font-weight: 600;
+  color: #CA5508;
+}
+button:hover {
+  background-color: #CA5508;
+  color: #fff;
+  transition: all 0.2s ease-in-out;
+}
+button:active {
+  transform: scale(0.9);
+  transition: all 0.05s ease-in-out;
+
+}
+.buttons {
+  padding-inline: 8%;
+  margin-top: 5vmin;
+  position: absolute;
+  bottom: 10vmin;
+}
+@media screen and (max-width: 750px) {
+  .buttons {
+    width: min-content;
+    position: relative;
+    margin-inline: auto;
+  }
+  button  {
+    width: 40vw;
+    margin: 3vmin;
+    
+  }
+  h2 {
+    font-size: 3vmin;
+  }
+  .container {
+    display: block;
+    text-align: center;
+    
+    
+  }
+    .img {
+    width: 100%; height: auto; margin-top: 0px;
+  }
+  .imgcontainer {
+    display: inline-block; position: relative; width: 50vmin; height: 50vmin; overflow: hidden; border-radius: 50%;
+  }
+  .Box {
+    width: 70vw;
+    height: fit-content;
+    margin-inline: auto;
+    margin-bottom: 10vmin;
+    }
+    .show {display: block;}
+    .remove {display: none;}
+}
+

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#000000">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="../../../assets/favicon.svg">
+<link rel="stylesheet" href="../../../Extra/fonts.css">
+<link rel="stylesheet" href="../../../style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" crossorigin="anonymous">
+<title>Währungs-Umrechner — Code · Elyes Ferchichi</title>
+</head>
+<body>
+<div class="page">
+  <a class="back-link" href="../../../code.html">‹ Zurück zu den Code-Projekten</a>
+  <h1 class="viewer-title">Währungs-Umrechner</h1>
+  <div class="viewer-date">Jan. 2023 · Python</div>
+  <p class="viewer-sub">Modular über mehrere Dateien aufgebaut — Logik, Daten und Einstieg sauber getrennt.</p>
+  <ul class="project-tags viewer-meta"><li>Python</li></ul>
+  <div class="run-bar">
+    <button id="runBtn" class="run-btn" type="button">▶ Ausführen</button>
+    <button id="stopBtn" class="run-btn stop" type="button" hidden>■ Stop</button>
+    <span class="run-hint">Läuft direkt im Browser (Python via Pyodide) — Ein- und Ausgabe im Terminal.</span>
+  </div>
+  <div id="terminal" class="terminal" hidden>
+    <div id="termOut" class="term-out" aria-live="polite"></div>
+    <div id="termInputRow" class="term-input-row" hidden>
+      <span id="termPrompt" class="term-prompt"></span>
+      <input id="termInput" class="term-input-field" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Eingabe">
+    </div>
+  </div>
+  <div class="code-file">
+    <div class="code-file-head"><span class="cf-name">Main.py</span><span class="cf-lang">Python</span></div>
+    <pre><code class="language-python">import os
+from Umrechnung import Umrechnen
+
+print(&quot;----Währungs Umrechner----&quot;) # Start Text
+
+print()
+
+print(&quot;---Es werden folgende währungen unterstützt---&quot;)
+print()
+print(&quot;-Euro-EUR&quot;)
+print(&quot;-Dollar-USD&quot;)
+print(&quot;-Pfund Sterling-GBP&quot;)
+print(&quot;-Tunesicher Dinar-TND&quot;)
+print(&quot;-Kuwaitisher Dinar-KWD&quot;)
+
+print()
+
+Eingabe = input(&quot;Eingabe Währung : &quot;).upper()
+Ausgabe = input(&quot;Ausgabe Währung (Liste möglich): &quot;).upper() # Eingabe Zeilen um damit zu rechnen
+Betrag = float (input(&quot;Betrag : &quot;))
+
+
+os.system (&#x27;cls&#x27;)
+
+if Eingabe.upper() not in [&quot;EUR&quot;,&quot;TND&quot;,&quot;USD&quot;,&quot;GBP&quot;,&quot;TND&quot;,&quot;KWD&quot;]:
+    print (&quot;Ungültige Eingabe Währung&quot;)
+    input (&quot;Drücken sie [Enter] zum Schliesen&quot;)
+    quit()
+if Ausgabe.upper() not in [&quot;EUR&quot;,&quot;TND&quot;,&quot;USD&quot;,&quot;GBP&quot;,&quot;TND&quot;,&quot;KWD&quot;,&quot;LISTE&quot;]:
+    print (&quot;Ungültige Ausgabe Währung&quot;)
+    input (&quot;Drücken sie [Enter] zum Schliesen&quot;)
+    quit()
+
+
+
+print(&quot;----Währungs Umrechner----&quot;)
+
+print()
+print(&quot;Orginal Betrag : &quot;, Betrag)
+print(&quot;Orginal Währung : &quot;, Eingabe)
+print()
+Umrechnen(Eingabe,Ausgabe,Betrag)
+# Die rechnungen die gemacht werden müssen um es umzurechnen werden durchgegangen und 1 wird gemacht
+
+
+print()
+input (&quot;Drücke [Enter] Zum schliesen.&quot;)  </code></pre>
+  </div>
+  <div class="code-file">
+    <div class="code-file-head"><span class="cf-name">Umrechnung.py</span><span class="cf-lang">Python</span></div>
+    <pre><code class="language-python">from Währungen import EUR_EUR,EUR_GBP,EUR_KWD,EUR_TND,EUR_USD,GBP_EUR,KWD_EUR,TND_EUR,USD_EUR,GBP_GBP,GBP_KWD,GBP_TND,GBP_USD,KWD_GBP,TND_GBP,USD_GBP,USD_KWD,USD_TND,USD_USD,KWD_USD,TND_USD,TND_KWD,TND_TND,KWD_TND,KWD_KWD
+def Umrechnen(Eingabe,Ausgabe,Betrag):
+    if Eingabe.upper() == &quot;EUR&quot; and Ausgabe.lower() == &quot;liste&quot;:
+        print(&quot;Dollar : &quot;,EUR_USD * Betrag)
+        print(&quot;Brittischer Pfund : &quot;,EUR_GBP * Betrag)
+        print(&quot;Tunesicher Dinar : &quot;,EUR_TND * Betrag)
+        print(&quot;Kuwaitischer Dinar : &quot;,EUR_KWD * Betrag)
+    if Eingabe.upper() == &quot;USD&quot; and Ausgabe.lower() == &quot;liste&quot;:
+        print(&quot;Euro : &quot;,USD_EUR * Betrag)
+        print(&quot;Brittischer Pfund : &quot;,USD_GBP * Betrag)
+        print(&quot;Tunesicher Dinar : &quot;,USD_TND * Betrag)
+        print(&quot;Kuwaitischer Dinar : &quot;,USD_KWD * Betrag)
+    if Eingabe.upper() == &quot;GBP&quot; and Ausgabe.lower() == &quot;liste&quot;:
+        print(&quot;Euro : &quot;,GBP_EUR * Betrag)
+        print(&quot;Dollar : &quot;,GBP_USD * Betrag)
+        print(&quot;Tunesicher Dinar : &quot;,GBP_TND * Betrag)
+        print(&quot;Kuwaitischer Dinar : &quot;,GBP_KWD * Betrag)
+    if Eingabe.upper() == &quot;TND&quot; and Ausgabe.lower() == &quot;liste&quot;:
+        print(&quot;Euro : &quot;,TND_EUR * Betrag)
+        print(&quot;Dollar : &quot;,TND_USD * Betrag)
+        print(&quot;Brittischer Pfund : &quot;,TND_GBP * Betrag)
+        print(&quot;Kuwaitischer Dinar : &quot;,TND_KWD * Betrag)
+    if Eingabe.upper() == &quot;KWD&quot; and Ausgabe.lower() == &quot;liste&quot;:
+        print(&quot;Euro : &quot;,KWD_EUR * Betrag)
+        print(&quot;Dollar : &quot;,KWD_USD * Betrag)
+        print(&quot;Brittischer Pfund : &quot;,KWD_GBP * Betrag)
+        print(&quot;Tunesicher Dinar : &quot;,KWD_TND * Betrag)
+
+    if Eingabe.upper() == &quot;EUR&quot; and Ausgabe.upper() == &quot;EUR&quot;:
+        print(&quot;Euro : &quot;,EUR_EUR * Betrag)
+    if Eingabe.upper() == &quot;EUR&quot; and Ausgabe.upper() == &quot;GBP&quot;:
+        print(&quot;Britischer Pfund : &quot;,EUR_GBP * Betrag)
+    if Eingabe.upper() == &quot;EUR&quot; and Ausgabe.upper() == &quot;USD&quot;:
+        print(&quot;Dollar : &quot;,EUR_USD * Betrag)
+    if Eingabe.upper() == &quot;EUR&quot; and Ausgabe.upper() == &quot;TND&quot;:
+        print(&quot;Tunesicher Dinar : &quot;,EUR_TND * Betrag)
+    if Eingabe.upper() == &quot;EUR&quot; and Ausgabe.upper() == &quot;KWD&quot;:
+        print(&quot;Kuwaitischer Dinar : &quot;,EUR_KWD * Betrag)
+
+    if Eingabe.upper() == &quot;USD&quot; and Ausgabe.upper() == &quot;EUR&quot;:
+        print(&quot;Euro : &quot;,USD_EUR * Betrag)
+    if Eingabe.upper() == &quot;USD&quot; and Ausgabe.upper() == &quot;GBP&quot;:
+        print(&quot;Britischer Pfund : &quot;,USD_GBP * Betrag)
+    if Eingabe.upper() == &quot;USD&quot; and Ausgabe.upper() == &quot;USD&quot;:
+        print(&quot;Dollar : &quot;,USD_USD * Betrag)
+    if Eingabe.upper() == &quot;USD&quot; and Ausgabe.upper() == &quot;TND&quot;:
+        print(&quot;Tunesicher Dinar : &quot;,USD_TND * Betrag)
+    if Eingabe.upper() == &quot;USD&quot; and Ausgabe.upper() == &quot;KWD&quot;:
+        print(&quot;Kuwaitischer Dinar : &quot;,USD_KWD * Betrag)
+
+    if Eingabe.upper() == &quot;GBP&quot; and Ausgabe.upper() == &quot;EUR&quot;:
+        print(&quot;Euro : &quot;,GBP_EUR * Betrag)
+    if Eingabe.upper() == &quot;GBP&quot; and Ausgabe.upper() == &quot;GBP&quot;:
+        print(&quot;Britischer Pfund : &quot;,GBP_GBP * Betrag)
+    if Eingabe.upper() == &quot;GBP&quot; and Ausgabe.upper() == &quot;USD&quot;:
+        print(&quot;Dollar : &quot;,GBP_USD * Betrag)
+    if Eingabe.upper() == &quot;GBP&quot; and Ausgabe.upper() == &quot;TND&quot;:
+        print(&quot;Tunesicher Dinar : &quot;,GBP_TND * Betrag)
+    if Eingabe.upper() == &quot;GBP&quot; and Ausgabe.upper() == &quot;KWD&quot;:
+        print(&quot;Kuwaitischer Dinar : &quot;,GBP_KWD * Betrag)
+
+    if Eingabe.upper() == &quot;TND&quot; and Ausgabe.upper() == &quot;EUR&quot;:
+        print(&quot;Euro : &quot;,TND_EUR * Betrag)
+    if Eingabe.upper() == &quot;TND&quot; and Ausgabe.upper() == &quot;GBP&quot;:
+        print(&quot;Britischer Pfund : &quot;,TND_GBP * Betrag)
+    if Eingabe.upper() == &quot;TND&quot; and Ausgabe.upper() == &quot;USD&quot;:
+        print(&quot;Dollar : &quot;,TND_USD * Betrag)
+    if Eingabe.upper() == &quot;TND&quot; and Ausgabe.upper() == &quot;TND&quot;:
+        print(&quot;Tunesicher Dinar : &quot;,TND_TND * Betrag)
+    if Eingabe.upper() == &quot;TND&quot; and Ausgabe.upper() == &quot;KWD&quot;:
+        print(&quot;Kuwaitischer Dinar : &quot;,TND_KWD * Betrag)
+
+    if Eingabe.upper() == &quot;KWD&quot; and Ausgabe.upper() == &quot;EUR&quot;:
+        print(&quot;Euro : &quot;,KWD_EUR * Betrag)
+    if Eingabe.upper() == &quot;KWD&quot; and Ausgabe.upper() == &quot;GBP&quot;:
+        print(&quot;Britischer Pfund : &quot;,KWD_GBP * Betrag)
+    if Eingabe.upper() == &quot;KWD&quot; and Ausgabe.upper() == &quot;USD&quot;:
+        print(&quot;Dollar : &quot;,KWD_USD * Betrag)
+    if Eingabe.upper() == &quot;KWD&quot; and Ausgabe.upper() == &quot;TND&quot;:
+        print(&quot;Tunesicher Dinar : &quot;,KWD_TND * Betrag)
+    if Eingabe.upper() == &quot;KWD&quot; and Ausgabe.upper() == &quot;KWD&quot;:
+        print(&quot;Kuwaitischer Dinar : &quot;,KWD_KWD * Betrag)</code></pre>
+  </div>
+  <div class="code-file">
+    <div class="code-file-head"><span class="cf-name">Währungen.py</span><span class="cf-lang">Python</span></div>
+    <pre><code class="language-python">EUR_EUR = 1.00
+EUR_USD = 1.08
+EUR_GBP = 0.89
+EUR_TND = 3.33
+EUR_KWD = 0.33
+
+USD_EUR = 0.92
+USD_USD = 1.00
+USD_GBP = 0.82
+USD_TND = 3.07
+USD_KWD = 0.31
+
+GBP_EUR = 1.13
+GBP_USD = 1.22
+GBP_GBP = 1.00
+GBP_TND = 3.76
+GBP_KWD = 0.37
+
+TND_EUR = 0.30
+TND_USD = 0.33
+TND_GBP = 0.27
+TND_TND = 1.00
+TND_KWD = 0.099
+
+KWD_EUR = 3.03
+KWD_USD = 3.29
+KWD_GBP = 2.69
+KWD_TND = 10.10
+KWD_KWD = 1.00</code></pre>
+  </div>
+  <footer class="footer">
+    <div>Offen für Möglichkeiten im Web Development.</div>
+    <div class="tag">© 2026 — Elyes Ferchichi</div>
+  </footer>
+</div>
+<script src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js" crossorigin="anonymous"></script>
+<script id="pyproject" type="application/json">{"main": "Main.py", "files": {"Main.py": "import os\nfrom Umrechnung import Umrechnen\n\nprint(\"----Währungs Umrechner----\") # Start Text\n\nprint()\n\nprint(\"---Es werden folgende währungen unterstützt---\")\nprint()\nprint(\"-Euro-EUR\")\nprint(\"-Dollar-USD\")\nprint(\"-Pfund Sterling-GBP\")\nprint(\"-Tunesicher Dinar-TND\")\nprint(\"-Kuwaitisher Dinar-KWD\")\n\nprint()\n\nEingabe = input(\"Eingabe Währung : \").upper()\nAusgabe = input(\"Ausgabe Währung (Liste möglich): \").upper() # Eingabe Zeilen um damit zu rechnen\nBetrag = float (input(\"Betrag : \"))\n\n\nos.system ('cls')\n\nif Eingabe.upper() not in [\"EUR\",\"TND\",\"USD\",\"GBP\",\"TND\",\"KWD\"]:\n    print (\"Ungültige Eingabe Währung\")\n    input (\"Drücken sie [Enter] zum Schliesen\")\n    quit()\nif Ausgabe.upper() not in [\"EUR\",\"TND\",\"USD\",\"GBP\",\"TND\",\"KWD\",\"LISTE\"]:\n    print (\"Ungültige Ausgabe Währung\")\n    input (\"Drücken sie [Enter] zum Schliesen\")\n    quit()\n\n\n\nprint(\"----Währungs Umrechner----\")\n\nprint()\nprint(\"Orginal Betrag : \", Betrag)\nprint(\"Orginal Währung : \", Eingabe)\nprint()\nUmrechnen(Eingabe,Ausgabe,Betrag)\n# Die rechnungen die gemacht werden müssen um es umzurechnen werden durchgegangen und 1 wird gemacht\n\n\nprint()\ninput (\"Drücke [Enter] Zum schliesen.\")  ", "Umrechnung.py": "from Währungen import EUR_EUR,EUR_GBP,EUR_KWD,EUR_TND,EUR_USD,GBP_EUR,KWD_EUR,TND_EUR,USD_EUR,GBP_GBP,GBP_KWD,GBP_TND,GBP_USD,KWD_GBP,TND_GBP,USD_GBP,USD_KWD,USD_TND,USD_USD,KWD_USD,TND_USD,TND_KWD,TND_TND,KWD_TND,KWD_KWD\ndef Umrechnen(Eingabe,Ausgabe,Betrag):\n    if Eingabe.upper() == \"EUR\" and Ausgabe.lower() == \"liste\":\n        print(\"Dollar : \",EUR_USD * Betrag)\n        print(\"Brittischer Pfund : \",EUR_GBP * Betrag)\n        print(\"Tunesicher Dinar : \",EUR_TND * Betrag)\n        print(\"Kuwaitischer Dinar : \",EUR_KWD * Betrag)\n    if Eingabe.upper() == \"USD\" and Ausgabe.lower() == \"liste\":\n        print(\"Euro : \",USD_EUR * Betrag)\n        print(\"Brittischer Pfund : \",USD_GBP * Betrag)\n        print(\"Tunesicher Dinar : \",USD_TND * Betrag)\n        print(\"Kuwaitischer Dinar : \",USD_KWD * Betrag)\n    if Eingabe.upper() == \"GBP\" and Ausgabe.lower() == \"liste\":\n        print(\"Euro : \",GBP_EUR * Betrag)\n        print(\"Dollar : \",GBP_USD * Betrag)\n        print(\"Tunesicher Dinar : \",GBP_TND * Betrag)\n        print(\"Kuwaitischer Dinar : \",GBP_KWD * Betrag)\n    if Eingabe.upper() == \"TND\" and Ausgabe.lower() == \"liste\":\n        print(\"Euro : \",TND_EUR * Betrag)\n        print(\"Dollar : \",TND_USD * Betrag)\n        print(\"Brittischer Pfund : \",TND_GBP * Betrag)\n        print(\"Kuwaitischer Dinar : \",TND_KWD * Betrag)\n    if Eingabe.upper() == \"KWD\" and Ausgabe.lower() == \"liste\":\n        print(\"Euro : \",KWD_EUR * Betrag)\n        print(\"Dollar : \",KWD_USD * Betrag)\n        print(\"Brittischer Pfund : \",KWD_GBP * Betrag)\n        print(\"Tunesicher Dinar : \",KWD_TND * Betrag)\n\n    if Eingabe.upper() == \"EUR\" and Ausgabe.upper() == \"EUR\":\n        print(\"Euro : \",EUR_EUR * Betrag)\n    if Eingabe.upper() == \"EUR\" and Ausgabe.upper() == \"GBP\":\n        print(\"Britischer Pfund : \",EUR_GBP * Betrag)\n    if Eingabe.upper() == \"EUR\" and Ausgabe.upper() == \"USD\":\n        print(\"Dollar : \",EUR_USD * Betrag)\n    if Eingabe.upper() == \"EUR\" and Ausgabe.upper() == \"TND\":\n        print(\"Tunesicher Dinar : \",EUR_TND * Betrag)\n    if Eingabe.upper() == \"EUR\" and Ausgabe.upper() == \"KWD\":\n        print(\"Kuwaitischer Dinar : \",EUR_KWD * Betrag)\n\n    if Eingabe.upper() == \"USD\" and Ausgabe.upper() == \"EUR\":\n        print(\"Euro : \",USD_EUR * Betrag)\n    if Eingabe.upper() == \"USD\" and Ausgabe.upper() == \"GBP\":\n        print(\"Britischer Pfund : \",USD_GBP * Betrag)\n    if Eingabe.upper() == \"USD\" and Ausgabe.upper() == \"USD\":\n        print(\"Dollar : \",USD_USD * Betrag)\n    if Eingabe.upper() == \"USD\" and Ausgabe.upper() == \"TND\":\n        print(\"Tunesicher Dinar : \",USD_TND * Betrag)\n    if Eingabe.upper() == \"USD\" and Ausgabe.upper() == \"KWD\":\n        print(\"Kuwaitischer Dinar : \",USD_KWD * Betrag)\n\n    if Eingabe.upper() == \"GBP\" and Ausgabe.upper() == \"EUR\":\n        print(\"Euro : \",GBP_EUR * Betrag)\n    if Eingabe.upper() == \"GBP\" and Ausgabe.upper() == \"GBP\":\n        print(\"Britischer Pfund : \",GBP_GBP * Betrag)\n    if Eingabe.upper() == \"GBP\" and Ausgabe.upper() == \"USD\":\n        print(\"Dollar : \",GBP_USD * Betrag)\n    if Eingabe.upper() == \"GBP\" and Ausgabe.upper() == \"TND\":\n        print(\"Tunesicher Dinar : \",GBP_TND * Betrag)\n    if Eingabe.upper() == \"GBP\" and Ausgabe.upper() == \"KWD\":\n        print(\"Kuwaitischer Dinar : \",GBP_KWD * Betrag)\n\n    if Eingabe.upper() == \"TND\" and Ausgabe.upper() == \"EUR\":\n        print(\"Euro : \",TND_EUR * Betrag)\n    if Eingabe.upper() == \"TND\" and Ausgabe.upper() == \"GBP\":\n        print(\"Britischer Pfund : \",TND_GBP * Betrag)\n    if Eingabe.upper() == \"TND\" and Ausgabe.upper() == \"USD\":\n        print(\"Dollar : \",TND_USD * Betrag)\n    if Eingabe.upper() == \"TND\" and Ausgabe.upper() == \"TND\":\n        print(\"Tunesicher Dinar : \",TND_TND * Betrag)\n    if Eingabe.upper() == \"TND\" and Ausgabe.upper() == \"KWD\":\n        print(\"Kuwaitischer Dinar : \",TND_KWD * Betrag)\n\n    if Eingabe.upper() == \"KWD\" and Ausgabe.upper() == \"EUR\":\n        print(\"Euro : \",KWD_EUR * Betrag)\n    if Eingabe.upper() == \"KWD\" and Ausgabe.upper() == \"GBP\":\n        print(\"Britischer Pfund : \",KWD_GBP * Betrag)\n    if Eingabe.upper() == \"KWD\" and Ausgabe.upper() == \"USD\":\n        print(\"Dollar : \",KWD_USD * Betrag)\n    if Eingabe.upper() == \"KWD\" and Ausgabe.upper() == \"TND\":\n        print(\"Tunesicher Dinar : \",KWD_TND * Betrag)\n    if Eingabe.upper() == \"KWD\" and Ausgabe.upper() == \"KWD\":\n        print(\"Kuwaitischer Dinar : \",KWD_KWD * Betrag)", "Währungen.py": "EUR_EUR = 1.00\nEUR_USD = 1.08\nEUR_GBP = 0.89\nEUR_TND = 3.33\nEUR_KWD = 0.33\n\nUSD_EUR = 0.92\nUSD_USD = 1.00\nUSD_GBP = 0.82\nUSD_TND = 3.07\nUSD_KWD = 0.31\n\nGBP_EUR = 1.13\nGBP_USD = 1.22\nGBP_GBP = 1.00\nGBP_TND = 3.76\nGBP_KWD = 0.37\n\nTND_EUR = 0.30\nTND_USD = 0.33\nTND_GBP = 0.27\nTND_TND = 1.00\nTND_KWD = 0.099\n\nKWD_EUR = 3.03\nKWD_USD = 3.29\nKWD_GBP = 2.69\nKWD_TND = 10.10\nKWD_KWD = 1.00"}}</script>
+<script src="../_run.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" crossorigin="anonymous"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

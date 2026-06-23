@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#000000">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="../../../assets/favicon.svg">
+<link rel="stylesheet" href="../../../Extra/fonts.css">
+<link rel="stylesheet" href="../../../style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" crossorigin="anonymous">
+<title>Passwort-Generator — Code · Elyes Ferchichi</title>
+</head>
+<body>
+<div class="page">
+  <a class="back-link" href="../../../code.html">‹ Zurück zu den Code-Projekten</a>
+  <h1 class="viewer-title">Passwort-Generator</h1>
+  <div class="viewer-date">Jan. 2023 · Python</div>
+  <p class="viewer-sub">Erzeugt sichere Zufallspasswörter nach wählbarer Länge und Zeichensatz.</p>
+  <ul class="project-tags viewer-meta"><li>Python</li></ul>
+  <div class="run-bar">
+    <button id="runBtn" class="run-btn" type="button">▶ Ausführen</button>
+    <button id="stopBtn" class="run-btn stop" type="button" hidden>■ Stop</button>
+    <span class="run-hint">Läuft direkt im Browser (Python via Pyodide) — Ein- und Ausgabe im Terminal.</span>
+  </div>
+  <div id="terminal" class="terminal" hidden>
+    <div id="termOut" class="term-out" aria-live="polite"></div>
+    <div id="termInputRow" class="term-input-row" hidden>
+      <span id="termPrompt" class="term-prompt"></span>
+      <input id="termInput" class="term-input-field" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Eingabe">
+    </div>
+  </div>
+  <div class="code-file">
+    <div class="code-file-head"><span class="cf-name">main.py</span><span class="cf-lang">Python</span></div>
+    <pre><code class="language-python">import os
+import random
+import string
+
+
+def get_password(length):
+    
+    result_str = &#x27;&#x27;.join(random.choice(string.ascii_letters) for i in range(length))
+    
+    print (&quot;Password : &quot;)
+    print(result_str)
+    print ()
+
+
+print (&quot;---Password Generator---&quot;)
+print ()
+Ziffern = float (input (&quot;Länge : &quot;))
+
+if Ziffern &lt; 3 :
+    input (&quot;Ungültige länge - Drücke [Enter] zum schliesen.&quot;)
+    quit
+
+if Ziffern == 3 :
+    get_password(3)
+
+if Ziffern == 4 :
+    get_password(4)
+
+if Ziffern == 5 :
+    get_password(5)
+
+if Ziffern == 6 :
+    get_password(6)
+
+if Ziffern == 7 :
+    get_password(7)
+
+if Ziffern == 8 :
+    get_password(8)
+
+if Ziffern == 9 :
+    get_password(9)
+
+if Ziffern == 10 :
+    get_password(10)
+
+if Ziffern == 11 :
+    get_password(11)
+
+if Ziffern &gt; 11 :
+    input (&quot;Ungültige länge - Drücke [Enter] zum schliesen.&quot;)
+    quit
+
+input (&quot;Zum schliesen [Enter] drücken.&quot;)</code></pre>
+  </div>
+  <footer class="footer">
+    <div>Offen für Möglichkeiten im Web Development.</div>
+    <div class="tag">© 2026 — Elyes Ferchichi</div>
+  </footer>
+</div>
+<script src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js" crossorigin="anonymous"></script>
+<script id="pyproject" type="application/json">{"main": "main.py", "files": {"main.py": "import os\nimport random\nimport string\n\n\ndef get_password(length):\n    \n    result_str = ''.join(random.choice(string.ascii_letters) for i in range(length))\n    \n    print (\"Password : \")\n    print(result_str)\n    print ()\n\n\nprint (\"---Password Generator---\")\nprint ()\nZiffern = float (input (\"Länge : \"))\n\nif Ziffern < 3 :\n    input (\"Ungültige länge - Drücke [Enter] zum schliesen.\")\n    quit\n\nif Ziffern == 3 :\n    get_password(3)\n\nif Ziffern == 4 :\n    get_password(4)\n\nif Ziffern == 5 :\n    get_password(5)\n\nif Ziffern == 6 :\n    get_password(6)\n\nif Ziffern == 7 :\n    get_password(7)\n\nif Ziffern == 8 :\n    get_password(8)\n\nif Ziffern == 9 :\n    get_password(9)\n\nif Ziffern == 10 :\n    get_password(10)\n\nif Ziffern == 11 :\n    get_password(11)\n\nif Ziffern > 11 :\n    input (\"Ungültige länge - Drücke [Enter] zum schliesen.\")\n    quit\n\ninput (\"Zum schliesen [Enter] drücken.\")"}}</script>
+<script src="../_run.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" crossorigin="anonymous"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

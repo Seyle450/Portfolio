@@ -1,0 +1,99 @@
+body {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    font-family: "Segoe UI", sans-serif;
+    background-color: #e5cbe2;
+}
+header {
+    background-color: #f693d7;
+    height: 8vh;
+    padding-inline: 5vw;
+    display: flex;
+    outline: rgb(255, 255, 255) solid 5px;
+}
+header .Logo {
+    height: 80%;
+    display: flex;
+    margin-top: auto;
+    margin-bottom: auto;
+    
+    img {
+        height: 100%;
+    }
+}
+header .navigation {
+    margin-right: 0;
+    margin-left: auto;
+    margin-block: auto;
+    nav {
+        flex-grow: 1;
+        display: flex;
+        gap: 2vw;
+        
+        a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+    }
+}
+
+.Home {
+    display: flex;
+    padding-inline: 5vw;
+    padding-block: 5vh;
+    .HomeText {
+        color: #be79d3;
+        font-weight: 600;
+        width: 60vw;
+        height: 36vw;
+        h1 {
+        height: 20%;
+        font-size: min(6vw, 200px);
+        margin: 0;
+        }
+        p {
+        height: 60%;
+        margin: 0;
+        font-size: min(3vw, 60px);
+        }
+
+        button {
+        font-size: 2vw;
+        padding: 2vw 5vw;
+        border: 0;
+        border-radius: 100px;
+        background-color: #d58fdb;
+        color: #ffffff;
+        font-weight: Bold;
+        transition: all 0.5s;
+        -webkit-transition: all 0.5s;
+        margin-bottom: 0;
+        margin-top: auto;
+        }
+        button:hover {
+        background-color: #dd92d3;
+        box-shadow: 0 0 20px #750e7950;
+        transform: scale(1.1);
+        }
+        button:active {
+        background-color: #ca3dcf;
+        transition: all 0.25s;
+        -webkit-transition: all 0.25s;
+        box-shadow: none;
+        transform: scale(0.98);
+        }
+    }
+
+    .HomeLogo {
+    width: 40vw;
+    height: 33vw;
+    margin-left: auto;
+    margin-top: 2vh;
+    }
+}
+

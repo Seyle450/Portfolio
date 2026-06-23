@@ -1,0 +1,78 @@
+body {
+    background-color: #333;
+    color: whitesmoke;
+}
+
+table,tr,th,td,caption {
+    border: 1px solid white;
+    border-collapse: collapse;
+    padding: 0.5rem;
+    margin: 0px auto;
+}
+html {
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+}
+button {
+    background-color: rgb(70, 70, 70);
+    border-color: whitesmoke;
+    margin-inline: 10px;
+    color: white;
+    margin: 7px;
+    outline-width: 1px;
+    font-family: Arial, Helvetica, sans-serif;
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-weight: bold;
+}
+h1,h2,h3 {
+    text-shadow: 3px 3px rgb(43, 43, 43);
+    color: rgb(216, 167, 5);
+}
+legend {
+    font-weight: bold;
+}
+input {
+    background-color: #333;
+    border-style: ridge;
+    margin: 4px;
+    color: white;
+
+}
+textarea {
+    background-color: #333;
+    margin: 4px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: white;
+}
+button:hover {
+    transition: 50ms;
+    margin: auto;
+    padding: 6px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.underline {
+    font-style: italic;
+    font-size: auto;
+}
+button:active {
+    transition: 100ms;
+    color: rgb(216, 167, 5);
+
+}
+.adress {
+    margin: 15px;
+    font-style: italic;
+}
+
+
+.Logo {
+    height: 50vmin;
+}
+
+.Location {
+    width: 80vw;
+    height: auto;
+}

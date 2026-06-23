@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#000000">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="../../../assets/favicon.svg">
+<link rel="stylesheet" href="../../../Extra/fonts.css">
+<link rel="stylesheet" href="../../../style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" crossorigin="anonymous">
+<title>Nummern Raten — Code · Elyes Ferchichi</title>
+</head>
+<body>
+<div class="page">
+  <a class="back-link" href="../../../code.html">‹ Zurück zu den Code-Projekten</a>
+  <h1 class="viewer-title">Nummern Raten</h1>
+  <div class="viewer-date">Nov. 2024 · Python</div>
+  <p class="viewer-sub">Zahlenraten als Spieler- und als Bot-Version, die sich per Suchstrategie an die Zahl herantastet.</p>
+  <ul class="project-tags viewer-meta"><li>Python</li></ul>
+  <div class="run-bar">
+    <button id="runBtn" class="run-btn" type="button">▶ Ausführen</button>
+    <button id="stopBtn" class="run-btn stop" type="button" hidden>■ Stop</button>
+    <span class="run-hint">Läuft direkt im Browser (Python via Pyodide) — Ein- und Ausgabe im Terminal.</span>
+  </div>
+  <div id="terminal" class="terminal" hidden>
+    <div id="termOut" class="term-out" aria-live="polite"></div>
+    <div id="termInputRow" class="term-input-row" hidden>
+      <span id="termPrompt" class="term-prompt"></span>
+      <input id="termInput" class="term-input-field" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Eingabe">
+    </div>
+  </div>
+  <div class="code-file">
+    <div class="code-file-head"><span class="cf-name">spieler.py</span><span class="cf-lang">Python</span></div>
+    <pre><code class="language-python">import random
+import os
+
+
+os.system (&#x27;cls&#x27;)
+print (&quot;----Nummern Erraten----&quot;)
+print()
+
+Max = input (&quot;Max Number : &quot;)
+print()
+print(&quot;---------------&quot;)
+print ()
+if Max.isdigit:
+    Max = int(Max)
+Max_r = Max + 1
+
+r = random.randrange(Max_r)
+Versuche = 0
+
+print (&quot;Eine nummer von 0 -&quot;,Max,&quot;wurde generiert versuche sie zu erraten.&quot;)
+print()
+input (&quot;Drücke [Enter] zum starten&quot;)
+
+
+os.system (&#x27;cls&#x27;)
+
+
+print (&quot;---Errate die Nummer---&quot;)
+print()
+Guess = input (&quot;Nummer : &quot;)
+if Guess.isdigit:
+    Guess = int(Guess)
+
+Versuche = Versuche + 1
+
+while Guess != r :
+    print (&quot;---Errate die Nummer---&quot;)
+    
+
+    if Guess &gt; r: 
+        os.system (&#x27;cls&#x27;)
+        print (&quot;---Lower---&quot;)
+
+    elif Guess &lt; r:
+        os.system (&#x27;cls&#x27;)
+        print (&quot;---Higher---&quot;)
+
+
+   
+   
+    print()
+    print (&quot;Letzer Versuch : &quot;,Guess)
+    print()
+    Guess = input (&quot;Nummer : &quot;)
+    Versuche = Versuche + 1
+    if Guess.isdigit:
+        Guess = int(Guess)
+
+
+    continue     
+    
+    
+    
+if Guess == r:  
+        os.system (&#x27;cls&#x27;)
+        print (&quot;Gut gemacht du hast die Richtige Zahl erraten!&quot;)
+        print()
+        print (&quot;Richtige Nummer : &quot;, Guess)
+        print(&quot;Versuche : &quot;, Versuche)
+        print ()
+        print()
+        input(&quot;Zum schliesen [Enter] Drücken&quot;)
+
+</code></pre>
+  </div>
+  <div class="code-file">
+    <div class="code-file-head"><span class="cf-name">bot.py</span><span class="cf-lang">Python</span></div>
+    <pre><code class="language-python">
+import random
+import os
+
+while True:
+    os.system (&#x27;cls&#x27;)
+
+    Min = 0
+    Max = 1000001
+    Versuche = 1
+    Guess = False
+
+    print (&quot;----Nummern Erraten (BOT)----&quot;)
+    print ()
+    print (&quot;Denke dir eine nummer zwischen 1-1.000.000 aus und merke sie dir.&quot;)
+    print ()
+    input (&quot;Drücke [Enter] wenn du eine nummer hast.&quot;)
+
+    os.system (&#x27;cls&#x27;)
+
+
+    while Guess != True:
+        os.system (&#x27;cls&#x27;)
+        Versuch = random.randrange(Min,Max)
+
+        print (&quot;----Nummern Erraten (BOT)----&quot;)
+        print ()
+        print (f&quot;---{Versuch}---&quot;)
+        print()
+        Status = input (&quot;Höher (H) oder Niedriger (N) oder Richtig (R) : &quot;)
+
+
+        if Status.upper() == &quot;R&quot;:
+            Guess = True
+        elif Status.upper() == &quot;H&quot;:
+            Min = Versuch
+            Versuche = Versuche + 1
+        elif Status.upper() == &quot;N&quot;:
+            Max = Versuch
+            Versuche = Versuche + 1
+        elif Status.upper() != &quot;R&quot; or &quot;H&quot; or &quot;N&quot;:
+            print (&quot;Schreiben sie bitten nur R / H / N.&quot;)
+            input (&quot;Drücken sie [Enter] zum Fortfahren&quot;)
+            Status = input (&quot;Höher (H) oder Niedriger (N) oder Richtig (R) : &quot;)
+
+            if Status.upper() == &quot;R&quot;:
+                Guess = True
+            elif Status.upper() == &quot;H&quot;:
+                Min = Versuch
+                Versuche = Versuche + 1
+            elif Status.upper() == &quot;N&quot;:
+                Max = Versuch
+                Versuche = Versuche + 1
+            elif Status.upper() != &quot;R&quot; or &quot;H&quot; or &quot;N&quot;:
+                input (&quot;Ein Fehler ist aufgetreten drücken sie [Enter] zum schliesen.&quot;)
+                quit()
+
+    print ()
+    print (f&quot;Der Bot hat deine Zahl nach {Versuche} herausgefunden.&quot;)
+    print ()
+    Weiter = input (&quot;Schreibe W wenn du Weiter Spielen willst.  &quot;)
+
+    if Weiter.upper != &quot;W&quot;:
+        quit()
+        </code></pre>
+  </div>
+  <footer class="footer">
+    <div>Offen für Möglichkeiten im Web Development.</div>
+    <div class="tag">© 2026 — Elyes Ferchichi</div>
+  </footer>
+</div>
+<script src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js" crossorigin="anonymous"></script>
+<script id="pyproject" type="application/json">{"main": "spieler.py", "files": {"spieler.py": "import random\nimport os\n\n\nos.system ('cls')\nprint (\"----Nummern Erraten----\")\nprint()\n\nMax = input (\"Max Number : \")\nprint()\nprint(\"---------------\")\nprint ()\nif Max.isdigit:\n    Max = int(Max)\nMax_r = Max + 1\n\nr = random.randrange(Max_r)\nVersuche = 0\n\nprint (\"Eine nummer von 0 -\",Max,\"wurde generiert versuche sie zu erraten.\")\nprint()\ninput (\"Drücke [Enter] zum starten\")\n\n\nos.system ('cls')\n\n\nprint (\"---Errate die Nummer---\")\nprint()\nGuess = input (\"Nummer : \")\nif Guess.isdigit:\n    Guess = int(Guess)\n\nVersuche = Versuche + 1\n\nwhile Guess != r :\n    print (\"---Errate die Nummer---\")\n    \n\n    if Guess > r: \n        os.system ('cls')\n        print (\"---Lower---\")\n\n    elif Guess < r:\n        os.system ('cls')\n        print (\"---Higher---\")\n\n\n   \n   \n    print()\n    print (\"Letzer Versuch : \",Guess)\n    print()\n    Guess = input (\"Nummer : \")\n    Versuche = Versuche + 1\n    if Guess.isdigit:\n        Guess = int(Guess)\n\n\n    continue     \n    \n    \n    \nif Guess == r:  \n        os.system ('cls')\n        print (\"Gut gemacht du hast die Richtige Zahl erraten!\")\n        print()\n        print (\"Richtige Nummer : \", Guess)\n        print(\"Versuche : \", Versuche)\n        print ()\n        print()\n        input(\"Zum schliesen [Enter] Drücken\")\n\n", "bot.py": "\nimport random\nimport os\n\nwhile True:\n    os.system ('cls')\n\n    Min = 0\n    Max = 1000001\n    Versuche = 1\n    Guess = False\n\n    print (\"----Nummern Erraten (BOT)----\")\n    print ()\n    print (\"Denke dir eine nummer zwischen 1-1.000.000 aus und merke sie dir.\")\n    print ()\n    input (\"Drücke [Enter] wenn du eine nummer hast.\")\n\n    os.system ('cls')\n\n\n    while Guess != True:\n        os.system ('cls')\n        Versuch = random.randrange(Min,Max)\n\n        print (\"----Nummern Erraten (BOT)----\")\n        print ()\n        print (f\"---{Versuch}---\")\n        print()\n        Status = input (\"Höher (H) oder Niedriger (N) oder Richtig (R) : \")\n\n\n        if Status.upper() == \"R\":\n            Guess = True\n        elif Status.upper() == \"H\":\n            Min = Versuch\n            Versuche = Versuche + 1\n        elif Status.upper() == \"N\":\n            Max = Versuch\n            Versuche = Versuche + 1\n        elif Status.upper() != \"R\" or \"H\" or \"N\":\n            print (\"Schreiben sie bitten nur R / H / N.\")\n            input (\"Drücken sie [Enter] zum Fortfahren\")\n            Status = input (\"Höher (H) oder Niedriger (N) oder Richtig (R) : \")\n\n            if Status.upper() == \"R\":\n                Guess = True\n            elif Status.upper() == \"H\":\n                Min = Versuch\n                Versuche = Versuche + 1\n            elif Status.upper() == \"N\":\n                Max = Versuch\n                Versuche = Versuche + 1\n            elif Status.upper() != \"R\" or \"H\" or \"N\":\n                input (\"Ein Fehler ist aufgetreten drücken sie [Enter] zum schliesen.\")\n                quit()\n\n    print ()\n    print (f\"Der Bot hat deine Zahl nach {Versuche} herausgefunden.\")\n    print ()\n    Weiter = input (\"Schreibe W wenn du Weiter Spielen willst.  \")\n\n    if Weiter.upper != \"W\":\n        quit()\n        "}}</script>
+<script src="../_run.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" crossorigin="anonymous"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

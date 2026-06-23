@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0Q7RPXJ6GS"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-0Q7RPXJ6GS');
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href="menu.css">
+    <link rel="stylesheet" href="bg.css">
+
+    <title>Elyesfolio</title>
+</head>
+<body>
+    
+    <div class="bg"></div>
+    <a href="index.html"><img class="logo" src="Logo.png" alt=""></a>    
+    
+    <div class="container">
+      <div class="imgcontainer">
+        <img class="img show" src="Portrait.png" alt="Porträt">
+      </div>
+      
+      <div class="Box">
+        <h4>Webdesigner</h4>
+        <h1>Elyes Ferchichi</h1>
+        <h2>15.10.2007 - <span>17</span></h2>
+        <h2>Bremen, Deutschland</h2>
+        <br>
+
+        <a href="mailto:elyes.ferchichi@icloud.com"><h3>elyes.ferchichi@icloud.com</h3></a>
+        <a href="tel:+49 15773550528"><h3>+49 157 73550528</h3></a>
+        <p>Hi, ich bin <span class="n1">Elyes</span>, ein <span class="n1">Webentwickler</span> mit Fokus auf <span class="n2">Shopify</span> & <span class="n2">Frontend-Development</span>.</p>
+    </div>
+
+    <img class="img remove" src="Portrait.png" alt="Porträt">
+    </div>
+    
+    <div class="buttons">
+    <a href="Projekte.html"><button>PROJEKTE</button></a>
+    <a href="Lebenslauf.pdf"><button>LEBENSLAUF</button></a>
+    <a href="Kontakt.html"><button>KONTAKT</button></a>
+    
+    </div>
+
+    <section class="Menu">
+      <div id="menu" class="MenuScreen hide">
+      <div class="menuItem">
+        <a href="index.html"><p class="MenuText hide"><span class="num">01</span> HOME</p></a>
+        <a href="Projekte.html"><p class="MenuText hide"><span class="num">02</span> PROJEKTE</p></a>
+        <a href="Lebenslauf.pdf"><p class="MenuText hide"><span class="num">03</span> LEBENSLAUF</p></a>
+        <a href="Kontakt.html"><p class="MenuText hide"><span class="num">04</span> KONTAKT</p></a>
+      </div>
+
+    </div>
+    <div class="menu" onclick="myFunction(this)">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </div>
+      
+      <script>
+      function myFunction(x) {
+        x.classList.toggle("change");
+        menu.classList.toggle("hide");
+        const texts = document.querySelectorAll(".MenuText");
+        texts.forEach(el => el.classList.toggle("hide"));
+      }
+      </script>
+    </section>
+    
+</body>
+</html>

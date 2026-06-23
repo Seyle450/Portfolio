@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#000000">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="../../../assets/favicon.svg">
+<link rel="stylesheet" href="../../../Extra/fonts.css">
+<link rel="stylesheet" href="../../../style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" crossorigin="anonymous">
+<title>Konsolen-Rechner — Code · Elyes Ferchichi</title>
+</head>
+<body>
+<div class="page">
+  <a class="back-link" href="../../../code.html">‹ Zurück zu den Code-Projekten</a>
+  <h1 class="viewer-title">Konsolen-Rechner</h1>
+  <div class="viewer-date">Jan. 2023 · Python</div>
+  <p class="viewer-sub">Grundrechenarten im Terminal mit Eingabe-Verarbeitung und Ausgabe.</p>
+  <ul class="project-tags viewer-meta"><li>Python</li></ul>
+  <div class="run-bar">
+    <button id="runBtn" class="run-btn" type="button">▶ Ausführen</button>
+    <button id="stopBtn" class="run-btn stop" type="button" hidden>■ Stop</button>
+    <span class="run-hint">Läuft direkt im Browser (Python via Pyodide) — Ein- und Ausgabe im Terminal.</span>
+  </div>
+  <div id="terminal" class="terminal" hidden>
+    <div id="termOut" class="term-out" aria-live="polite"></div>
+    <div id="termInputRow" class="term-input-row" hidden>
+      <span id="termPrompt" class="term-prompt"></span>
+      <input id="termInput" class="term-input-field" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Eingabe">
+    </div>
+  </div>
+  <div class="code-file">
+    <div class="code-file-head"><span class="cf-name">Main.py</span><span class="cf-lang">Python</span></div>
+    <pre><code class="language-python">print (&quot;---Rechner---&quot;)
+
+Num1 = float (input (&quot;Erste Zahl : &quot;))
+print ()
+
+Op = input (&quot;Rechenart : &quot;)
+print ()
+
+Num2 = float (input (&quot;Zweite Zahl : &quot;))
+print ()
+
+
+
+if Op == &quot;+&quot;:
+    Ergebniss = (Num1 + Num2)
+
+elif Op == &quot;-&quot;:
+    Ergebniss = (Num1 - Num2)
+
+elif Op == &quot;*&quot;:
+    Ergebniss = (Num1 * Num2)
+
+elif Op == &quot;/&quot;:
+    Ergebniss = (Num1 / Num2)
+
+elif Op != &quot;/&quot; or &quot;*&quot; or &quot;+&quot; or &quot;-&quot;:
+    input (&quot;Etwas ist schiefgelaufen drücken sie [Enter] zum schliesen.&quot;)
+    quit()
+
+
+
+
+
+
+print (&quot;----&quot;,Num1, Op, Num2, &quot;=&quot;, Ergebniss, &quot;----&quot;)
+
+input (&quot;Zum Schliesen [Enter] Drücken&quot;)</code></pre>
+  </div>
+  <footer class="footer">
+    <div>Offen für Möglichkeiten im Web Development.</div>
+    <div class="tag">© 2026 — Elyes Ferchichi</div>
+  </footer>
+</div>
+<script src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js" crossorigin="anonymous"></script>
+<script id="pyproject" type="application/json">{"main": "Main.py", "files": {"Main.py": "print (\"---Rechner---\")\n\nNum1 = float (input (\"Erste Zahl : \"))\nprint ()\n\nOp = input (\"Rechenart : \")\nprint ()\n\nNum2 = float (input (\"Zweite Zahl : \"))\nprint ()\n\n\n\nif Op == \"+\":\n    Ergebniss = (Num1 + Num2)\n\nelif Op == \"-\":\n    Ergebniss = (Num1 - Num2)\n\nelif Op == \"*\":\n    Ergebniss = (Num1 * Num2)\n\nelif Op == \"/\":\n    Ergebniss = (Num1 / Num2)\n\nelif Op != \"/\" or \"*\" or \"+\" or \"-\":\n    input (\"Etwas ist schiefgelaufen drücken sie [Enter] zum schliesen.\")\n    quit()\n\n\n\n\n\n\nprint (\"----\",Num1, Op, Num2, \"=\", Ergebniss, \"----\")\n\ninput (\"Zum Schliesen [Enter] Drücken\")"}}</script>
+<script src="../_run.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" crossorigin="anonymous"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

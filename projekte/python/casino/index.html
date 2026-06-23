@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#000000">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="../../../assets/favicon.svg">
+<link rel="stylesheet" href="../../../Extra/fonts.css">
+<link rel="stylesheet" href="../../../style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" crossorigin="anonymous">
+<title>Casino-Simulator — Code · Elyes Ferchichi</title>
+</head>
+<body>
+<div class="page">
+  <a class="back-link" href="../../../code.html">‹ Zurück zu den Code-Projekten</a>
+  <h1 class="viewer-title">Casino-Simulator</h1>
+  <div class="viewer-date">Nov. 2024 · Python</div>
+  <p class="viewer-sub">Roulette mit automatischer und manueller Strategie inklusive Verdopplungs-System zum Durchspielen.</p>
+  <ul class="project-tags viewer-meta"><li>Python</li></ul>
+  <div class="run-bar">
+    <button id="runBtn" class="run-btn" type="button">▶ Ausführen</button>
+    <button id="stopBtn" class="run-btn stop" type="button" hidden>■ Stop</button>
+    <span class="run-hint">Läuft direkt im Browser (Python via Pyodide) — Ein- und Ausgabe im Terminal.</span>
+  </div>
+  <div id="terminal" class="terminal" hidden>
+    <div id="termOut" class="term-out" aria-live="polite"></div>
+    <div id="termInputRow" class="term-input-row" hidden>
+      <span id="termPrompt" class="term-prompt"></span>
+      <input id="termInput" class="term-input-field" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Eingabe">
+    </div>
+  </div>
+  <div class="code-file">
+    <div class="code-file-head"><span class="cf-name">Auto.py</span><span class="cf-lang">Python</span></div>
+    <pre><code class="language-python">from random import randint
+import os
+
+
+Tests = 0
+Wins = 0
+Looses = 0
+Plays = 0
+
+Money = 300000
+Betting = 1000
+Status = 0
+
+    
+
+while Tests &lt; 1000:
+    while Money &lt; 600000 and Money &gt; 999:
+        if Betting == 64000:
+            Betting == 100000
+        if Betting &gt; 10000:
+            Betting = 1000
+        Money -= Betting
+        Status = randint(0,2)
+        if Status == 0:
+            Money += Betting * 3
+            Betting = 1000
+            continue
+        elif Status == 1 or 2:
+            Betting *= 2
+
+    if Money &gt; 1000:
+        print (&quot;You Won!&quot;)
+        Wins += 1
+        Money = 300000
+        Tests += 1
+    elif Money &lt; 1000:
+        print(&quot;You Lost!&quot;)
+        Looses += 1
+        Money = 300000
+        Tests += 1
+    
+    
+print (&quot;Wins = &quot;, Wins)
+print (&quot;Looses = &quot;, Looses)
+    
+
+
+    
+</code></pre>
+  </div>
+  <div class="code-file">
+    <div class="code-file-head"><span class="cf-name">Manuel.py</span><span class="cf-lang">Python</span></div>
+    <pre><code class="language-python">from random import randint
+import os
+Status = 0
+Money = 1000
+while True :
+ list = [&quot;list&quot;,&quot;0&quot;,&quot;1&quot;,&quot;2&quot;,&quot;3&quot;,&quot;4&quot;,&quot;5&quot;,&quot;6&quot;,&quot;7&quot;,&quot;8&quot;,&quot;9&quot;,&quot;10&quot;,&quot;11&quot;,&quot;12&quot;,&quot;13&quot;,&quot;14&quot;,&quot;15&quot;,&quot;16&quot;,&quot;17&quot;,&quot;18&quot;,&quot;19&quot;,&quot;20&quot;,&quot;21&quot;,&quot;22&quot;,&quot;23&quot;,&quot;24&quot;,&quot;25&quot;,&quot;26&quot;,&quot;27&quot;,&quot;28&quot;,&quot;29&quot;,&quot;30&quot;,&quot;31&quot;,&quot;32&quot;,&quot;33&quot;,&quot;34&quot;,&quot;35&quot;,&quot;36&quot;,&quot;black&quot;,&quot;red&quot;,&quot;1-12&quot;,&quot;2-12&quot;,&quot;3-12&quot;]
+ Black = [&quot;2&quot;, &quot;4&quot;, &quot;6&quot;, &quot;8&quot;, &quot;10&quot;, &quot;11&quot;, &quot;13&quot;, &quot;15&quot;, &quot;17&quot;, &quot;20&quot;, &quot;22&quot;, &quot;24&quot;, &quot;26&quot;, &quot;28&quot;, &quot;29&quot;,&quot;31&quot;,&quot;33&quot;,&quot;35&quot;]
+ Red = [&quot;1&quot;, &quot;3&quot;, &quot;5&quot;, &quot;7&quot;, &quot;9&quot;, &quot;12&quot;, &quot;14&quot;, &quot;16&quot;, &quot;18&quot;, &quot;19&quot;, &quot;21&quot;, &quot;23&quot;, &quot;25&quot;, &quot;27&quot;, &quot;30&quot;, &quot;32&quot;, &quot;34&quot;, &quot;36&quot;]
+ First12 = [&quot;0&quot;,&quot;1&quot;,&quot;2&quot;,&quot;3&quot;,&quot;4&quot;,&quot;5&quot;,&quot;6&quot;,&quot;7&quot;,&quot;8&quot;,&quot;9&quot;,&quot;10&quot;,&quot;11&quot;,&quot;12&quot;]
+ Second12 = [&quot;13&quot;,&quot;14&quot;,&quot;15&quot;,&quot;16&quot;,&quot;17&quot;,&quot;18&quot;,&quot;19&quot;,&quot;20&quot;,&quot;21&quot;,&quot;22&quot;,&quot;23&quot;,&quot;24&quot;]
+ Third12 = [&quot;25&quot;,&quot;26&quot;,&quot;27&quot;,&quot;28&quot;,&quot;29&quot;,&quot;30&quot;,&quot;31&quot;,&quot;32&quot;,&quot;33&quot;,&quot;34&quot;,&quot;35&quot;,&quot;36&quot;]
+
+
+
+ os.system (&#x27;cls&#x27;)
+
+ print(&quot;---Elyes&#x27;s Casino---&quot;)
+ print()
+ print(&quot;Welcome to Elyes&#x27;s Casino, good Luck!&quot;)
+ print (&quot;To see a list of the Inputs write List.&quot;)
+ print()
+ print (&quot;Money :&quot;,Money)
+ print()
+ print(&quot;--------------------------------------&quot;)
+ Number = input(&quot;Input :&quot;)
+ Number = str(Number)
+ Number = str.lower(Number)
+ Payin = input(&quot;Pay-In :&quot;)
+ Payin = int(Payin)
+ Money -= Payin
+ print()
+ if Number == &quot;list&quot;:
+    os.system (&#x27;cls&#x27;)
+    print(&quot;---Elyes&#x27;s Casino---&quot;)
+    print()
+    print(&quot;Here are the Inputs you can use, and their Payout rate.&quot;)
+    print(&quot;A number from 0 to 36   Payout : 36x&quot;)
+    print(&quot;Black   Payout : 2x&quot;)
+    print(&quot;Red   Payout : 2x&quot;)
+    print(&quot;1-12   Payout : 3x&quot;)
+    print(&quot;2-12   Payout : 3x&quot;)
+    print(&quot;3-12   Payout : 3x&quot;)
+    print ()
+    input(&quot; Press [Enter] to continue.&quot;)
+
+ while Number not in list and not &quot;list&quot;:
+    os.system (&#x27;cls&#x27;)
+
+    print(&quot;---Elyes&#x27;s Casino---&quot;)
+    print()
+    print(&quot;Your Input was INVALID.&quot;)
+    print (&quot;To see a list of the Inputs write List.&quot;)
+    print()
+    print(&quot;--------------------------------------&quot;)
+    Number = input(&quot;Input :&quot;)
+    Number = str(Number)
+    Number = str.lower(Number)
+    print()
+    if Number == &quot;list&quot;:
+        os.system (&#x27;cls&#x27;)
+        print(&quot;---Elyes&#x27;s Casino---&quot;)
+        print()
+        print(&quot;Here are the Inputs you can use, and their Payout rate.&quot;)
+        print(&quot;A number from 0 to 36   Payout : 36x&quot;)
+        print(&quot;Black   Payout : 2x&quot;)
+        print(&quot;Red   Payout : 2x&quot;)
+        print(&quot;1-12   Payout : 3x&quot;)
+        print(&quot;2-12   Payout : 3x&quot;)
+        print(&quot;3-12   Payout : 3x&quot;)
+        print ()
+        input(&quot; Press [Enter] to continue.&quot;)
+
+
+ Winner = randint(0,42)
+ Winner = str(Winner)
+ if Number in list:
+    if Number == &quot;black&quot;:
+        if Winner in Black:
+            Status = 1
+            Rate = 2
+        else: Status = 2
+    if Number == &quot;red&quot;:
+        if Winner in Red:
+            Status = 1
+            Rate = 2
+        else: Status = 2
+    if Number == &quot;1-12&quot;:
+        if Winner in First12:
+            Status = 1
+            Rate = 3
+        else: Status = 2
+    if Number == &quot;2-12&quot;:
+        if Winner in Second12:
+            Status = 1
+            Rate = 3
+        else: Status = 2
+    if Number == &quot;3-12&quot;:
+        if Winner in Third12:
+            Status = 1
+            Rate = 3
+        else: Status = 2
+ else: 
+    if Number == Winner:
+        Status = 1
+        Rate = 36
+    else: Status = 2
+
+
+
+
+
+ os.system (&#x27;cls&#x27;)
+ print(&quot;---Elyes&#x27;s Casino---&quot;)
+ print()
+ print(&quot;--------------------------------------&quot;)
+ print()
+ print(&quot;The Input you Picked is : &quot;, Number)
+ print (&quot;The Winner Number is : &quot;, Winner)
+ print()
+ if Winner in Black:
+    print(&quot;Color : Black&quot;)
+ elif Winner in Red:
+    print(&quot;Color : Red&quot;)
+ else: 
+    print(&quot;Color : White&quot;)
+
+ if Winner in First12:
+    print(&quot;Row : First&quot;)
+ elif Winner in Second12:
+    print(&quot;Row : Second&quot;)
+ elif Winner in Third12:
+    print(&quot;Row : Third&quot;)
+ else: 
+    print(&quot;Row : None&quot;)
+
+ print()
+ print(&quot;------------------------------------------------------&quot;)
+ if Status == 1:
+    print(&quot;You Won this bet and will get&quot;, Rate, &quot;of your pay in.&quot;)
+    Payout = Rate * Payin
+    print(&quot;Pay-Out :&quot;,Payout)
+    Money += Payout
+ elif Status == 2:
+    print(&quot;You Lost this bet.&quot;)
+    Payout = 0
+    print(&quot;Pay-Out :&quot;,Payout)
+
+ print()
+ Continue = input(&quot;To leave write [1], to continue press anything&quot;)
+ if Continue == 1:
+    break</code></pre>
+  </div>
+  <div class="code-file">
+    <div class="code-file-head"><span class="cf-name">Verdoplet.py</span><span class="cf-lang">Python</span></div>
+    <pre><code class="language-python">import random
+import os
+status = None
+winner = None
+Lost = None
+Number = 1
+
+def Screen():
+    os.system(&quot;cls&quot;)
+    print(&quot;*-*-*-*-*-*-*-*&quot;)
+    print(&quot;----Casino----&quot;)
+    print()
+
+def Bet():
+    global Number
+    global Tokens
+    global Lost
+    Screen()
+    print((&quot;■&quot; * Number) + (&quot;□&quot; * 10))
+    print()
+    print (&quot;If you want to Bet press [Enter]!&quot;)
+    print (&quot;If you stop write [X]!&quot;)
+    status = input(&quot;&quot;)
+    winner = random.randint(1,100)
+    if winner &lt; 50:
+        Number += 1
+    else:
+        Tokens =- 1
+        Screen()
+        print (&quot;You Lost!&quot;)
+        Number = 1
+        print (&quot;If you want to Bet press [Enter]!&quot;)
+        print (&quot;If you stop write [X]!&quot;)
+        Lost = 1
+    status = input(&quot;&quot;)
+
+
+
+Screen()
+Tokens = input(&quot;Tokens :&quot;)
+STokens = Tokens
+
+while status != &quot;x&quot; or &quot;X&quot;:
+    Screen()
+    print(&quot;Press [Enter] to Bet!&quot;)
+    print (&quot;Or write [X] to Leave the Casino!&quot;)
+    while Lost != 1:
+        Bet()
+    status = input(&quot;Input :&quot;)
+
+    
+
+
+
+
+
+Screen()
+print (&quot;You Started with&quot;,STokens+&quot;.&quot;)
+print (&quot;And Left with&quot;,Tokens+&quot;.&quot;)
+input (&quot;Press [Enter] to continue!&quot;)
+</code></pre>
+  </div>
+  <footer class="footer">
+    <div>Offen für Möglichkeiten im Web Development.</div>
+    <div class="tag">© 2026 — Elyes Ferchichi</div>
+  </footer>
+</div>
+<script src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js" crossorigin="anonymous"></script>
+<script id="pyproject" type="application/json">{"main": "Manuel.py", "files": {"Auto.py": "from random import randint\nimport os\n\n\nTests = 0\nWins = 0\nLooses = 0\nPlays = 0\n\nMoney = 300000\nBetting = 1000\nStatus = 0\n\n    \n\nwhile Tests < 1000:\n    while Money < 600000 and Money > 999:\n        if Betting == 64000:\n            Betting == 100000\n        if Betting > 10000:\n            Betting = 1000\n        Money -= Betting\n        Status = randint(0,2)\n        if Status == 0:\n            Money += Betting * 3\n            Betting = 1000\n            continue\n        elif Status == 1 or 2:\n            Betting *= 2\n\n    if Money > 1000:\n        print (\"You Won!\")\n        Wins += 1\n        Money = 300000\n        Tests += 1\n    elif Money < 1000:\n        print(\"You Lost!\")\n        Looses += 1\n        Money = 300000\n        Tests += 1\n    \n    \nprint (\"Wins = \", Wins)\nprint (\"Looses = \", Looses)\n    \n\n\n    \n", "Manuel.py": "from random import randint\nimport os\nStatus = 0\nMoney = 1000\nwhile True :\n list = [\"list\",\"0\",\"1\",\"2\",\"3\",\"4\",\"5\",\"6\",\"7\",\"8\",\"9\",\"10\",\"11\",\"12\",\"13\",\"14\",\"15\",\"16\",\"17\",\"18\",\"19\",\"20\",\"21\",\"22\",\"23\",\"24\",\"25\",\"26\",\"27\",\"28\",\"29\",\"30\",\"31\",\"32\",\"33\",\"34\",\"35\",\"36\",\"black\",\"red\",\"1-12\",\"2-12\",\"3-12\"]\n Black = [\"2\", \"4\", \"6\", \"8\", \"10\", \"11\", \"13\", \"15\", \"17\", \"20\", \"22\", \"24\", \"26\", \"28\", \"29\",\"31\",\"33\",\"35\"]\n Red = [\"1\", \"3\", \"5\", \"7\", \"9\", \"12\", \"14\", \"16\", \"18\", \"19\", \"21\", \"23\", \"25\", \"27\", \"30\", \"32\", \"34\", \"36\"]\n First12 = [\"0\",\"1\",\"2\",\"3\",\"4\",\"5\",\"6\",\"7\",\"8\",\"9\",\"10\",\"11\",\"12\"]\n Second12 = [\"13\",\"14\",\"15\",\"16\",\"17\",\"18\",\"19\",\"20\",\"21\",\"22\",\"23\",\"24\"]\n Third12 = [\"25\",\"26\",\"27\",\"28\",\"29\",\"30\",\"31\",\"32\",\"33\",\"34\",\"35\",\"36\"]\n\n\n\n os.system ('cls')\n\n print(\"---Elyes's Casino---\")\n print()\n print(\"Welcome to Elyes's Casino, good Luck!\")\n print (\"To see a list of the Inputs write List.\")\n print()\n print (\"Money :\",Money)\n print()\n print(\"--------------------------------------\")\n Number = input(\"Input :\")\n Number = str(Number)\n Number = str.lower(Number)\n Payin = input(\"Pay-In :\")\n Payin = int(Payin)\n Money -= Payin\n print()\n if Number == \"list\":\n    os.system ('cls')\n    print(\"---Elyes's Casino---\")\n    print()\n    print(\"Here are the Inputs you can use, and their Payout rate.\")\n    print(\"A number from 0 to 36   Payout : 36x\")\n    print(\"Black   Payout : 2x\")\n    print(\"Red   Payout : 2x\")\n    print(\"1-12   Payout : 3x\")\n    print(\"2-12   Payout : 3x\")\n    print(\"3-12   Payout : 3x\")\n    print ()\n    input(\" Press [Enter] to continue.\")\n\n while Number not in list and not \"list\":\n    os.system ('cls')\n\n    print(\"---Elyes's Casino---\")\n    print()\n    print(\"Your Input was INVALID.\")\n    print (\"To see a list of the Inputs write List.\")\n    print()\n    print(\"--------------------------------------\")\n    Number = input(\"Input :\")\n    Number = str(Number)\n    Number = str.lower(Number)\n    print()\n    if Number == \"list\":\n        os.system ('cls')\n        print(\"---Elyes's Casino---\")\n        print()\n        print(\"Here are the Inputs you can use, and their Payout rate.\")\n        print(\"A number from 0 to 36   Payout : 36x\")\n        print(\"Black   Payout : 2x\")\n        print(\"Red   Payout : 2x\")\n        print(\"1-12   Payout : 3x\")\n        print(\"2-12   Payout : 3x\")\n        print(\"3-12   Payout : 3x\")\n        print ()\n        input(\" Press [Enter] to continue.\")\n\n\n Winner = randint(0,42)\n Winner = str(Winner)\n if Number in list:\n    if Number == \"black\":\n        if Winner in Black:\n            Status = 1\n            Rate = 2\n        else: Status = 2\n    if Number == \"red\":\n        if Winner in Red:\n            Status = 1\n            Rate = 2\n        else: Status = 2\n    if Number == \"1-12\":\n        if Winner in First12:\n            Status = 1\n            Rate = 3\n        else: Status = 2\n    if Number == \"2-12\":\n        if Winner in Second12:\n            Status = 1\n            Rate = 3\n        else: Status = 2\n    if Number == \"3-12\":\n        if Winner in Third12:\n            Status = 1\n            Rate = 3\n        else: Status = 2\n else: \n    if Number == Winner:\n        Status = 1\n        Rate = 36\n    else: Status = 2\n\n\n\n\n\n os.system ('cls')\n print(\"---Elyes's Casino---\")\n print()\n print(\"--------------------------------------\")\n print()\n print(\"The Input you Picked is : \", Number)\n print (\"The Winner Number is : \", Winner)\n print()\n if Winner in Black:\n    print(\"Color : Black\")\n elif Winner in Red:\n    print(\"Color : Red\")\n else: \n    print(\"Color : White\")\n\n if Winner in First12:\n    print(\"Row : First\")\n elif Winner in Second12:\n    print(\"Row : Second\")\n elif Winner in Third12:\n    print(\"Row : Third\")\n else: \n    print(\"Row : None\")\n\n print()\n print(\"------------------------------------------------------\")\n if Status == 1:\n    print(\"You Won this bet and will get\", Rate, \"of your pay in.\")\n    Payout = Rate * Payin\n    print(\"Pay-Out :\",Payout)\n    Money += Payout\n elif Status == 2:\n    print(\"You Lost this bet.\")\n    Payout = 0\n    print(\"Pay-Out :\",Payout)\n\n print()\n Continue = input(\"To leave write [1], to continue press anything\")\n if Continue == 1:\n    break", "Verdoplet.py": "import random\nimport os\nstatus = None\nwinner = None\nLost = None\nNumber = 1\n\ndef Screen():\n    os.system(\"cls\")\n    print(\"*-*-*-*-*-*-*-*\")\n    print(\"----Casino----\")\n    print()\n\ndef Bet():\n    global Number\n    global Tokens\n    global Lost\n    Screen()\n    print((\"■\" * Number) + (\"□\" * 10))\n    print()\n    print (\"If you want to Bet press [Enter]!\")\n    print (\"If you stop write [X]!\")\n    status = input(\"\")\n    winner = random.randint(1,100)\n    if winner < 50:\n        Number += 1\n    else:\n        Tokens =- 1\n        Screen()\n        print (\"You Lost!\")\n        Number = 1\n        print (\"If you want to Bet press [Enter]!\")\n        print (\"If you stop write [X]!\")\n        Lost = 1\n    status = input(\"\")\n\n\n\nScreen()\nTokens = input(\"Tokens :\")\nSTokens = Tokens\n\nwhile status != \"x\" or \"X\":\n    Screen()\n    print(\"Press [Enter] to Bet!\")\n    print (\"Or write [X] to Leave the Casino!\")\n    while Lost != 1:\n        Bet()\n    status = input(\"Input :\")\n\n    \n\n\n\n\n\nScreen()\nprint (\"You Started with\",STokens+\".\")\nprint (\"And Left with\",Tokens+\".\")\ninput (\"Press [Enter] to continue!\")\n"}}</script>
+<script src="../_run.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" crossorigin="anonymous"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

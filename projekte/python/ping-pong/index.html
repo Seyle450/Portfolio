@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#000000">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="../../../assets/favicon.svg">
+<link rel="stylesheet" href="../../../Extra/fonts.css">
+<link rel="stylesheet" href="../../../style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" crossorigin="anonymous">
+<title>Ping Pong — Code · Elyes Ferchichi</title>
+</head>
+<body>
+<div class="page">
+  <a class="back-link" href="../../../code.html">‹ Zurück zu den Code-Projekten</a>
+  <h1 class="viewer-title">Ping Pong</h1>
+  <div class="viewer-date">Jan. 2023 · Python</div>
+  <p class="viewer-sub">Pong-Klassiker mit dem turtle-Modul — Schläger-Steuerung, Ballphysik und Punktestand.</p>
+  <ul class="project-tags viewer-meta"><li>Python</li></ul>
+  <div class="run-bar">
+    <span class="run-hint norun">⚠ Benötigt eine grafische Oberfläche (turtle) — im Browser nicht ausführbar, nur als Code.</span>
+  </div>
+  <div class="code-file">
+    <div class="code-file-head"><span class="cf-name">main.py</span><span class="cf-lang">Python</span></div>
+    <pre><code class="language-python">import turtle
+
+
+win = turtle.Screen()
+win.title(&quot;Ping Pong&quot;)
+win.bgcolor(&quot;grey&quot;)
+win.setup(width=800, height=600)
+win.tracer(0)
+
+
+#Score
+Score_A = 0
+Score_B = 0
+
+#Spieler A
+Spieler_A = turtle.Turtle()
+Spieler_A.speed(0)
+Spieler_A.shape(&quot;square&quot;)
+Spieler_A.color(&quot;Blue&quot;)
+Spieler_A.penup()
+Spieler_A.goto(-350,0)
+Spieler_A.shapesize(stretch_wid=5,stretch_len=1)
+
+
+#Spieler B
+Spieler_B = turtle.Turtle()
+Spieler_B.speed(0)
+Spieler_B.shape(&quot;square&quot;)
+Spieler_B.color(&quot;Red&quot;)
+Spieler_B.penup()
+Spieler_B.goto(350,0)
+Spieler_B.shapesize(stretch_wid=5,stretch_len=1)
+
+#Ball
+Ball = turtle.Turtle()
+Ball.speed(0)
+Ball.shape(&quot;square&quot;)
+Ball.color(&quot;white&quot;)
+Ball.penup()
+Ball.goto(0,0)
+Ball.dx = 0.2
+Ball.dy = -0.2
+
+
+#Pen
+pen = turtle.Turtle()
+pen.speed(0)
+pen.color(&quot;White&quot;)
+pen.penup()
+pen.hideturtle()
+pen.goto(0,260)
+pen.write (&quot;Spieler A: 0  Spielerr B: 0&quot;, align=&quot;center&quot;, font=(&quot;Courier&quot;, 24, &quot;normal&quot;))
+
+#Function
+def Spieler_A_up():
+    y = Spieler_A.ycor()
+    y += 20
+    Spieler_A.sety(y)
+def Spieler_A_down():
+    y = Spieler_A.ycor()
+    y -= 20
+    Spieler_A.sety(y)
+
+def Spieler_B_up():
+    y = Spieler_B.ycor()
+    y += 20
+    Spieler_B.sety(y)
+def Spieler_B_down():
+    y = Spieler_B.ycor()
+    y -= 20
+    Spieler_B.sety(y)
+
+#Keyboard binding
+win.listen()
+win.onkeypress(Spieler_A_up, &quot;w&quot;)
+win.onkeypress(Spieler_A_down, &quot;s&quot;)
+
+win.onkeypress(Spieler_B_up, &quot;Up&quot;)
+win.onkeypress(Spieler_B_down, &quot;Down&quot;)
+
+while True:
+    win.update()
+    
+
+    Ball.setx(Ball.xcor()+ Ball.dx)
+    Ball.sety(Ball.ycor()+ Ball.dy)
+
+    if Ball.ycor() &gt; 290:
+        Ball.sety(290)
+        Ball.dy *= -1
+
+
+    if  Ball.ycor() &lt; -290:
+        Ball.sety(-290)
+        Ball.dy *= -1
+
+    if  Ball.xcor() &gt; 390:
+        Ball.goto(0,0)
+        Ball.dx *= -1
+        Score_A += 1
+        pen.clear()
+        pen.write (f&quot;Spieler A: {Score_A}  Spielerr B: {Score_B}&quot;, align=&quot;center&quot;, font=(&quot;Courier&quot;, 24, &quot;normal&quot;))
+
+    if  Ball.xcor() &lt; -390:
+        Ball.goto(0,0)
+        Ball.dx *= -1
+        Score_B += 1
+        pen.clear()
+        pen.write (f&quot;Spieler A: {Score_A}  Spielerr B: {Score_B}&quot;, align=&quot;center&quot;, font=(&quot;Courier&quot;, 24, &quot;normal&quot;))
+
+    #Spielr und Ball Colision
+    if (Ball.xcor() &gt; 340 and Ball.xcor() &lt; 350) and (Ball.ycor()&lt; Spieler_B.ycor()+50 and Ball.ycor() &gt; Spieler_B.ycor() -50 ):
+        Ball.setx(340)
+        Ball.dx *= -1
+
+    if (Ball.xcor() &lt; -340 and Ball.xcor() &lt; -350) and (Ball.ycor()&lt; Spieler_A.ycor()+50 and Ball.ycor() &gt; Spieler_A.ycor() -50 ):
+        Ball.setx(-340)
+        Ball.dx *= -1
+
+    
+</code></pre>
+  </div>
+  <footer class="footer">
+    <div>Offen für Möglichkeiten im Web Development.</div>
+    <div class="tag">© 2026 — Elyes Ferchichi</div>
+  </footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" crossorigin="anonymous"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

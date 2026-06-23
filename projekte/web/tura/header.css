@@ -1,0 +1,146 @@
+header {
+    
+    position: fixed;
+    display: flex;
+    align-items: center;
+    background-color: #038500;
+    color: white;
+    height: 10vmin;
+    width: 100vw;
+    z-index: 9998;
+    transition: 100ms
+}
+.HeadLogo {
+  width: 5.6vmin;
+  height: 9vmin;
+  margin-left: 2vmin;
+  margin-block: auto;
+  margin-right: 2vmin;
+}
+header h1 {
+  font-size: 5vmin;
+  font-weight: 800;
+  margin-right: 5vw;
+  color: white;
+  text-decoration: none;
+}
+header a {
+  text-decoration: none;
+  color: white;
+  
+}
+header .Links {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 10vmin;
+    font-size: 3vmin;
+}
+header .Links a {
+    text-decoration: none;
+    color: white;
+    height: 100%;
+    padding-inline: 2vmin;
+    transition: background-color 0.3s ease;
+}
+header .Link {
+    color: white;
+    vertical-align: middle;
+    
+}
+header .Links a:hover {
+    background-color: #028a00;
+    transition: 100ms;
+
+}
+header .Links p {
+    font-size: 2.7vmin;
+    font-weight: 600;
+    color: white;
+    line-height: 10vmin;
+    margin: 0;
+}
+.menu {
+    position: fixed;
+    cursor: pointer;
+    right: 4vmin;
+    top: 2.5vmin;
+    z-index: 9999;
+    font-size: 2.5vmin;
+    transition: 100ms;
+  }
+  .bar1, .bar2, .bar3 {
+    width: 1.75em;
+    height: 0.25em;
+    background-color: #ffffff;
+    margin: 0.3em 0;
+    border-radius: 0.5em;
+    transition: 0.4s;
+  }
+  
+  .change .bar1 {
+    transform: translate(0, 0.55em) rotate(-45deg);
+  }
+  
+  .change .bar2 {
+    opacity: 0;
+  }
+  
+  .change .bar3 {
+    transform: translate(0, -0.55em) rotate(45deg);
+  }
+  
+  .MenuScreen {
+      
+      position: fixed;
+      top: 0;
+      left: 0;
+      background-color: #038500;
+      background-image: radial-gradient(#ffffff 1.3px, #038500 1.3px);
+      background-size: 26px 26px;
+      width: 100vw;
+      height: 100vh;
+      transition: 500ms;
+      z-index: 9999;
+     }
+    .MenuText {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 5vmin;
+      color: #ffffff;
+      margin-left: 3vmin;
+      margin-top: 3vmin;
+      font-weight: 800;
+  
+      user-select: none;
+    }
+    
+    .num {
+      font-size: 3vmin;
+      font-weight: 500;
+    }
+    
+    .menuItem {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: left;
+      height: 100%;
+      
+    }
+    .Menu .hide {
+      top: -100vh;
+      height: 0px;
+      color: transparent;
+      transition: 500ms;
+    }
+    .Menu a{text-decoration: none;
+      color: #ffffff;
+    } 
+    .Menu a:hover {
+      text-decoration: underline;
+      transition: 500ms;
+    }
+    .Menu a:active {
+      transform: scale(0.8);
+      transition: 100ms ease-in-out;
+    }

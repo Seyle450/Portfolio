@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TURA Bremen - Startseite</title>
+    <link rel="stylesheet" href="Home.css">
+    <link rel="stylesheet" href="header.css">
+</head>
+<body>
+    <header>
+        <img class="HeadLogo" src="Logo.png" alt="">
+        <a href="index.html"><h1 class="HeadName">TURA</h1></a>
+        <div class="Links">
+            <a href=""><div class="Link"><p>Blog</p></div></a>
+            <a href=""><div class="Link"><p>Angebote</p></div></a>
+            <a href=""><div class="Link"><p>Team</p></div></a>
+            <a href=""><div class="Link"><p>Verein</p></div></a>
+        </div>
+        <section class="Menu">
+            <div id="menu" class="MenuScreen hide">
+            <div class="menuItem">
+              <a href="index.html"><p class="MenuText hide"><span class="num">01</span> BLOG</p></a>
+              <a href="Projekte.html"><p class="MenuText hide"><span class="num">02</span> ANGEBOTE</p></a>
+              <a href="Lebenslauf.pdf"><p class="MenuText hide"><span class="num">03</span> TEAM</p></a>
+              <a href="Kontakt.html"><p class="MenuText hide"><span class="num">04</span> VEREIN</p></a>
+              <a href="Kontakt.html"><p class="MenuText hide"><span class="num">05</span> KONRAKT</p></a>
+
+            </div>
+      
+          </div>
+          <div id="test" class="menu" onclick="myFunction(this)">
+              <div class="bar1"></div>
+              <div class="bar2"></div>
+              <div class="bar3"></div>
+            </div>
+            <script>
+            var prevScrollpos = window.pageYOffset;
+            window.onscroll = function() {
+              var currentScrollPos = window.pageYOffset;
+              if (prevScrollpos > currentScrollPos && document.getElementById("menu").classList.contains("hide")) {
+                document.querySelector("header").style.top = "0";
+                document.querySelector(".menu").style.top = "2.5vmin";
+             } else {
+                document.querySelector("header").style.top = "-7.2rem";
+                document.querySelector(".menu").style.top = "-7.2rem";
+              }
+              prevScrollpos = currentScrollPos;
+            }
+            </script>
+            <script>
+            function myFunction(x) {
+              x.classList.toggle("change");
+              menu.classList.toggle("hide");
+              const texts = document.querySelectorAll(".MenuText");
+              texts.forEach(el => el.classList.toggle("hide"));
+            }
+            </script>
+          </section>
+    </header>
+        <div class="WillkommenContainer">
+            <img class="Willkommen" src="vereinszentrum.jpg" alt="">
+            <h1 class="WillkommenText">Willkommen bei TURA Bremen!</h1>
+        </div>
+        <div class="ZahlenContainer">
+          <div class="Zahlenbox">
+            <div class="ZahlenInner">
+              <p class="ZahlenBoxZahl" data-target="2400" data-suffix="+">0</p>
+              <img class="ZahlenBoxBox" src="Zahlenbox.svg" alt="">
+            </div>
+            <h2>Mitglieder</h2>
+          </div>
+
+          <div class="Zahlenbox">
+            <div class="ZahlenInner">
+              <p class="ZahlenBoxZahl" data-target="1894">0</p>
+              <img class="ZahlenBoxBox" src="Zahlenbox.svg" alt="">
+            </div>
+            <h2>Seit</h2>
+          </div>
+
+          <div class="Zahlenbox">
+            <div class="ZahlenInner">
+              <p class="ZahlenBoxZahl" data-target="15" data-suffix="+">0</p>
+              <img class="ZahlenBoxBox" src="Zahlenbox.svg" alt="">
+            </div>
+            <h2>Sportarten</h2>
+          </div>
+        </div>   
+        <script>
+          const counters = document.querySelectorAll('.ZahlenBoxZahl');
+          
+          const startCount = (counter) => {
+            const target = +counter.getAttribute('data-target');
+            const suffix = counter.getAttribute('data-suffix') || "";
+            const speed = 200;
+            let current = 0;
+          
+            const updateCount = () => {
+              const increment = target / speed;
+              if (current < target) {
+                current += increment;
+                counter.innerText = Math.ceil(current) + suffix;
+                setTimeout(updateCount, 10);
+              } else {
+                counter.innerText = target.toLocaleString() + suffix;
+              }
+            };
+          
+            updateCount();
+          };
+          
+          // Scroll-Erkennung (nur einmal starten)
+          const observer = new IntersectionObserver((entries, obs) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                const counter = entry.target;
+                startCount(counter);
+                obs.unobserve(counter); // Nur 1x zählen
+              }
+            });
+          }, {
+            threshold: 0.5 // Wenn 50 % sichtbar
+          });
+          
+          counters.forEach(counter => {
+            observer.observe(counter);
+          });
+          </script>
+
+          <div class="AboutUsContainer">
+            <div class="AboutUsText">
+              <h2>Über Uns.</h2>
+              <p><span>TURA</span> der <span>Tu</span>rn- und <span>Ra</span>sensportverein - ist der moderne Sportverein im Bremer Westen und gehört mit rund <span>2.400</span> Mitgliedern zu den größten Vereinen in Bremen. Mehr als <span>15</span> Sportarten sind unter einem Dach vereint. Unser Schwerpunkt liegt auf <span>Breiten- und Gesundheitssport</span>. Gegründet wurde unser Verein <span>1894</span>. Sport betreiben wir in Gröpelingen in verschiedenen Schulturnhallen, in unserem Vereinszentrum mit eigenem Fitnessstudio und bei unserer Kanu-Abteilung an der Lesum.</p>
+            </div>
+            <img class="AboutUsImage" src="Logo.png" alt="">
+          </div>
+
+          <div class="BlogContainer">
+            <h1>Blog.</h1>
+            <div class="BlogGrid">
+              <div class="BlogCard">
+              <img src="Praesidium2025.jpg" alt="">
+              <h1>Stabwechsel bei Tura</h1>
+              <h2>Gerd Schweizer folgt Dirk Bierfischer als Präsident</h2>
+              <p>In einer gut besuchten Jahreshauptversammlung hat es eine Zäsur in der Präsidentschaft des über 130 Jahre alten Sportvereins Tura Bremen gegeben: Der langjährige Vorsitzende Dirk Bierfischer, der ...</p>
+              <a href=""><button>Artikel Öffnen</button></a>
+            </div>
+            <div class="BlogCard">
+              <img src="Jasmin2020-3271d41d.jpg" alt="">
+              <h1>Steakhaus Bei Jasmin wünscht frohe Ostern
+              </h1>
+              <p>Jasmin Nanic, Inhaber des Steakhauses im TURA-Vereinszentrum, wünscht allen Gästen und allen Mitgliedern und Freunden von TURA Frohe Ostern und geruhsame Feiertage. Das Steakhaus hat über Ostern an ...</p>
+              <a href=""><button>Artikel Öffnen</button></a>
+            </div>
+            <div class="BlogCard">
+              <img src="Jubilare-24.jpg" alt="">
+              <h1>Ehrung für langjährige Vereinstreue
+              </h1>
+              <p>Über 25, 40 oder 50 Jahre einem Verein die Treue zu halten, ist immer noch etwas Besonderes und hat Anerkennung verdient. So setzte der Turn- und Rasensportverein Bremen (Tura) jetzt die gute Tradition fort ...</p>
+              <a href=""><button>Artikel Öffnen</button></a>
+            </div>
+            </div>
+            
+          </div>
+
+          <div class="KontaktContainer">
+            <h1>Kontakt.</h1>
+            <table>
+              <tr>
+                <td><h2>Adresse :</h2></td>
+                <td><h2>E-Mail :</h2></td>
+              </tr>
+              <tr>
+                <td><p>Bert-Trautmann-Platz/Lissaer Str.60 <br>28237 Bremen</p></td>
+                <td><p>info@turabremen.de</p></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td><h2>Tel :</h2></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td><p>0421/613410</p></td>
+              </tr>
+              <tr>
+                <td><h2>Öffnungszeiten :</h2></td>
+                <td><h2>Telefonzeiten :</h2></td>
+              </tr>
+              <tr>
+                <td><p>Montags 10-12</p></td>
+                <td><p>Mo,Mi,Di 10-12</p></td>
+              </tr>
+              <tr>
+                <td><p>Dienstags 16-19</p></td>
+                <td><p>Di 16-19</p></td>
+              </tr>
+              <tr>
+                <td><p>Donnerstags 10-12</p></td>
+              </tr>
+            </table>
+            <hr>
+            <p><span>Außerhalb</span> der <span>Telefonzeiten</span> können Sie uns eine Nachricht auf dem <span>Anrufbeantworter</span> hinterlassen. <span>Wir melden uns</span> dann bei Ihnen.</p>
+          </div>
+          
+          <div class="FooterContainer">
+            <div class="Links">
+              <table>
+              <tr>
+                <td><a href=""><div class="Link"><p>Zurück nach Oben</p></div></a></td>
+                <td><p class="trennung">-</p></td>
+                <td><a href=""><div class="Link"><p>Blog</p></div></a></td>
+                <td><p class="trennung">-</p></td>
+                <td><a href=""><div class="Link"><p>Angebote</p></div></a></td>
+                <td><p class="trennung">-</p></td>
+                <td><a href=""><div class="Link"><p>Verein</p></div></a></td>
+                <td><p class="trennung">-</p></td>
+                <td><a href=""><div class="Link"><p>Team</p></div></a></td>
+                <td><p class="trennung">-</p></td>
+                <td><a href=""><div class="Link"><p>FAQ</p></div></a></td>
+              </tr>
+            </table>
+            </div>
+            
+            <div class="Rechtliches">
+              <table>
+                <tr>
+                  <td><a href=""><div class="LinkRechtliches"><p>Impressum</p></div></a></td>
+                  <td><p class="trennung">-</p></td>
+                  <td><a href=""><div class="LinkRechtliches"><p>Haftungshinweise</p></div></a></td>
+                </tr>
+              </table>
+            </div>
+            <div class="Copyright">
+              <p>Copyright © 2007-2012    Alle Rechte vorbehalten</p>
+              <p>Webdesign by <a href="seyle450.github.io" target="_blank">Elyes</a></p>
+            </div>
+
+          </div>    
+
+</body>
+</html>

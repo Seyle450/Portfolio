@@ -1,0 +1,75 @@
+.menu {
+  display: inline-block;
+  cursor: pointer;
+  position: fixed;
+  right: 3vmin;
+  top: 3vmin;
+}
+.bar1, .bar2, .bar3 {
+  width: 35px;
+  height: 5px;
+  background-color: #ffffff;
+  margin: 6px 0;
+  border-radius: 5px;
+  transition: 0.4s;
+}
+
+.change .bar1 {
+  transform: translate(0, 11px) rotate(-45deg);
+}
+
+.change .bar2 {opacity: 0;}
+
+.change .bar3 {
+  transform: translate(0, -11px) rotate(45deg);
+}
+.MenuScreen {
+    position: absolute;
+    top: 0;
+    background-color: #CA5508;
+    background-image: radial-gradient(#ffffff 1.3px, #CA5508 1.3px);
+    background-size: 26px 26px;
+    width: 100vw;
+    height: 100vh;
+    transition: 500ms;
+   }
+  .MenuText {
+    font-size: 5vmin;
+    color: #ffffff;
+    margin-left: 3vmin;
+    margin-top: 3vmin;
+    font-weight: 800;
+
+    user-select: none;
+  }
+  
+  .num {
+    font-size: 3vmin;
+    font-weight: 500;
+  }
+  
+  .menuItem {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: left;
+    height: 100%;
+    
+  }
+  .Menu .hide {
+    top: -100vh;
+    height: 0px;
+    color: transparent;
+    transition: 500ms;
+  }
+  .Menu a{text-decoration: none;
+    color: #ffffff;
+  } 
+  .Menu a:hover {
+    text-decoration: underline;
+    transition: 500ms;
+  }
+  .Menu a:active {
+    transform: scale(0.8);
+    transition: 100ms ease-in-out;
+  }

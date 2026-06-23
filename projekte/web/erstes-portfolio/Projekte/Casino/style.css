@@ -1,0 +1,189 @@
+body {
+    background-color: #DEBDA4;
+    font-family: Georgia, Times, 'Times New Roman', serif;
+    font-weight: bold;
+    overflow-x: hidden;
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+}
+
+h1 {
+    color: #6E0E0E;
+    text-align: center;
+    font-family: Georgia, Times, 'Times New Roman', serif;
+    font-size: 80px;
+    margin: 10px;
+}
+
+hr {
+    color: gray;
+    width: 40%;
+    margin-bottom: 20px;
+}
+
+a {
+    text-decoration: none;
+}
+h2:hover {
+    color: #560808;
+}
+
+button {
+    border-color: #6E0E0E;
+    border-style: solid;
+}
+.money {
+    display: none;
+}
+
+#Tokens {
+    display: flex;
+    font-family: Georgia, Times, 'Times New Roman', serif;
+    font-weight: bold;
+    flex-wrap: wrap; /* Ermöglicht den Umbruch */
+    width: 100vw;
+    justify-content: space-between; /* Platziert die Elemente gleichmäßig */
+    align-items: center; /* Vertikale Zentrierung */
+} 
+.button {
+    color: #6E0E0E;
+    background-color: #BB9277;
+    border-color: #6E0E0E;
+    border-style: solid;
+    font-family: Georgia, Times, 'Times New Roman', serif;
+    font-weight: bold;
+    font-size: 20px;
+    width: 100%;
+    height: 40px;
+    cursor:pointer;
+}
+.link {
+    width: 20%;
+    margin: auto;
+}
+.link2 {
+    display: flex; /* Aktiviert Flexbox */
+    justify-content: center; /* Horizontale Zentrierung */
+    align-items: center; /* Vertikale Zentrierung */
+    width: 100%; /* Passt sich an den Container an */
+    height: 100%; /* Passt sich an den Container an */
+    color: #6E0E0E;
+    text-decoration: none;
+    font-size: 20px; /* Gleiche Schriftgröße wie die Container */
+}
+
+.token {
+    color: #6E0E0E;
+    width: 35vw;
+    font-size: 3.5vw;
+    text-align: center;
+    font-weight: bold;
+    margin-inline: 5vw;
+}
+
+
+
+
+
+#games {
+    margin-top: 50px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-grow: 1;
+    
+}
+.c1,.c2 {
+    display: flex;
+    text-align: center;
+    vertical-align: middle;
+    color: #6E0E0E;
+    background-color: #BB9277;
+    flex-basis: 150px;
+    height: 15vmin;
+    margin: 1vmin;
+    font-family: Georgia, Times, 'Times New Roman', serif;
+    font-weight: bold;
+    font-size: 20px;
+    cursor:pointer;
+    flex-grow: 1;
+    border: 2px solid #6E0E0E;
+}
+.c2 {
+    color: #6E0E0E;
+    background-color: #A77B5F;
+}
+
+footer {
+    display: flex; /* Flexbox für die Hauptstruktur */
+    width: 100%; /* Gesamte Breite */
+    background-color: #A77B5F;
+    position: fixed;
+    bottom: 0;
+    height: 10vh; /* Höhe des Footers */
+    left: 0;
+    margin: 0;
+    padding-block: 10px;
+    border: #560808 solid 2px;
+}
+
+.footer {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    font-size: 15px;
+    font-family: Georgia, Times, 'Times New Roman', serif;
+    font-weight: bold;
+    width: 40vw;
+    height: 10vh;
+    margin-inline: 5vw;
+    background-color: #a07357;
+    border-radius: 5px;
+}
+
+.vl {
+    position: relative; /* Von absolut zu relativ geändert */
+    align-self: center; /* Zentriert die Linie innerhalb von Flexbox */    height: 80%; /* Höhe der Linie */
+    background-color: #6E0E0E;
+    width: 3px; /* Breite der Linie */
+}
+h1 {
+    font-size: 15vw;
+}
+h2 {
+    font-size: 15px;
+    font-family: Georgia, Times, 'Times New Roman', serif;
+    color: #6E0E0E;
+    margin: 1vh;
+}
+
+@media (max-width:500px){
+    .hider {
+        display: none;
+    }
+    .footer {
+        width: 80vw;
+    }
+}
+@media (max-width: 550px) {
+    .hide {
+        display: none;
+    }
+    #Tokens {
+        flex-direction: column; /* Stellt sicher, dass Button und Text untereinander stehen */
+        align-items: center; /* Zentriert beide Elemente */
+    }
+    .money {
+        display: flex; /* Sichtbar machen, wenn Bildschirm schmaler */
+        text-decoration: none;
+        font-size: 4vw;
+        width: 60vw;
+        justify-content: center; /* Zentriert den Button */
+    }
+    .token {
+        width: 100vw; /* Token-Text über die ganze Breite */
+        font-size: 3.5vw;
+        margin-inline: 0; /* Entfernt den horizontalen Abstand */
+    }
+}
+

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TicTacToe</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    
+    <h1>TicTacToe</h1>
+    <p id="P">Spieler X</p>
+
+    <div class="winscreen1 win"> <p>Spieler X hat Gewonnen</p></div>
+    <div class="winscreen2 win"><p>Spieler O hat Gewonnen</p></div>
+    <table>
+        <tr>
+            <th><button id="1" class="Field" onClick="Pressed(1)"></button></th>
+            <th><button id="2" class="Field" onClick="Pressed(2)"></button></th>
+            <th><button id="3" class="Field" onClick="Pressed(3)"></button></th>
+        </tr>
+        <tr>
+            <th><button id="4" class="Field" onClick="Pressed(4)"></button></th>
+            <th><button id="5" class="Field" onClick="Pressed(5)"></button></th>
+            <th><button id="6" class="Field" onClick="Pressed(6)"></button></th>
+        </tr>
+        <tr>
+            <th><button id="7" class="Field" onClick="Pressed(7)"></button></th>
+            <th><button id="8" class="Field" onClick="Pressed(8)"></button></th>
+            <th><button id="9" class="Field" onClick="Pressed(9)"></button></th>
+        </tr>
+    </table>
+    <button class="reset" onclick="reset()">RESET</button>
+    <footer><button class="more">Hier Sollte was stehen</button></footer>
+    <div class="compatible"><p>Website is not compatible with iPhones</p></div>
+    <div style="position: fixed;right: 3vmin;bottom: 3vmin;background-color: rgba(103, 103, 103, 0.41);backdrop-filter: blur(2px);width: 25vmin;height: 6vh;display: flex; justify-content: center; align-items: center; box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;"><a style="font-weight: bolder;font-family: Arial, Helvetica, sans-serif;color: rgb(33, 33, 33);text-decoration: none;font-size: 2vmin;" href="../index.html">Zurück zum Portfolio</a></div>
+
+</body>
+<script src="script.js"></script>
+</html>
